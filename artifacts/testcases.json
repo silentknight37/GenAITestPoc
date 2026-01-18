@@ -1,0 +1,82 @@
+[
+  {
+    "id": "TC-REG-001",
+    "title": "Valid registration returns 201",
+    "method": "POST",
+    "url": "/api/users/register",
+    "body": {
+      "email": "ok@test.com",
+      "password": "Password1",
+      "age": 22
+    },
+    "expectedStatus": 201,
+    "rulesCovered": [
+      "UniqueEmail",
+      "PasswordPolicy",
+      "AgeMin18",
+      "DuplicateEmailReturns409",
+      "InvalidInputReturns400"
+    ],
+    "setup": null
+  },
+  {
+    "id": "TC-REG-002",
+    "title": "Weak password returns 400",
+    "method": "POST",
+    "url": "/api/users/register",
+    "body": {
+      "email": "weak@test.com",
+      "password": "pass",
+      "age": 22
+    },
+    "expectedStatus": 400,
+    "rulesCovered": [
+      "PasswordPolicy",
+      "InvalidInputReturns400"
+    ],
+    "setup": null
+  },
+  {
+    "id": "TC-REG-003",
+    "title": "Underage returns 400",
+    "method": "POST",
+    "url": "/api/users/register",
+    "body": {
+      "email": "kid@test.com",
+      "password": "Password1",
+      "age": 17
+    },
+    "expectedStatus": 400,
+    "rulesCovered": [
+      "AgeMin18",
+      "InvalidInputReturns400"
+    ],
+    "setup": null
+  },
+  {
+    "id": "TC-REG-004",
+    "title": "Duplicate email returns 409",
+    "method": "POST",
+    "url": "/api/users/register",
+    "body": {
+      "email": "dup@test.com",
+      "password": "Password1",
+      "age": 22
+    },
+    "expectedStatus": 409,
+    "rulesCovered": [
+      "UniqueEmail",
+      "DuplicateEmailReturns409"
+    ],
+    "setup": [
+      {
+        "action": "register",
+        "body": {
+          "email": "dup@test.com",
+          "password": "Password1",
+          "age": 22
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+﻿Email must be unique
+Password must be minimum 8 characters and include uppercase and number
+Age must be >= 18
+Duplicate email should return 409
+Invalid input should return 400

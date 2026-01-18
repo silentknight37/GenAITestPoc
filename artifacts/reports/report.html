@@ -1,0 +1,112 @@
+<!doctype html>
+<html><head><meta charset='utf-8'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'/>
+<title>GenAI Test Report</title>
+
+<style>
+body{font-family:Arial, sans-serif; margin:20px; line-height:1.35;}
+h1{font-size:22px; margin:0 0 6px;}
+small{color:#555;}
+.card{border:1px solid #ddd; border-radius:10px; padding:14px; margin:12px 0;}
+.kpi{display:flex; gap:12px; flex-wrap:wrap;}
+.kpi div{border:1px solid #eee; border-radius:10px; padding:10px 12px; min-width:160px;}
+.ok{color:#137333; font-weight:bold;}
+.bad{color:#b3261e; font-weight:bold;}
+table{border-collapse:collapse; width:100%; margin-top:10px;}
+th,td{border:1px solid #ddd; padding:8px; vertical-align:top;}
+th{background:#f6f6f6;}
+code{background:#f3f3f3; padding:2px 4px; border-radius:4px;}
+details{margin-top:6px;}
+</style>
+
+</head><body>
+<h1>GenAI-Augmented Testing Report</h1>
+<small><b>TRX:</b> C:\GIT\GenAITestPoC\tests\MyApi.Tests.Integration\TestResults\results.trx<br/>
+<b>Generated:</b> 2026-01-16 09:45:24</small>
+<div class='card'>
+<h2 style='margin:0 0 8px; font-size:18px;'>Summary</h2>
+<div class='kpi'>
+<div><div>Total Tests</div><div><b>4</b></div></div>
+<div><div>Passed</div><div class='ok'>4</div></div>
+<div><div>Failed</div><div class='bad'>0</div></div>
+</div>
+</div>
+<div class='card'>
+<h2 style='margin:0 0 8px; font-size:18px;'>Rule Coverage (from AI/ML metadata)</h2>
+<table><tr><th>Rule</th><th>Covered by Passing Tests?</th></tr>
+<tr><td>AgeMin18</td><td><span class='ok'>Yes</span></td></tr>
+<tr><td>DuplicateEmailReturns409</td><td><span class='ok'>Yes</span></td></tr>
+<tr><td>InvalidInputReturns400</td><td><span class='ok'>Yes</span></td></tr>
+<tr><td>PasswordPolicy</td><td><span class='ok'>Yes</span></td></tr>
+<tr><td>UniqueEmail</td><td><span class='ok'>Yes</span></td></tr>
+</table>
+</div>
+<div class='card'>
+<h2 style='margin:0 0 8px; font-size:18px;'>AI/ML Generated Testcases</h2>
+<table>
+<tr><th>ID</th><th>Title</th><th>Endpoint</th><th>Expected</th><th>Rules Covered</th><th>Outcome</th></tr>
+<tr>
+<td>TC-REG-001</td>
+<td>Valid registration returns 201</td>
+<td><code>POST /api/users/register</code></td>
+<td>201</td>
+<td>UniqueEmail, PasswordPolicy, AgeMin18, DuplicateEmailReturns409, InvalidInputReturns400</td>
+<td><span class='ok'>Passed</span></td>
+</tr>
+<tr>
+<td>TC-REG-002</td>
+<td>Weak password returns 400</td>
+<td><code>POST /api/users/register</code></td>
+<td>400</td>
+<td>PasswordPolicy, InvalidInputReturns400</td>
+<td><span class='ok'>Passed</span></td>
+</tr>
+<tr>
+<td>TC-REG-003</td>
+<td>Underage returns 400</td>
+<td><code>POST /api/users/register</code></td>
+<td>400</td>
+<td>AgeMin18, InvalidInputReturns400</td>
+<td><span class='ok'>Passed</span></td>
+</tr>
+<tr>
+<td>TC-REG-004</td>
+<td>Duplicate email returns 409</td>
+<td><code>POST /api/users/register</code></td>
+<td>409</td>
+<td>UniqueEmail, DuplicateEmailReturns409</td>
+<td><span class='ok'>Passed</span></td>
+</tr>
+</table>
+</div>
+<div class='card'>
+<h2 style='margin:0 0 8px; font-size:18px;'>TRX Test Results (Details)</h2>
+<table>
+<tr><th>Test Name</th><th>Outcome</th><th>Duration</th><th>Failure Info</th></tr>
+<tr>
+<td>MyApi.Tests.Integration.GeneratedTests.TC_REG_001_Valid_registration_returns_201</td>
+<td><span class='ok'>Passed</span></td>
+<td>00:00:00.0031985</td>
+<td></td>
+</tr>
+<tr>
+<td>MyApi.Tests.Integration.GeneratedTests.TC_REG_002_Weak_password_returns_400</td>
+<td><span class='ok'>Passed</span></td>
+<td>00:00:00.0068126</td>
+<td></td>
+</tr>
+<tr>
+<td>MyApi.Tests.Integration.GeneratedTests.TC_REG_003_Underage_returns_400</td>
+<td><span class='ok'>Passed</span></td>
+<td>00:00:00.6056356</td>
+<td></td>
+</tr>
+<tr>
+<td>MyApi.Tests.Integration.GeneratedTests.TC_REG_004_Duplicate_email_returns_409</td>
+<td><span class='ok'>Passed</span></td>
+<td>00:00:00.1693934</td>
+<td></td>
+</tr>
+</table>
+</div>
+</body></html>

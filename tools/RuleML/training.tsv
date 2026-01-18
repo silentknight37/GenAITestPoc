@@ -1,0 +1,80 @@
+Text	Label
+Email must be unique	UniqueEmail
+User email should be unique	UniqueEmail
+System must prevent duplicate emails	UniqueEmail
+Email duplication is not allowed	UniqueEmail
+Same email cannot be used twice	UniqueEmail
+Email already used is not allowed	UniqueEmail
+Do not allow repeated email registration	UniqueEmail
+Each account must have a unique email	UniqueEmail
+Email cannot be reused	UniqueEmail
+No two users can share the same email	UniqueEmail
+Email must not be duplicated	UniqueEmail
+Unique email is required	UniqueEmail
+Email must be distinct	UniqueEmail
+Email uniqueness validation required	UniqueEmail
+Reject duplicate email values	UniqueEmail
+
+Duplicate email should return 409	DuplicateEmailReturns409
+If email already exists return 409 conflict	DuplicateEmailReturns409
+Return 409 when email exists	DuplicateEmailReturns409
+Conflict 409 for duplicate email	DuplicateEmailReturns409
+Existing email registration must fail with 409	DuplicateEmailReturns409
+Duplicate registration should respond 409	DuplicateEmailReturns409
+When email is already registered respond conflict	DuplicateEmailReturns409
+Attempting to register same email returns conflict	DuplicateEmailReturns409
+Duplicate email should be rejected with conflict	DuplicateEmailReturns409
+Email already exists should return 409	DuplicateEmailReturns409
+Conflict status code should be 409	DuplicateEmailReturns409
+409 conflict returned for duplicates	DuplicateEmailReturns409
+System returns 409 for duplicate email	DuplicateEmailReturns409
+Register same email twice returns conflict	DuplicateEmailReturns409
+Duplicate email must trigger 409 response	DuplicateEmailReturns409
+
+Password must be minimum 8 characters	PasswordPolicy
+Password min length is 8	PasswordPolicy
+Password requires at least 8 chars	PasswordPolicy
+Password must include uppercase letter	PasswordPolicy
+Password must contain a number	PasswordPolicy
+Password must contain uppercase and digit	PasswordPolicy
+Password must have at least one capital letter	PasswordPolicy
+Password must have at least one numeric character	PasswordPolicy
+Reject weak password	PasswordPolicy
+Weak password should be rejected	PasswordPolicy
+Password validation must fail for weak password	PasswordPolicy
+Password rules must be enforced	PasswordPolicy
+Invalid password format not allowed	PasswordPolicy
+Password complexity requirement enforced	PasswordPolicy
+Password strength validation required	PasswordPolicy
+
+Age must be >= 18	AgeMin18
+Age must be at least 18	AgeMin18
+User must be 18 or older	AgeMin18
+Minimum age is 18	AgeMin18
+Underage user not allowed	AgeMin18
+Reject age below 18	AgeMin18
+If age is less than 18 reject registration	AgeMin18
+Age 17 should be rejected	AgeMin18
+Age requirement: 18+ only	AgeMin18
+Registration allowed only if age >= 18	AgeMin18
+Age must meet minimum threshold 18	AgeMin18
+Fail when age is under 18	AgeMin18
+Age must not be below 18	AgeMin18
+Age validation rule 18 years	AgeMin18
+Age constraint: minimum 18 years old	AgeMin18
+
+Invalid input should return 400	InvalidInputReturns400
+Bad request for invalid data	InvalidInputReturns400
+Return 400 for invalid request	InvalidInputReturns400
+400 bad request on validation failure	InvalidInputReturns400
+Invalid payload should return 400	InvalidInputReturns400
+Malformed request should fail with 400	InvalidInputReturns400
+Missing required field returns 400	InvalidInputReturns400
+If request is invalid respond 400	InvalidInputReturns400
+Validation error should return bad request	InvalidInputReturns400
+BadRequest status code is 400	InvalidInputReturns400
+Invalid body should return 400	InvalidInputReturns400
+Improper input should trigger 400	InvalidInputReturns400
+Incorrect format should return 400	InvalidInputReturns400
+Bad request 400 returned for invalid input	InvalidInputReturns400
+Client input error should be 400	InvalidInputReturns400

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="661556bc-9622-4550-bbd6-6b58786e6b97" name="Lenovo@DESKTOP-A0N8TMD 2026-01-16 09:45:21" runUser="DESKTOP-A0N8TMD\Lenovo" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-16T09:45:21.0917047+05:30" queuing="2026-01-16T09:45:21.0917049+05:30" start="2026-01-16T09:45:19.7274932+05:30" finish="2026-01-16T09:45:21.0969309+05:30" />
+  <TestSettings name="default" id="fa02c344-a83e-41b2-a8dd-49819f3771d1">
+    <Deployment runDeploymentRoot="Lenovo_DESKTOP-A0N8TMD_2026-01-16_09_45_21" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="43a81867-9099-4b86-85c5-994c95c146ff" testId="c5f052c8-9d04-d332-e64f-beea1bd6b03c" testName="MyApi.Tests.Integration.GeneratedTests.TC_REG_001_Valid_registration_returns_201" computerName="DESKTOP-A0N8TMD" duration="00:00:00.0031985" startTime="2026-01-16T09:45:20.9820513+05:30" endTime="2026-01-16T09:45:20.9820514+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="43a81867-9099-4b86-85c5-994c95c146ff" />
+    <UnitTestResult executionId="25a3f2dd-7378-4c48-a243-d9ee42166239" testId="2eb15f16-89f3-4874-a85f-5455c4ac2306" testName="MyApi.Tests.Integration.GeneratedTests.TC_REG_002_Weak_password_returns_400" computerName="DESKTOP-A0N8TMD" duration="00:00:00.0068126" startTime="2026-01-16T09:45:20.8093241+05:30" endTime="2026-01-16T09:45:20.8093242+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="25a3f2dd-7378-4c48-a243-d9ee42166239" />
+    <UnitTestResult executionId="454f580a-7bc3-4d96-893d-0e7b276a683e" testId="de6080db-44a4-5a27-b4b9-de5c48beecc1" testName="MyApi.Tests.Integration.GeneratedTests.TC_REG_003_Underage_returns_400" computerName="DESKTOP-A0N8TMD" duration="00:00:00.6056356" startTime="2026-01-16T09:45:20.8022811+05:30" endTime="2026-01-16T09:45:20.8023033+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="454f580a-7bc3-4d96-893d-0e7b276a683e" />
+    <UnitTestResult executionId="6738b5e8-6832-4978-a858-0180cc028865" testId="da4f5834-b21d-74da-b380-05e18e42d7a9" testName="MyApi.Tests.Integration.GeneratedTests.TC_REG_004_Duplicate_email_returns_409" computerName="DESKTOP-A0N8TMD" duration="00:00:00.1693934" startTime="2026-01-16T09:45:20.9787642+05:30" endTime="2026-01-16T09:45:20.9787643+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6738b5e8-6832-4978-a858-0180cc028865" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="MyApi.Tests.Integration.GeneratedTests.TC_REG_002_Weak_password_returns_400" storage="c:\git\genaitestpoc\tests\myapi.tests.integration\bin\debug\net8.0\myapi.tests.integration.dll" id="2eb15f16-89f3-4874-a85f-5455c4ac2306">
+      <Execution id="25a3f2dd-7378-4c48-a243-d9ee42166239" />
+      <TestMethod codeBase="C:\GIT\GenAITestPoC\tests\MyApi.Tests.Integration\bin\Debug\net8.0\MyApi.Tests.Integration.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="MyApi.Tests.Integration.GeneratedTests" name="TC_REG_002_Weak_password_returns_400" />
+    </UnitTest>
+    <UnitTest name="MyApi.Tests.Integration.GeneratedTests.TC_REG_004_Duplicate_email_returns_409" storage="c:\git\genaitestpoc\tests\myapi.tests.integration\bin\debug\net8.0\myapi.tests.integration.dll" id="da4f5834-b21d-74da-b380-05e18e42d7a9">
+      <Execution id="6738b5e8-6832-4978-a858-0180cc028865" />
+      <TestMethod codeBase="C:\GIT\GenAITestPoC\tests\MyApi.Tests.Integration\bin\Debug\net8.0\MyApi.Tests.Integration.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="MyApi.Tests.Integration.GeneratedTests" name="TC_REG_004_Duplicate_email_returns_409" />
+    </UnitTest>
+    <UnitTest name="MyApi.Tests.Integration.GeneratedTests.TC_REG_001_Valid_registration_returns_201" storage="c:\git\genaitestpoc\tests\myapi.tests.integration\bin\debug\net8.0\myapi.tests.integration.dll" id="c5f052c8-9d04-d332-e64f-beea1bd6b03c">
+      <Execution id="43a81867-9099-4b86-85c5-994c95c146ff" />
+      <TestMethod codeBase="C:\GIT\GenAITestPoC\tests\MyApi.Tests.Integration\bin\Debug\net8.0\MyApi.Tests.Integration.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="MyApi.Tests.Integration.GeneratedTests" name="TC_REG_001_Valid_registration_returns_201" />
+    </UnitTest>
+    <UnitTest name="MyApi.Tests.Integration.GeneratedTests.TC_REG_003_Underage_returns_400" storage="c:\git\genaitestpoc\tests\myapi.tests.integration\bin\debug\net8.0\myapi.tests.integration.dll" id="de6080db-44a4-5a27-b4b9-de5c48beecc1">
+      <Execution id="454f580a-7bc3-4d96-893d-0e7b276a683e" />
+      <TestMethod codeBase="C:\GIT\GenAITestPoC\tests\MyApi.Tests.Integration\bin\Debug\net8.0\MyApi.Tests.Integration.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="MyApi.Tests.Integration.GeneratedTests" name="TC_REG_003_Underage_returns_400" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="c5f052c8-9d04-d332-e64f-beea1bd6b03c" executionId="43a81867-9099-4b86-85c5-994c95c146ff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2eb15f16-89f3-4874-a85f-5455c4ac2306" executionId="25a3f2dd-7378-4c48-a243-d9ee42166239" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="de6080db-44a4-5a27-b4b9-de5c48beecc1" executionId="454f580a-7bc3-4d96-893d-0e7b276a683e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="da4f5834-b21d-74da-b380-05e18e42d7a9" executionId="6738b5e8-6832-4978-a858-0180cc028865" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.8)&#xD;
+[xUnit.net 00:00:00.07]   Discovering: MyApi.Tests.Integration&#xD;
+[xUnit.net 00:00:00.10]   Discovered:  MyApi.Tests.Integration&#xD;
+[xUnit.net 00:00:00.10]   Starting:    MyApi.Tests.Integration&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 0 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 0 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 0 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 0 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 0 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+[xUnit.net 00:00:00.93]   Finished:    MyApi.Tests.Integration&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
