@@ -1,0 +1,8 @@
+{
+  "CompileSuccess": true,
+  "BuildExitCode": 0,
+  "BuildLogPath": "results\\run1\\build.log",
+  "TestSuccess": false,
+  "TestExitCode": 1,
+  "TestLogPath": "results\\run1\\test.log"
+}

@@ -1,0 +1,176 @@
+﻿{
+   "CodeGenerationMode": 2,
+   "ContextClassName": "DB_LogisticsproContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "LogisticsPro_Data",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[LP_F_Invoice]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_F_Invoice_ProformaInvoice]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_F_InvoiceLineItem]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_F_PaymentVoucher]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_F_PaymentVoucherLineItem]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_F_ProformaInvoice]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_F_ProformaInvoiceReceipt]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_F_Receipt]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_F_ReceiptAllocation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_J_FinancePayment]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_J_FinanceReceipt]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_J_Hotel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_J_Hotel_Audit]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_J_Miscellaneous]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_J_Miscellaneous_Audit]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_J_Transportation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_J_Transportation_Audit]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_J_Visa]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_J_Visa_Audit]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_JobCard]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_JobCard_Audit]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_L_Batch]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_L_BatchLineItem]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_Counrty]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_Customer]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_Event]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_InvoiceStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_PaymentMethod]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_Status]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_SystemRole]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_TransactionType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_User]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_Vender]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_M_VisaType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LP_SystemConfig]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "SQL5110.db_a9664f_holidaymakersprod",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\GenAITest.Framework\GenAITest.Framework.csproj" />
+    <ProjectReference Include="..\GenAITest.Pipeline.LLM\GenAITest.Pipeline.LLM.csproj" />
+    <ProjectReference Include="..\GenAITest.Pipeline.RAG\GenAITest.Pipeline.RAG.csproj" />
+    <ProjectReference Include="..\GenAITest.Pipeline.Hybrid\GenAITest.Pipeline.Hybrid.csproj" />
+    <ProjectReference Include="..\GenAITest.RagStore\GenAITest.RagStore.csproj" />
+    <ProjectReference Include="..\GenAITest.Evaluator\GenAITest.Evaluator.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

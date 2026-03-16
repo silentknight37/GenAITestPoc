@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  MyApi -> C:\GIT\GenAITestPoC\src\MyApi\bin\Debug\net8.0\MyApi.dll
+  CompileCheck -> C:\GIT\GenAITestPoC\results\run1\_compilecheck\CompileCheck\bin\Debug\net8.0\CompileCheck.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.21
+
+Workload updates are available. Run `dotnet workload list` for more information.
+
