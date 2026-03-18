@@ -5,51 +5,34 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5A4E2F6B-DA3E-43FB-8714-9DBA694756A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApi", "src\MyApi\MyApi.csproj", "{E32DA573-54BE-48EF-9FAF-B862CAA30256}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8C4423BB-A3D7-4995-8CD6-CEF523C8D267}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApi.Tests.Integration", "tests\MyApi.Tests.Integration\MyApi.Tests.Integration.csproj", "{69F332F6-FE56-4789-9AE5-4B4A8BF0D586}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{A2BD0EA0-1349-461A-A4AD-984E50046416}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGen", "tools\TestGen\TestGen.csproj", "{505FBF1B-230D-4147-BAE1-D79CC8635E85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestGen", "tools\TestGen\TestGen.csproj", "{505FBF1B-230D-4147-BAE1-D79CC8635E85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportGen", "tools\ReportGen\ReportGen.csproj", "{10DDAD3F-8EE7-41A7-947F-92107B504158}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReportGen", "tools\ReportGen\ReportGen.csproj", "{10DDAD3F-8EE7-41A7-947F-92107B504158}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleML", "tools\RuleML\RuleML.csproj", "{C52C3E84-8CB9-42CD-9142-E19D906E510F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RuleML", "tools\RuleML\RuleML.csproj", "{C52C3E84-8CB9-42CD-9142-E19D906E510F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenAITest.Framework", "src\GenAITest.Framework\GenAITest.Framework.csproj", "{E39A40DB-5571-418A-BD21-93847BC35E4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenAITest.Framework", "src\GenAITest.Framework\GenAITest.Framework.csproj", "{E39A40DB-5571-418A-BD21-93847BC35E4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenAITest.Pipeline.LLM", "src\GenAITest.Pipeline.LLM\GenAITest.Pipeline.LLM.csproj", "{3BEAA14D-EBCF-4F30-B8A3-B18467A4DF4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenAITest.Pipeline.LLM", "src\GenAITest.Pipeline.LLM\GenAITest.Pipeline.LLM.csproj", "{3BEAA14D-EBCF-4F30-B8A3-B18467A4DF4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenAITest.Pipeline.RAG", "src\GenAITest.Pipeline.RAG\GenAITest.Pipeline.RAG.csproj", "{B451049C-A3BF-44CE-897E-8066CAB3AEC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenAITest.Pipeline.RAG", "src\GenAITest.Pipeline.RAG\GenAITest.Pipeline.RAG.csproj", "{B451049C-A3BF-44CE-897E-8066CAB3AEC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenAITest.Pipeline.Hybrid", "src\GenAITest.Pipeline.Hybrid\GenAITest.Pipeline.Hybrid.csproj", "{858CDFD8-F870-4C13-A15E-581F3E73FA58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenAITest.Pipeline.Hybrid", "src\GenAITest.Pipeline.Hybrid\GenAITest.Pipeline.Hybrid.csproj", "{858CDFD8-F870-4C13-A15E-581F3E73FA58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenAITest.RagStore", "src\GenAITest.RagStore\GenAITest.RagStore.csproj", "{A149DAC0-BEA6-418C-AE14-1BC11FB19311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenAITest.RagStore", "src\GenAITest.RagStore\GenAITest.RagStore.csproj", "{A149DAC0-BEA6-418C-AE14-1BC11FB19311}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenAITest.Evaluator", "src\GenAITest.Evaluator\GenAITest.Evaluator.csproj", "{239CEAE7-3437-41C8-93FC-72188A3005C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenAITest.Evaluator", "src\GenAITest.Evaluator\GenAITest.Evaluator.csproj", "{239CEAE7-3437-41C8-93FC-72188A3005C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenAITest.CLI", "src\GenAITest.CLI\GenAITest.CLI.csproj", "{2DDD78C4-76F4-4010-ACAA-BAFFD7B80A90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenAITest.CLI", "src\GenAITest.CLI\GenAITest.CLI.csproj", "{2DDD78C4-76F4-4010-ACAA-BAFFD7B80A90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E32DA573-54BE-48EF-9FAF-B862CAA30256}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E32DA573-54BE-48EF-9FAF-B862CAA30256}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E32DA573-54BE-48EF-9FAF-B862CAA30256}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E32DA573-54BE-48EF-9FAF-B862CAA30256}.Release|Any CPU.Build.0 = Release|Any CPU
-		{69F332F6-FE56-4789-9AE5-4B4A8BF0D586}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69F332F6-FE56-4789-9AE5-4B4A8BF0D586}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69F332F6-FE56-4789-9AE5-4B4A8BF0D586}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69F332F6-FE56-4789-9AE5-4B4A8BF0D586}.Release|Any CPU.Build.0 = Release|Any CPU
 		{505FBF1B-230D-4147-BAE1-D79CC8635E85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{505FBF1B-230D-4147-BAE1-D79CC8635E85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{505FBF1B-230D-4147-BAE1-D79CC8635E85}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -91,9 +74,10 @@ Global
 		{2DDD78C4-76F4-4010-ACAA-BAFFD7B80A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DDD78C4-76F4-4010-ACAA-BAFFD7B80A90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E32DA573-54BE-48EF-9FAF-B862CAA30256} = {5A4E2F6B-DA3E-43FB-8714-9DBA694756A7}
-		{69F332F6-FE56-4789-9AE5-4B4A8BF0D586} = {8C4423BB-A3D7-4995-8CD6-CEF523C8D267}
 		{505FBF1B-230D-4147-BAE1-D79CC8635E85} = {A2BD0EA0-1349-461A-A4AD-984E50046416}
 		{10DDAD3F-8EE7-41A7-947F-92107B504158} = {A2BD0EA0-1349-461A-A4AD-984E50046416}
 		{C52C3E84-8CB9-42CD-9142-E19D906E510F} = {A2BD0EA0-1349-461A-A4AD-984E50046416}
@@ -104,5 +88,8 @@ Global
 		{A149DAC0-BEA6-418C-AE14-1BC11FB19311} = {5A4E2F6B-DA3E-43FB-8714-9DBA694756A7}
 		{239CEAE7-3437-41C8-93FC-72188A3005C3} = {5A4E2F6B-DA3E-43FB-8714-9DBA694756A7}
 		{2DDD78C4-76F4-4010-ACAA-BAFFD7B80A90} = {5A4E2F6B-DA3E-43FB-8714-9DBA694756A7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26B161D4-D3A4-4628-BECC-94BE2D69BB35}
 	EndGlobalSection
 EndGlobal

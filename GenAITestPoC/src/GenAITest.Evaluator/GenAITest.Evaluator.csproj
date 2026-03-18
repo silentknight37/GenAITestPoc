@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GenAITest.Framework\GenAITest.Framework.csproj" />
-    <ProjectReference Include="..\MyApi\MyApi.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
