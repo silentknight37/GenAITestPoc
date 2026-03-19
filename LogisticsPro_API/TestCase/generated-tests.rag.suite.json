@@ -1,0 +1,210 @@
+{
+  "ProjectName": "LogisticsPro_API",
+  "PipelineName": "rag",
+  "SourceDocument": "C:\\GIT\\GenAITestPoc_GIT\\BA Document\\LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT.pdf",
+  "GeneratedAtUtc": "2026-03-19T20:07:29.3323988Z",
+  "CorpusVersion": "v1",
+  "PromptVersion": "rag-v1",
+  "TestCases": [
+    {
+      "TestName": "Successful Authentication with Valid Credentials",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-49",
+      "ScenarioType": "Positive",
+      "Priority": "High",
+      "ApiEndpoint": "/api/authenticate",
+      "HttpMethod": "POST",
+      "Preconditions": [],
+      "Steps": [
+        "Send POST request to /api/authenticate with valid username/email and password"
+      ],
+      "Expected": "Response contains a valid authentication token",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Authentication Failure with Invalid Credentials",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-49",
+      "ScenarioType": "Negative",
+      "Priority": "High",
+      "ApiEndpoint": "/api/authenticate",
+      "HttpMethod": "POST",
+      "Preconditions": [],
+      "Steps": [
+        "Send POST request to /api/authenticate with invalid username/email or password"
+      ],
+      "Expected": "Response contains unauthorized status and error message without sensitive information",
+      "ExpectedStatusCode": 401,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Token Validation Success with Valid Token",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-49",
+      "ScenarioType": "Auth",
+      "Priority": "High",
+      "ApiEndpoint": "/api/protected-resource",
+      "HttpMethod": "GET",
+      "Preconditions": [
+        "Obtain a valid and non-expired JWT token via authentication"
+      ],
+      "Steps": [
+        "Send GET request to /api/protected-resource with valid JWT token in Authorization header"
+      ],
+      "Expected": "Request is authorized and proceeds to return requested resource",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Token Validation Failure with Expired Token",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-49",
+      "ScenarioType": "Auth",
+      "Priority": "High",
+      "ApiEndpoint": "/api/protected-resource",
+      "HttpMethod": "GET",
+      "Preconditions": [
+        "Have an expired JWT token"
+      ],
+      "Steps": [
+        "Send GET request to /api/protected-resource with expired JWT token in Authorization header"
+      ],
+      "Expected": "Request rejected with unauthorized response indicating expired token",
+      "ExpectedStatusCode": 401,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Token Validation Failure with Tampered Token",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-49",
+      "ScenarioType": "Auth",
+      "Priority": "High",
+      "ApiEndpoint": "/api/protected-resource",
+      "HttpMethod": "GET",
+      "Preconditions": [
+        "Create a tampered JWT token with invalid signature"
+      ],
+      "Steps": [
+        "Send GET request to /api/protected-resource with tampered JWT token in Authorization header"
+      ],
+      "Expected": "Request rejected with unauthorized response indicating invalid token",
+      "ExpectedStatusCode": 401,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Request Rejected When Authentication Token Missing",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-109",
+      "ScenarioType": "Auth",
+      "Priority": "High",
+      "ApiEndpoint": "/api/protected-resource",
+      "HttpMethod": "GET",
+      "Preconditions": [],
+      "Steps": [
+        "Send GET request to /api/protected-resource without Authorization header"
+      ],
+      "Expected": "Request rejected with unauthorized response indicating missing credentials",
+      "ExpectedStatusCode": 401,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Authentication Failure Does Not Leak Sensitive Information",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-109",
+      "ScenarioType": "Negative",
+      "Priority": "High",
+      "ApiEndpoint": "/api/authenticate",
+      "HttpMethod": "POST",
+      "Preconditions": [],
+      "Steps": [
+        "Send POST request to /api/authenticate with invalid credentials"
+      ],
+      "Expected": "Response includes generic error message without revealing sensitive security details",
+      "ExpectedStatusCode": 401,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Reject Malformed Authentication Token",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-56",
+      "ScenarioType": "Auth",
+      "Priority": "High",
+      "ApiEndpoint": "/api/protected-resource",
+      "HttpMethod": "GET",
+      "Preconditions": [
+        "Prepare a malformed JWT token"
+      ],
+      "Steps": [
+        "Send GET request to /api/protected-resource with malformed JWT token in Authorization header"
+      ],
+      "Expected": "Request rejected with unauthorized response due to invalid token structure",
+      "ExpectedStatusCode": 401,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Verify Authenticated User Identity Context on Authorized Request",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-56",
+      "ScenarioType": "Auth",
+      "Priority": "Medium",
+      "ApiEndpoint": "/api/user-actions",
+      "HttpMethod": "POST",
+      "Preconditions": [
+        "Authenticate and obtain valid JWT token for user"
+      ],
+      "Steps": [
+        "Send POST request to /api/user-actions with valid JWT token in Authorization header including user-specific action data"
+      ],
+      "Expected": "System processes action associating it with authenticated user identity",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Consistent Status Code for Authentication Failure",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-109",
+      "ScenarioType": "Validation",
+      "Priority": "High",
+      "ApiEndpoint": "/api/authenticate",
+      "HttpMethod": "POST",
+      "Preconditions": [],
+      "Steps": [
+        "Send POST request to /api/authenticate with invalid credentials",
+        "Send POST request to another authentication-related endpoint with invalid credentials (if applicable)"
+      ],
+      "Expected": "Both responses return consistent status code (e.g., 401) without contradictory behaviors",
+      "ExpectedStatusCode": 401,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Reject Expired Token for Protected Resource Access",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-56",
+      "ScenarioType": "Auth",
+      "Priority": "High",
+      "ApiEndpoint": "/api/financial-data",
+      "HttpMethod": "GET",
+      "Preconditions": [
+        "Expire the JWT token prior to request"
+      ],
+      "Steps": [
+        "Send GET request to /api/financial-data with expired JWT token in Authorization header"
+      ],
+      "Expected": "Request rejected with an unauthorized response indicating expired token",
+      "ExpectedStatusCode": 401,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    }
+  ]
+}

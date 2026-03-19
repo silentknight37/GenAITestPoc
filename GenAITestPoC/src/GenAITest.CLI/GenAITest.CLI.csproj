@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!--<ProjectReference Include="..\GenAITest.Pipeline.LLM\GenAITest.Pipeline.LLM.csproj" />
     <ProjectReference Include="..\GenAITest.Pipeline.RAG\GenAITest.Pipeline.RAG.csproj" />
     <ProjectReference Include="..\GenAITest.Pipeline.Hybrid\GenAITest.Pipeline.Hybrid.csproj" />

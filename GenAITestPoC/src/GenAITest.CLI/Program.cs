@@ -1,5 +1,14 @@
-﻿using GenAITest.Engine.Models;
+﻿using System.Text.Json;
+using GenAITest.Engine;
+using GenAITest.Engine.Abstractions;
+using GenAITest.Engine.Models;
 using GenAITest.Engine.Services;
+using Microsoft.Extensions.DependencyInjection;
+
+var services = new ServiceCollection();
+services.AddGenAITestEngine();
+
+var provider = services.BuildServiceProvider();
 
 if (args.Length == 0)
 {
@@ -22,7 +31,9 @@ string? framework = GetArg("--framework");
 string? style = GetArg("--style");
 string? module = GetArg("--module");
 
-if (string.IsNullOrWhiteSpace(mode) || string.IsNullOrWhiteSpace(target) || string.IsNullOrWhiteSpace(outDir))
+if (string.IsNullOrWhiteSpace(mode) ||
+    string.IsNullOrWhiteSpace(target) ||
+    string.IsNullOrWhiteSpace(outDir))
 {
     PrintUsage();
     return;
@@ -48,18 +59,66 @@ var request = new GenerationRequest(
     ModuleFilter: module
 );
 
+Directory.CreateDirectory(request.OutputPath);
+
 var engine = new TestGenerationEngine(
     new PdfDocumentExtractor(),
     new RequirementExtractor(),
     new SmartRequirementGrouper(),
     new ContextBuilderFactory(),
     new OpenAiTestGenerator(),
-    new XunitTestClassGenerator()
+    new XunitTestClassGenerator(),
+    new GeneratedTestJsonWriter()
 );
 
-await engine.GenerateAsync(request);
+switch (mode.ToLowerInvariant())
+{
+    case "llm":
+        {
+            Console.WriteLine("Running LLM pipeline...");
+            await engine.GenerateAsync(request);
+            Console.WriteLine("LLM generation completed.");
+            break;
+        }
 
-Console.WriteLine("Generation completed.");
+    case "rag":
+        {
+            Console.WriteLine("Running RAG pipeline (current step: ingestion + chunking only)...");
+
+            if (string.IsNullOrWhiteSpace(request.DocsPath))
+                throw new ArgumentException("DocsPath is required for RAG mode. Use --docs <ba-pdf>");
+
+            var ingestor = provider.GetRequiredService<IDocumentIngestor>();
+            var chunker = provider.GetRequiredService<IChunker>();
+
+            var ingested = await ingestor.IngestAsync(request.DocsPath);
+            var chunks = await chunker.ChunkAsync(ingested, "v1");
+
+            var chunkPath = Path.Combine(request.OutputPath, "ba-chunks.v1.json");
+
+            await File.WriteAllTextAsync(
+                chunkPath,
+                JsonSerializer.Serialize(chunks, new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                }));
+
+            Console.WriteLine($"Chunk file generated: {chunkPath}");
+            Console.WriteLine("RAG preprocessing completed.");
+            break;
+        }
+
+    case "hybrid":
+    case "lora":
+    case "lora-rag":
+        {
+            Console.WriteLine($"Mode '{mode}' is not implemented yet.");
+            break;
+        }
+
+    default:
+        throw new ArgumentException($"Unsupported mode: {mode}");
+}
 
 string? GetArg(string key)
 {
