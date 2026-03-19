@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_Manager", "Log
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_Common", "LogisticsPro_Common\LogisticsPro_Common.csproj", "{27ACFB3C-8012-4A6A-81F3-4148630107F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_API.TestGen", "LogisticsPro_API.TestGen\LogisticsPro_API.TestGen.csproj", "{1A113894-55AD-4308-BF1D-0BD08886C778}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{27ACFB3C-8012-4A6A-81F3-4148630107F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27ACFB3C-8012-4A6A-81F3-4148630107F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27ACFB3C-8012-4A6A-81F3-4148630107F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A113894-55AD-4308-BF1D-0BD08886C778}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A113894-55AD-4308-BF1D-0BD08886C778}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A113894-55AD-4308-BF1D-0BD08886C778}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A113894-55AD-4308-BF1D-0BD08886C778}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

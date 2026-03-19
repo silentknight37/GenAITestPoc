@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
-using GenAITest.Framework.Abstractions;
-using GenAITest.Framework.Models;
+using GenAITest.Engine.Abstractions;
+using GenAITest.Engine.Models;
 
 namespace GenAITest.Evaluator;
 

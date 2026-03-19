@@ -22,3 +22,6 @@
 /GenAITestPoC/tools/TestGen/bin
 /GenAITestPoC/tools/TestGen/obj
 /LogisticsPro_API/.vs
+/GenAITestPoC/src/GenAITest.Engine/obj
+/LogisticsPro_API/LogisticsPro_API.TestGen/obj
+/GenAITestPoC/src/GenAITest.Engine/bin

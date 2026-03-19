@@ -1,14 +1,16 @@
-﻿using GenAITest.Framework.Models;
-using GenAITest.Pipeline.LLM;
-using GenAITest.Pipeline.RAG;
-using GenAITest.Pipeline.Hybrid;
-using System.Text.Json;
-using GenAITest.Evaluator;
+﻿using GenAITest.Engine.Models;
+using GenAITest.Engine.Services;
 
 if (args.Length == 0)
 {
-    Console.WriteLine("Usage:");
-    Console.WriteLine("  --mode llm|rag|hybrid --target <path> --out <path> [--docs <path>]");
+    PrintUsage();
+    return;
+}
+
+var command = args[0].ToLowerInvariant();
+if (command != "generate")
+{
+    PrintUsage();
     return;
 }
 
@@ -16,83 +18,56 @@ string? mode = GetArg("--mode");
 string? target = GetArg("--target");
 string? outDir = GetArg("--out");
 string? docs = GetArg("--docs");
+string? framework = GetArg("--framework");
+string? style = GetArg("--style");
+string? module = GetArg("--module");
 
-if (mode is null || target is null || outDir is null)
+if (string.IsNullOrWhiteSpace(mode) || string.IsNullOrWhiteSpace(target) || string.IsNullOrWhiteSpace(outDir))
 {
-    Console.WriteLine("Missing required arguments.");
+    PrintUsage();
     return;
 }
 
-string? targetProject = Directory.GetFiles(target, "*.csproj", SearchOption.AllDirectories)
-                                 .FirstOrDefault();
+framework ??= TestFrameworkType.XUnit;
+style ??= TestStyleType.Integration;
 
-if (targetProject is null)
-    Console.WriteLine($"Target project: {targetProject ?? "(not found)"}");
+string? targetProject = null;
+if (Directory.Exists(target))
+{
+    targetProject = Directory.GetFiles(target, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
+}
 
 var request = new GenerationRequest(
     TargetPath: target,
     DocsPath: docs,
     OutputPath: outDir,
-    TestFramework: "xunit",
-    TargetProjectFile: targetProject
+    TargetProjectFile: targetProject,
+    ModelType: mode,
+    TestStyle: style,
+    TestFramework: framework,
+    ModuleFilter: module
 );
 
-GenAITest.Framework.Abstractions.ITestGenerationPipeline pipeline =
-mode.ToLowerInvariant() switch
-{
-    "llm" => new LLMOnlyPipeline(),
-    "llm-ba" => new LLMWithBaPipeline(),
-    "rag" => new RagPipeline(),
-    "hybrid" => new HybridPipeline(),
-    _ => throw new ArgumentException("Invalid --mode")
-};
+var engine = new TestGenerationEngine(
+    new PdfDocumentExtractor(),
+    new RequirementExtractor(),
+    new SmartRequirementGrouper(),
+    new ContextBuilderFactory(),
+    new StubTestGenerator()
+);
 
-var result = await pipeline.GenerateAsync(request);
+await engine.GenerateAsync(request);
 
-Console.WriteLine($"Mode: {result.Mode}");
-Console.WriteLine($"Files Generated: {result.FilesGenerated}");
-
-foreach (var warning in result.Warnings)
-{
-    Console.WriteLine($"WARNING: {warning}");
-}
+Console.WriteLine("Generation completed.");
 
 string? GetArg(string key)
 {
-    var index = Array.FindIndex(args, a =>
-        a.Equals(key, StringComparison.OrdinalIgnoreCase));
-
-    return index >= 0 && index + 1 < args.Length
-        ? args[index + 1]
-        : null;
+    var index = Array.FindIndex(args, a => a.Equals(key, StringComparison.OrdinalIgnoreCase));
+    return index >= 0 && index + 1 < args.Length ? args[index + 1] : null;
 }
 
-var evaluator = new DotnetBuildEvaluator();
-var generatedFilePath = result.GeneratedFiles.FirstOrDefault();
-
-if (!string.IsNullOrWhiteSpace(generatedFilePath) && File.Exists(generatedFilePath))
+static void PrintUsage()
 {
-    var targetProjectPath = Directory.GetFiles(target, "*.csproj", SearchOption.AllDirectories)
-                             .FirstOrDefault();
-
-    if (!string.IsNullOrWhiteSpace(targetProjectPath))
-    {
-        targetProjectPath = Path.GetFullPath(targetProjectPath);
-    }
-
-    Console.WriteLine($"Target project: {targetProjectPath ?? "(not found)"}");
-
-    var eval = await evaluator.EvaluateAsync(generatedFilePath, outDir, targetProjectPath);
-
-    var metricsPath = Path.Combine(outDir, "metrics.json");
-    var json = JsonSerializer.Serialize(eval, new JsonSerializerOptions { WriteIndented = true });
-    await File.WriteAllTextAsync(metricsPath, json);
-
-    Console.WriteLine($"Compile Success: {eval.CompileSuccess}");
-    Console.WriteLine($"Build Log: {eval.BuildLogPath}");
-    Console.WriteLine($"Metrics: {metricsPath}");
-}
-else
-{
-    Console.WriteLine("No generated test file found to evaluate.");
+    Console.WriteLine("Usage:");
+    Console.WriteLine("  generate --mode llm|rag|hybrid|lora|lora-rag --target <path> --out <path> [--docs <ba-pdf>] [--framework xunit|nunit|mstest] [--style integration|api|unit] [--module <module-name>]");
 }

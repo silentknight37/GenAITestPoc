@@ -1,0 +1,584 @@
+[
+  {
+    "Id": "BR-01",
+    "Type": "BR",
+    "Title": "Authentication and Access Control The system must ensure that only authorized users can access protected business functionalities.",
+    "Content": "BR-01: Authentication and Access Control The system must ensure that only authorized users can access protected business functionalities. Requirements: \u2022 The system must require authentication before granting access to business operations \u2022 The system must validate user identity for each request \u2022 The system must restrict unauthorized access to all protected endpoints Expected Outcome: All business operations are performed only by authenticated and authorized users."
+  },
+  {
+    "Id": "BR-02",
+    "Type": "BR",
+    "Title": "Customer Management The system must provide the ability to manage customer information used in operational and financial processes.",
+    "Content": "BR-02: Customer Management The system must provide the ability to manage customer information used in operational and financial processes. Requirements: \u2022 The system must allow creation of new customer records \u2022 The system must allow updating of existing customer details \u2022 The system must allow retrieval of customer information \u2022 The system must maintain uniqueness and integrity of customer data \n\nExpected Outcome: Accurate and consistent customer records are available for all downstream processes."
+  },
+  {
+    "Id": "BR-03",
+    "Type": "BR",
+    "Title": "Vendor Management The system must support the management of vendors who provide operational services.",
+    "Content": "BR-03: Vendor Management The system must support the management of vendors who provide operational services. Requirements: \u2022 The system must allow creation and maintenance of vendor records \u2022 The system must associate vendors with service types \u2022 The system must allow retrieval of vendor information Expected Outcome: Vendors are properly maintained and available for assignment in operational services."
+  },
+  {
+    "Id": "BR-04",
+    "Type": "BR",
+    "Title": "Event Management The system must allow the creation and management of events that group operational activities.",
+    "Content": "BR-04: Event Management The system must allow the creation and management of events that group operational activities. Requirements: \u2022 The system must allow creation of events \u2022 The system must allow updating event details \u2022 The system must allow retrieval of event information Expected Outcome: Events can be used to logically group and organize job cards."
+  },
+  {
+    "Id": "BR-05",
+    "Type": "BR",
+    "Title": "Job Card Management The system must support the creation and lifecycle management of job cards representing operational work.",
+    "Content": "BR-05: Job Card Management The system must support the creation and lifecycle management of job cards representing operational work. Requirements: \u2022 The system must allow creation of job cards linked to customers \n\n\u2022 The system must allow updating of job card details \u2022 The system must allow retrieval of job cards \u2022 The system must allow deletion of job cards under valid conditions \u2022 The system must support opening and closing of job cards Expected Outcome: Operational work is tracked through structured job cards with controlled lifecycle states."
+  },
+  {
+    "Id": "BR-06",
+    "Type": "BR",
+    "Title": "Operational Service Management The system must support recording and management of service items associated with job cards.",
+    "Content": "BR-06: Operational Service Management The system must support recording and management of service items associated with job cards. Requirements: \u2022 The system must allow adding service items to a job card \u2022 The system must allow updating service items \u2022 The system must allow removal of service items \u2022 The system must support multiple service types including transportation, hotel, visa, and miscellaneous Expected Outcome: All operational activities are captured as structured service records linked to job cards."
+  },
+  {
+    "Id": "BR-07",
+    "Type": "BR",
+    "Title": "Cost Management The system must ensure accurate tracking and aggregation of costs associated with service items.",
+    "Content": "BR-07: Cost Management The system must ensure accurate tracking and aggregation of costs associated with service items. Requirements: \u2022 The system must maintain cost values for each service item \u2022 The system must calculate total cost at job level \u2022 The system must update cost calculations dynamically based on changes Expected Outcome: \n\nFinancial values accurately reflect operational activities."
+  },
+  {
+    "Id": "BR-08",
+    "Type": "BR",
+    "Title": "Batch Processing The system must group operational service items into batches for financial processing.",
+    "Content": "BR-08: Batch Processing The system must group operational service items into batches for financial processing. Requirements: \u2022 The system must allow selection of eligible items for batching \u2022 The system must allow creation and management of batches \u2022 The system must prevent duplication of items across batches Expected Outcome: Operational items are efficiently grouped for downstream financial workflows."
+  },
+  {
+    "Id": "BR-09",
+    "Type": "BR",
+    "Title": "Payment Voucher Management The system must support the creation and management of payment vouchers for vendor payments.",
+    "Content": "BR-09: Payment Voucher Management The system must support the creation and management of payment vouchers for vendor payments. Requirements: \u2022 The system must allow creation of payment vouchers linked to batch items \u2022 The system must allow retrieval of payment voucher information \u2022 The system must ensure correctness of payment amounts Expected Outcome: Vendor payment obligations are recorded and managed accurately."
+  },
+  {
+    "Id": "BR-10",
+    "Type": "BR",
+    "Title": "Invoice Management The system must support billing of customers through invoices.",
+    "Content": "BR-10: Invoice Management The system must support billing of customers through invoices. Requirements: \u2022 The system must allow creation of invoices \u2022 The system must allow retrieval of invoices \n\n\u2022 The system must allow voiding of invoices under valid conditions Expected Outcome: Customer billing is handled in a structured and controlled manner."
+  },
+  {
+    "Id": "BR-11",
+    "Type": "BR",
+    "Title": "Proforma Invoice Management The system must support preliminary billing through proforma invoices.",
+    "Content": "BR-11: Proforma Invoice Management The system must support preliminary billing through proforma invoices. Requirements: \u2022 The system must allow creation of proforma invoices \u2022 The system must allow conversion of proforma invoices into final invoices Expected Outcome: Preliminary billing can be performed prior to final financial processing."
+  },
+  {
+    "Id": "BR-12",
+    "Type": "BR",
+    "Title": "Receipt Management The system must support recording of payments received from customers.",
+    "Content": "BR-12: Receipt Management The system must support recording of payments received from customers. Requirements: \u2022 The system must allow creation of receipts \u2022 The system must allow linking of receipts to invoices \u2022 The system must support voiding of receipts Expected Outcome: Payments are accurately recorded and linked to corresponding financial documents."
+  },
+  {
+    "Id": "BR-13",
+    "Type": "BR",
+    "Title": "Reporting and Analytics The system must provide reporting capabilities for operational and financial data.",
+    "Content": "BR-13: Reporting and Analytics The system must provide reporting capabilities for operational and financial data. Requirements: \u2022 The system must generate operational reports \u2022 The system must generate historical reports \n\n\u2022 The system must generate uninvoiced reports \u2022 The system must generate profit and loss reports Expected Outcome: Business users have access to accurate and meaningful insights. 2.4 Business Requirement Dependencies \u2022 Job Card Management depends on Customer and Event Management \u2022 Service Management depends on Job Card Management \u2022 Cost Management depends on Service Management \u2022 Batch Processing depends on Service Management \u2022 Payment Voucher Management depends on Batch Processing \u2022 Invoice Management depends on Job Card and Service data \u2022 Receipt Management depends on Invoice Management \u2022 Reporting depends on all modules 2.5 Business Requirement Constraints \u2022 Business operations must follow defined process sequences \u2022 Financial transactions must be traceable and auditable \u2022 Invalid operations must be rejected by the system \u2022 Data consistency must be maintained across all modules 2.6 Business Requirement Acceptance Criteria Each business requirement is considered satisfied when: \u2022 The functionality is implemented according to the defined requirement \u2022 All relevant business rules are enforced \n\n\u2022 The system prevents invalid operations \u2022 Outputs match expected business outcomes \u2022 Data consistency is maintained across modules 3. Functional Requirements"
+  },
+  {
+    "Id": "FR-01",
+    "Type": "FR",
+    "Title": "User Authentication",
+    "Content": "FR-01: User Authentication Description The system must authenticate users before allowing access to protected resources. \n\nInputs \u2022 Username / Email \u2022 Password Processing \u2022 Validate credentials against stored records \u2022 Generate authentication token Outputs \u2022 Success: Authentication token returned \u2022 Failure: Unauthorized response Validation Rules \u2022 Credentials must be valid \u2022 Invalid login attempts must be rejected"
+  },
+  {
+    "Id": "FR-02",
+    "Type": "FR",
+    "Title": "Token Validation",
+    "Content": "FR-02: Token Validation Description The system must validate authentication tokens for all protected API requests. Inputs \u2022 JWT token Processing \u2022 Verify token signature \u2022 Check token expiration \u2022 Extract user identity Outputs \u2022 Success: Request proceeds \n\n\u2022 Failure: Unauthorized response Validation Rules \u2022 Token must not be expired \u2022 Token must be valid and untampered"
+  },
+  {
+    "Id": "FR-03",
+    "Type": "FR",
+    "Title": "Create Customer",
+    "Content": "FR-03: Create Customer Description The system must allow creation of a new customer record. Inputs \u2022 Customer Name \u2022 Contact Details Processing \u2022 Validate input data \u2022 Store customer record Outputs \u2022 Success: Customer created with ID \u2022 Failure: Validation error Validation Rules \u2022 Name is mandatory \u2022 Duplicate entries must be prevented (if applicable)"
+  },
+  {
+    "Id": "FR-04",
+    "Type": "FR",
+    "Title": "Update Customer",
+    "Content": "FR-04: Update Customer Description The system must allow updating existing customer details. \n\nInputs \u2022 Customer ID \u2022 Updated fields Processing \u2022 Verify customer exists \u2022 Update record Outputs \u2022 Success: Updated customer \u2022 Failure: Not found / validation error"
+  },
+  {
+    "Id": "FR-05",
+    "Type": "FR",
+    "Title": "Retrieve Customer",
+    "Content": "FR-05: Retrieve Customer Description The system must allow retrieval of customer details. Inputs \u2022 Customer ID Processing \u2022 Fetch customer record Outputs \u2022 Success: Customer details \u2022 Failure: Not found"
+  },
+  {
+    "Id": "FR-06",
+    "Type": "FR",
+    "Title": "Create Vendor",
+    "Content": "FR-06: Create Vendor Description The system must allow creation of vendor records. \n\nInputs \u2022 Vendor Name \u2022 Service Type Processing \u2022 Validate and store vendor Outputs \u2022 Success: Vendor created"
+  },
+  {
+    "Id": "FR-07",
+    "Type": "FR",
+    "Title": "Retrieve Vendor",
+    "Content": "FR-07: Retrieve Vendor Description The system must allow retrieval of vendor details."
+  },
+  {
+    "Id": "FR-08",
+    "Type": "FR",
+    "Title": "Create Event",
+    "Content": "FR-08: Create Event Description The system must allow creation of event records. Inputs \u2022 Event Name \u2022 Start Date \u2022 End Date Validation Rules \u2022 End Date must be greater than or equal to Start Date"
+  },
+  {
+    "Id": "FR-09",
+    "Type": "FR",
+    "Title": "Create Job Card",
+    "Content": "FR-09: Create Job Card Description The system must allow creation of a job card. Inputs \u2022 Customer ID \u2022 Event ID (optional) Processing \u2022 Validate customer exists \u2022 Create job record Outputs \u2022 Job ID generated"
+  },
+  {
+    "Id": "FR-10",
+    "Type": "FR",
+    "Title": "Update Job Card",
+    "Content": "FR-10: Update Job Card Description The system must allow updating job card details. Validation Rules \u2022 Job must not be closed"
+  },
+  {
+    "Id": "FR-11",
+    "Type": "FR",
+    "Title": "Close Job Card",
+    "Content": "FR-11: Close Job Card Description The system must allow closing of job cards. Processing \u2022 Update status to Closed Validation Rules \n\n\u2022 Closed jobs cannot be modified"
+  },
+  {
+    "Id": "FR-12",
+    "Type": "FR",
+    "Title": "Add Service Item",
+    "Content": "FR-12: Add Service Item Description The system must allow adding service items to a job. Inputs \u2022 Job ID \u2022 Service Type \u2022 Cost Processing \u2022 Validate job exists \u2022 Add service record Validation Rules \u2022 Cost must be \u2265 0"
+  },
+  {
+    "Id": "FR-13",
+    "Type": "FR",
+    "Title": "Update Service Item",
+    "Content": "FR-13: Update Service Item Description The system must allow updating service details."
+  },
+  {
+    "Id": "FR-14",
+    "Type": "FR",
+    "Title": "Remove Service Item",
+    "Content": "FR-14: Remove Service Item Description The system must allow removal of service items. Validation Rules \u2022 Cannot remove if already invoiced"
+  },
+  {
+    "Id": "FR-15",
+    "Type": "FR",
+    "Title": "Calculate Job Cost",
+    "Content": "FR-15: Calculate Job Cost Description The system must calculate total cost of a job. Processing \u2022 Sum all service costs Output \u2022 Total cost"
+  },
+  {
+    "Id": "FR-16",
+    "Type": "FR",
+    "Title": "Create Batch",
+    "Content": "FR-16: Create Batch Description The system must group service items into a batch. Validation Rules \u2022 Items must not be duplicated"
+  },
+  {
+    "Id": "FR-17",
+    "Type": "FR",
+    "Title": "Create Payment Voucher",
+    "Content": "FR-17: Create Payment Voucher Description The system must create payment vouchers for vendors. Inputs \u2022 Batch ID Processing \u2022 Calculate payable amount"
+  },
+  {
+    "Id": "FR-18",
+    "Type": "FR",
+    "Title": "Create Invoice",
+    "Content": "FR-18: Create Invoice Description The system must generate invoices. Validation Rules \u2022 Must link to valid job"
+  },
+  {
+    "Id": "FR-19",
+    "Type": "FR",
+    "Title": "Void Invoice",
+    "Content": "FR-19: Void Invoice Description The system must allow voiding invoices."
+  },
+  {
+    "Id": "FR-20",
+    "Type": "FR",
+    "Title": "Create Receipt",
+    "Content": "FR-20: Create Receipt Description The system must record payments. Validation Rules \u2022 Amount must not exceed invoice"
+  },
+  {
+    "Id": "FR-21",
+    "Type": "FR",
+    "Title": "Generate Reports",
+    "Content": "FR-21: Generate Reports Description The system must generate reports. Types \u2022 Operational \u2022 Financial \u2022 P\u0026L \n\n4. Business Rules and Validation Requirements\n\n\u2022 Reporting and audit rules Each rule is assigned an identifier for traceability."
+  },
+  {
+    "Id": "BRULE-01",
+    "Type": "BRULE",
+    "Title": "Mandatory Data Integrity All records created, updated, or processed by the system must preserve referential and transactional integrity across related business entities.",
+    "Content": "BRULE-01: Mandatory Data Integrity All records created, updated, or processed by the system must preserve referential and transactional integrity across related business entities. Explanation: The system must not allow orphaned records, broken references, or inconsistent cross-module updates."
+  },
+  {
+    "Id": "BRULE-02",
+    "Type": "BRULE",
+    "Title": "Valid Entity Reference A transaction must not reference a customer, vendor, event, job card, batch, invoice, or other entity unless that entity already exists and is valid for use. Explanation: The system must verify the existence of referenced entities before",
+    "Content": "BRULE-02: Valid Entity Reference A transaction must not reference a customer, vendor, event, job card, batch, invoice, or other entity unless that entity already exists and is valid for use. Explanation: The system must verify the existence of referenced entities before processing the request."
+  },
+  {
+    "Id": "BRULE-03",
+    "Type": "BRULE",
+    "Title": "Controlled Modification Records that have reached a finalized, closed, processed, or voided state must be subject to controlled modification rules.",
+    "Content": "BRULE-03: Controlled Modification Records that have reached a finalized, closed, processed, or voided state must be subject to controlled modification rules. Explanation: Not every record can remain editable forever. Some records must become restricted after reaching a defined state."
+  },
+  {
+    "Id": "BRULE-04",
+    "Type": "BRULE",
+    "Title": "Audit Preservation Where financial or operational actions have audit significance, the system must preserve transaction history and avoid destructive",
+    "Content": "BRULE-04: Audit Preservation Where financial or operational actions have audit significance, the system must preserve transaction history and avoid destructive processing that removes historical traceability. Explanation: Important actions such as voiding financial records should preserve evidence of prior existence and status."
+  },
+  {
+    "Id": "BRULE-05",
+    "Type": "BRULE",
+    "Title": "Authenticated Access Required All protected API operations must require successful authentication.",
+    "Content": "BRULE-05: Authenticated Access Required All protected API operations must require successful authentication. Validation Requirement \u2022 Requests without valid credentials or token must be rejected."
+  },
+  {
+    "Id": "BRULE-06",
+    "Type": "BRULE",
+    "Title": "Token Validity The system must reject expired, malformed, tampered, or otherwise invalid authentication tokens.",
+    "Content": "BRULE-06: Token Validity The system must reject expired, malformed, tampered, or otherwise invalid authentication tokens. Validation Requirement \u2022 Token structure, expiration, and signature must be validated before request processing."
+  },
+  {
+    "Id": "BRULE-07",
+    "Type": "BRULE",
+    "Title": "Identity Context Every authorized transaction must be processed within the context of the authenticated user identity.",
+    "Content": "BRULE-07: Identity Context Every authorized transaction must be processed within the context of the authenticated user identity. Explanation: Where required, the system must associate changes or actions with the authenticated user."
+  },
+  {
+    "Id": "BRULE-08",
+    "Type": "BRULE",
+    "Title": "Customer Record Completeness A customer record must contain all mandatory attributes required to identify and manage the customer in operational and financial processes.",
+    "Content": "BRULE-08: Customer Record Completeness A customer record must contain all mandatory attributes required to identify and manage the customer in operational and financial processes. Validation Requirements \u2022 Customer name must be provided. \u2022 Required business contact fields must not be blank if marked mandatory by the domain model."
+  },
+  {
+    "Id": "BRULE-09",
+    "Type": "BRULE",
+    "Title": "Vendor Record Completeness A vendor record must include the minimum information required to identify the vendor and associate the vendor with supported services.",
+    "Content": "BRULE-09: Vendor Record Completeness A vendor record must include the minimum information required to identify the vendor and associate the vendor with supported services. Validation Requirements \u2022 Vendor name must be provided. \u2022 Vendor must be classifiable for operational usage."
+  },
+  {
+    "Id": "BRULE-10",
+    "Type": "BRULE",
+    "Title": "Event Date Consistency Where an event includes start and end dates, the end date must not occur before the start date.",
+    "Content": "BRULE-10: Event Date Consistency Where an event includes start and end dates, the end date must not occur before the start date. Validation Requirements \u2022 EndDate \u003E= StartDate"
+  },
+  {
+    "Id": "BRULE-11",
+    "Type": "BRULE",
+    "Title": "Protected Deletion of Master Data A customer, vendor, or event must not be deleted if it is actively referenced by downstream business transactions unless the system explicitly supports safe deactivation instead of deletion.",
+    "Content": "BRULE-11: Protected Deletion of Master Data A customer, vendor, or event must not be deleted if it is actively referenced by downstream business transactions unless the system explicitly supports safe deactivation instead of deletion. Explanation: This prevents broken references and historical inconsistencies."
+  },
+  {
+    "Id": "BRULE-12",
+    "Type": "BRULE",
+    "Title": "Active Usage Constraint Only active or valid master data records should be available for new downstream transactions.",
+    "Content": "BRULE-12: Active Usage Constraint Only active or valid master data records should be available for new downstream transactions. Explanation: Inactive entities may remain visible historically but should not necessarily be eligible for new business use."
+  },
+  {
+    "Id": "BRULE-13",
+    "Type": "BRULE",
+    "Title": "Customer Requirement for Job Creation A job card must be linked to a valid customer.",
+    "Content": "BRULE-13: Customer Requirement for Job Creation A job card must be linked to a valid customer. \n\nValidation Requirements \u2022 Job creation must fail if the customer reference is missing or invalid."
+  },
+  {
+    "Id": "BRULE-14",
+    "Type": "BRULE",
+    "Title": "Job Card Identity Each job card must have a unique identifier.",
+    "Content": "BRULE-14: Job Card Identity Each job card must have a unique identifier. Explanation: The system must ensure that each job card is uniquely traceable."
+  },
+  {
+    "Id": "BRULE-15",
+    "Type": "BRULE",
+    "Title": "Job Card Lifecycle Control A job card must operate within defined lifecycle states. Minimum Expected States \u2022 Open \u2022 Closed",
+    "Content": "BRULE-15: Job Card Lifecycle Control A job card must operate within defined lifecycle states. Minimum Expected States \u2022 Open \u2022 Closed"
+  },
+  {
+    "Id": "BRULE-17",
+    "Type": "BRULE",
+    "Title": "Closed Job Restriction A closed job card must not accept new operational service items or unrestricted modifications.",
+    "Content": "BRULE-17: Closed Job Restriction A closed job card must not accept new operational service items or unrestricted modifications. Explanation: Closing a job card indicates operational completion or administrative lock."
+  },
+  {
+    "Id": "BRULE-18",
+    "Type": "BRULE",
+    "Title": "Job Closure Preconditions The system may require certain business conditions to be satisfied before a job card can be closed. Possible Conditions \u2022 Required operational data completed \u2022 Financial dependencies reviewed \u2022 No invalid incomplete service lines",
+    "Content": "BRULE-18: Job Closure Preconditions The system may require certain business conditions to be satisfied before a job card can be closed. Possible Conditions \u2022 Required operational data completed \u2022 Financial dependencies reviewed \u2022 No invalid incomplete service lines \n\nWhere such preconditions are enforced by the implementation, the API must validate them prior to closure."
+  },
+  {
+    "Id": "BRULE-19",
+    "Type": "BRULE",
+    "Title": "Deletion Restriction for Financially Used Jobs A job card must not be deleted if it has already contributed to invoices, batches, vouchers, receipts, or other financially significant downstream records.",
+    "Content": "BRULE-19: Deletion Restriction for Financially Used Jobs A job card must not be deleted if it has already contributed to invoices, batches, vouchers, receipts, or other financially significant downstream records. Explanation: Historical financial traceability must be preserved."
+  },
+  {
+    "Id": "BRULE-20",
+    "Type": "BRULE",
+    "Title": "Service-to-Job Relationship Every operational service item must belong to a valid job card.",
+    "Content": "BRULE-20: Service-to-Job Relationship Every operational service item must belong to a valid job card. Validation Requirements \u2022 Service creation must fail if JobId is invalid or missing."
+  },
+  {
+    "Id": "BRULE-21",
+    "Type": "BRULE",
+    "Title": "Service Type Validity A service item must be classified under a valid supported service category. Supported Types \u2022 Transportation \u2022 Hotel \u2022 Visa \u2022 Miscellaneous",
+    "Content": "BRULE-21: Service Type Validity A service item must be classified under a valid supported service category. Supported Types \u2022 Transportation \u2022 Hotel \u2022 Visa \u2022 Miscellaneous"
+  },
+  {
+    "Id": "BRULE-22",
+    "Type": "BRULE",
+    "Title": "Service Editability A service item may only be edited if its parent job card remains eligible for modification and the service has not been locked by downstream financial",
+    "Content": "BRULE-22: Service Editability A service item may only be edited if its parent job card remains eligible for modification and the service has not been locked by downstream financial processing."
+  },
+  {
+    "Id": "BRULE-23",
+    "Type": "BRULE",
+    "Title": "Service Deletion Restriction A service item must not be removed if it has already been included in a finalized financial process unless the system supports controlled reversal procedures.",
+    "Content": "BRULE-23: Service Deletion Restriction A service item must not be removed if it has already been included in a finalized financial process unless the system supports controlled reversal procedures."
+  },
+  {
+    "Id": "BRULE-24",
+    "Type": "BRULE",
+    "Title": "Mandatory Cost Value Every service item that contributes to business cost must contain a valid cost value.",
+    "Content": "BRULE-24: Mandatory Cost Value Every service item that contributes to business cost must contain a valid cost value. Validation Requirements \u2022 Cost must be numeric. \u2022 Cost must not be negative."
+  },
+  {
+    "Id": "BRULE-25",
+    "Type": "BRULE",
+    "Title": "Transportation Route Validity For transportation entries, pickup and drop-off information must be valid and meaningful.",
+    "Content": "BRULE-25: Transportation Route Validity For transportation entries, pickup and drop-off information must be valid and meaningful. Validation Requirements \u2022 Pickup and drop-off must not both be blank. \u2022 Where both are provided, they should not represent the same unusable route unless explicitly allowed."
+  },
+  {
+    "Id": "BRULE-26",
+    "Type": "BRULE",
+    "Title": "Hotel Stay Validity For hotel entries, stay duration must be logically valid.",
+    "Content": "BRULE-26: Hotel Stay Validity For hotel entries, stay duration must be logically valid. Validation Requirements \u2022 Check-out date must be later than or equal to check-in date, depending on the defined booking model. \u2022 Room-related quantities must be positive if quantity fields are used."
+  },
+  {
+    "Id": "BRULE-27",
+    "Type": "BRULE",
+    "Title": "Visa Service Validity Visa-related services must include the required identifying or",
+    "Content": "BRULE-27: Visa Service Validity Visa-related services must include the required identifying or processing information defined by the service model. \n\nExplanation: Mandatory visa-specific fields must be validated before save."
+  },
+  {
+    "Id": "BRULE-28",
+    "Type": "BRULE",
+    "Title": "Miscellaneous Service Clarity Miscellaneous items must contain sufficient descriptive information to justify their existence and financial value. Validation Requirements \u2022",
+    "Content": "BRULE-28: Miscellaneous Service Clarity Miscellaneous items must contain sufficient descriptive information to justify their existence and financial value. Validation Requirements \u2022 Description must not be empty. \u2022 Cost must remain valid."
+  },
+  {
+    "Id": "BRULE-29",
+    "Type": "BRULE",
+    "Title": "Non-Negative Cost Rule All cost-bearing service entries must have non-negative amounts.",
+    "Content": "BRULE-29: Non-Negative Cost Rule All cost-bearing service entries must have non-negative amounts."
+  },
+  {
+    "Id": "BRULE-30",
+    "Type": "BRULE",
+    "Title": "Recalculation on Change The total cost of a job card must be recalculated whenever a cost-bearing service item is added, updated, or removed.",
+    "Content": "BRULE-30: Recalculation on Change The total cost of a job card must be recalculated whenever a cost-bearing service item is added, updated, or removed."
+  },
+  {
+    "Id": "BRULE-31",
+    "Type": "BRULE",
+    "Title": "Aggregated Total Accuracy The total job cost must equal the sum of all valid included service item costs associated with that job.",
+    "Content": "BRULE-31: Aggregated Total Accuracy The total job cost must equal the sum of all valid included service item costs associated with that job."
+  },
+  {
+    "Id": "BRULE-32",
+    "Type": "BRULE",
+    "Title": "Financial Consistency Operational totals used in downstream financial",
+    "Content": "BRULE-32: Financial Consistency Operational totals used in downstream financial processing must remain consistent with the relevant included service records. Explanation: The system must avoid mismatches between operational values and financial values derived from them."
+  },
+  {
+    "Id": "BRULE-33",
+    "Type": "BRULE",
+    "Title": "Invalid Numeric Rejection The system must reject invalid numeric values such as non-numeric costs, malformed decimals, or values outside supported limits.",
+    "Content": "BRULE-33: Invalid Numeric Rejection The system must reject invalid numeric values such as non-numeric costs, malformed decimals, or values outside supported limits."
+  },
+  {
+    "Id": "BRULE-34",
+    "Type": "BRULE",
+    "Title": "Eligibility for Batching Only eligible operational items may be added to a batch. Typical Eligibility Conditions \u2022 Item exists \u2022 Item is valid \u2022 Item is not already processed in another conflicting financial workflow",
+    "Content": "BRULE-34: Eligibility for Batching Only eligible operational items may be added to a batch. Typical Eligibility Conditions \u2022 Item exists \u2022 Item is valid \u2022 Item is not already processed in another conflicting financial workflow"
+  },
+  {
+    "Id": "BRULE-35",
+    "Type": "BRULE",
+    "Title": "Single Batch Membership An item must not belong to multiple active or conflicting batches when the business process expects exclusive grouping.",
+    "Content": "BRULE-35: Single Batch Membership An item must not belong to multiple active or conflicting batches when the business process expects exclusive grouping."
+  },
+  {
+    "Id": "BRULE-36",
+    "Type": "BRULE",
+    "Title": "Empty Batch Prevention The system must not create or persist a financial batch without at least one valid item.",
+    "Content": "BRULE-36: Empty Batch Prevention The system must not create or persist a financial batch without at least one valid item."
+  },
+  {
+    "Id": "BRULE-37",
+    "Type": "BRULE",
+    "Title": "Batch Integrity All items included in a batch must remain valid and traceable to their source records.",
+    "Content": "BRULE-37: Batch Integrity All items included in a batch must remain valid and traceable to their source records."
+  },
+  {
+    "Id": "BRULE-38",
+    "Type": "BRULE",
+    "Title": "Processed Batch Restriction Once a batch has been processed into downstream financial transactions, unrestricted editing or item replacement should not be allowed.",
+    "Content": "BRULE-38: Processed Batch Restriction Once a batch has been processed into downstream financial transactions, unrestricted editing or item replacement should not be allowed."
+  },
+  {
+    "Id": "BRULE-39",
+    "Type": "BRULE",
+    "Title": "Valid Batch Requirement for Voucher Creation A payment voucher must be linked to valid batch data or another valid source of payable operational items.",
+    "Content": "BRULE-39: Valid Batch Requirement for Voucher Creation A payment voucher must be linked to valid batch data or another valid source of payable operational items."
+  },
+  {
+    "Id": "BRULE-40",
+    "Type": "BRULE",
+    "Title": "Voucher Amount Accuracy The value of a payment voucher must match the payable amount derived from the included operational items according to business rules.",
+    "Content": "BRULE-40: Voucher Amount Accuracy The value of a payment voucher must match the payable amount derived from the included operational items according to business rules."
+  },
+  {
+    "Id": "BRULE-41",
+    "Type": "BRULE",
+    "Title": "Duplicate Voucher Prevention The system must prevent duplicate or conflicting payment voucher creation for the same payable business content unless intentional partial or revised voucher behavior is explicitly supported.",
+    "Content": "BRULE-41: Duplicate Voucher Prevention The system must prevent duplicate or conflicting payment voucher creation for the same payable business content unless intentional partial or revised voucher behavior is explicitly supported."
+  },
+  {
+    "Id": "BRULE-42",
+    "Type": "BRULE",
+    "Title": "Vendor Consistency for Voucher Where the voucher is vendor-specific, the included payable items must align with the vendor associated with the voucher.",
+    "Content": "BRULE-42: Vendor Consistency for Voucher Where the voucher is vendor-specific, the included payable items must align with the vendor associated with the voucher."
+  },
+  {
+    "Id": "BRULE-43",
+    "Type": "BRULE",
+    "Title": "Voucher Traceability A voucher must remain traceable to the items, batches, or services that generated the payable amount.",
+    "Content": "BRULE-43: Voucher Traceability A voucher must remain traceable to the items, batches, or services that generated the payable amount."
+  },
+  {
+    "Id": "BRULE-44",
+    "Type": "BRULE",
+    "Title": "Invoice Source Validity An invoice must be created only from valid billable business content.",
+    "Content": "BRULE-44: Invoice Source Validity An invoice must be created only from valid billable business content."
+  },
+  {
+    "Id": "BRULE-45",
+    "Type": "BRULE",
+    "Title": "Invoice Amount Integrity Invoice totals must accurately reflect the chargeable content from the underlying operational and financial records.",
+    "Content": "BRULE-45: Invoice Amount Integrity Invoice totals must accurately reflect the chargeable content from the underlying operational and financial records."
+  },
+  {
+    "Id": "BRULE-46",
+    "Type": "BRULE",
+    "Title": "Finalized Invoice Restriction Once finalized, an invoice must not be freely modified.",
+    "Content": "BRULE-46: Finalized Invoice Restriction Once finalized, an invoice must not be freely modified. \n\nExplanation: Subsequent correction should occur through controlled actions such as voiding or issuance of replacement records if supported."
+  },
+  {
+    "Id": "BRULE-47",
+    "Type": "BRULE",
+    "Title": "Voided Invoice Preservation Voiding an invoice must preserve the invoice record and its historical relationship rather than erase it.",
+    "Content": "BRULE-47: Voided Invoice Preservation Voiding an invoice must preserve the invoice record and its historical relationship rather than erase it."
+  },
+  {
+    "Id": "BRULE-48",
+    "Type": "BRULE",
+    "Title": "Proforma as Non-Final Billing A proforma invoice must be treated as a preliminary billing document and not as a finalized financial settlement record.",
+    "Content": "BRULE-48: Proforma as Non-Final Billing A proforma invoice must be treated as a preliminary billing document and not as a finalized financial settlement record."
+  },
+  {
+    "Id": "BRULE-49",
+    "Type": "BRULE",
+    "Title": "Proforma Conversion Control Where conversion from proforma invoice to final invoice is supported, the conversion must preserve business consistency and avoid duplicated billing.",
+    "Content": "BRULE-49: Proforma Conversion Control Where conversion from proforma invoice to final invoice is supported, the conversion must preserve business consistency and avoid duplicated billing."
+  },
+  {
+    "Id": "BRULE-50",
+    "Type": "BRULE",
+    "Title": "Duplicate Billing Prevention The system must prevent double invoicing of the same billable content unless explicitly allowed by the business model.",
+    "Content": "BRULE-50: Duplicate Billing Prevention The system must prevent double invoicing of the same billable content unless explicitly allowed by the business model."
+  },
+  {
+    "Id": "BRULE-51",
+    "Type": "BRULE",
+    "Title": "Valid Invoice Requirement for Receipt A receipt must be linked to a valid payable invoice or supported financial source.",
+    "Content": "BRULE-51: Valid Invoice Requirement for Receipt A receipt must be linked to a valid payable invoice or supported financial source."
+  },
+  {
+    "Id": "BRULE-52",
+    "Type": "BRULE",
+    "Title": "Receipt Amount Limit The cumulative total of receipts applied to an invoice must not exceed the allowed receivable amount for that invoice unless overpayment handling is explicitly supported.",
+    "Content": "BRULE-52: Receipt Amount Limit The cumulative total of receipts applied to an invoice must not exceed the allowed receivable amount for that invoice unless overpayment handling is explicitly supported."
+  },
+  {
+    "Id": "BRULE-53",
+    "Type": "BRULE",
+    "Title": "Voided or Invalid Target Restriction The system must prevent receipt application to a voided, invalid, or otherwise non-receivable financial document unless business rules explicitly permit it.",
+    "Content": "BRULE-53: Voided or Invalid Target Restriction The system must prevent receipt application to a voided, invalid, or otherwise non-receivable financial document unless business rules explicitly permit it."
+  },
+  {
+    "Id": "BRULE-54",
+    "Type": "BRULE",
+    "Title": "Receipt Traceability A receipt must remain traceable to the invoice or financial document against which it was recorded.",
+    "Content": "BRULE-54: Receipt Traceability A receipt must remain traceable to the invoice or financial document against which it was recorded."
+  },
+  {
+    "Id": "BRULE-55",
+    "Type": "BRULE",
+    "Title": "Receipt Void Preservation Voiding a receipt must preserve transaction history and audit visibility.",
+    "Content": "BRULE-55: Receipt Void Preservation Voiding a receipt must preserve transaction history and audit visibility."
+  },
+  {
+    "Id": "BRULE-56",
+    "Type": "BRULE",
+    "Title": "Reporting Accuracy All reports must reflect the current valid state of the underlying business data according to the reporting context.",
+    "Content": "BRULE-56: Reporting Accuracy All reports must reflect the current valid state of the underlying business data according to the reporting context."
+  },
+  {
+    "Id": "BRULE-57",
+    "Type": "BRULE",
+    "Title": "Profit and Loss Consistency Profit and loss reporting must be based on accurate revenue and cost figures derived from valid business records.",
+    "Content": "BRULE-57: Profit and Loss Consistency Profit and loss reporting must be based on accurate revenue and cost figures derived from valid business records."
+  },
+  {
+    "Id": "BRULE-58",
+    "Type": "BRULE",
+    "Title": "Historical Integrity Historical reports must preserve prior business events and should not be distorted by destructive deletion of financially relevant records.",
+    "Content": "BRULE-58: Historical Integrity Historical reports must preserve prior business events and should not be distorted by destructive deletion of financially relevant records."
+  },
+  {
+    "Id": "BRULE-59",
+    "Type": "BRULE",
+    "Title": "Uninvoiced Identification Uninvoiced reporting must correctly identify valid business content that has not yet been invoiced according to the billing rules.",
+    "Content": "BRULE-59: Uninvoiced Identification Uninvoiced reporting must correctly identify valid business content that has not yet been invoiced according to the billing rules."
+  },
+  {
+    "Id": "BRULE-60",
+    "Type": "BRULE",
+    "Title": "Auditability of Financial Events Financially significant actions such as invoice creation, voiding, receipt recording, and voucher creation must remain auditable.",
+    "Content": "BRULE-60: Auditability of Financial Events Financially significant actions such as invoice creation, voiding, receipt recording, and voucher creation must remain auditable."
+  },
+  {
+    "Id": "BRULE-61",
+    "Type": "BRULE",
+    "Title": "Clear Validation Feedback When a request fails validation, the system must provide a clear and meaningful error response identifying the reason for rejection.",
+    "Content": "BRULE-61: Clear Validation Feedback When a request fails validation, the system must provide a clear and meaningful error response identifying the reason for rejection."
+  },
+  {
+    "Id": "BRULE-62",
+    "Type": "BRULE",
+    "Title": "Consistent Error Handling Validation failures, missing references, state violations, and unauthorized access must be handled consistently across modules.",
+    "Content": "BRULE-62: Consistent Error Handling Validation failures, missing references, state violations, and unauthorized access must be handled consistently across modules."
+  },
+  {
+    "Id": "BRULE-63",
+    "Type": "BRULE",
+    "Title": "Downstream Dependency Protection A record must not be changed in a way that invalidates already completed downstream",
+    "Content": "BRULE-63: Downstream Dependency Protection A record must not be changed in a way that invalidates already completed downstream processing unless reversal logic exists."
+  },
+  {
+    "Id": "BRULE-64",
+    "Type": "BRULE",
+    "Title": "Operational-to-Financial Continuity Operational records and financial records must remain connected throughout the lifecycle of a business transaction.",
+    "Content": "BRULE-64: Operational-to-Financial Continuity Operational records and financial records must remain connected throughout the lifecycle of a business transaction."
+  }
+]

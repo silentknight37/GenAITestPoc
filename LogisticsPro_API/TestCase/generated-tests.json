@@ -1,0 +1,972 @@
+[
+  {
+    "TestName": "Validate BR-01 - Authentication and Access Control The system must ensure that only authorized users can access protected business functionalities.",
+    "RelatedRequirement": "BR-01",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-01 - User Authentication",
+    "RelatedRequirement": "FR-01",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-02 - Customer Management The system must provide the ability to manage customer information used in operational and financial processes.",
+    "RelatedRequirement": "BR-02",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-08 - Customer Record Completeness A customer record must contain all mandatory attributes required to identify and manage the customer in operational and financial processes.",
+    "RelatedRequirement": "BRULE-08",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-13 - Customer Requirement for Job Creation A job card must be linked to a valid customer.",
+    "RelatedRequirement": "BRULE-13",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-03 - Vendor Management The system must support the management of vendors who provide operational services.",
+    "RelatedRequirement": "BR-03",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-09 - Vendor Record Completeness A vendor record must include the minimum information required to identify the vendor and associate the vendor with supported services.",
+    "RelatedRequirement": "BRULE-09",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-42 - Vendor Consistency for Voucher Where the voucher is vendor-specific, the included payable items must align with the vendor associated with the voucher.",
+    "RelatedRequirement": "BRULE-42",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-04 - Event Management The system must allow the creation and management of events that group operational activities.",
+    "RelatedRequirement": "BR-04",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-10 - Event Date Consistency Where an event includes start and end dates, the end date must not occur before the start date.",
+    "RelatedRequirement": "BRULE-10",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-05 - Job Card Management The system must support the creation and lifecycle management of job cards representing operational work.",
+    "RelatedRequirement": "BR-05",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-07 - Cost Management The system must ensure accurate tracking and aggregation of costs associated with service items.",
+    "RelatedRequirement": "BR-07",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-06 - Operational Service Management The system must support recording and management of service items associated with job cards.",
+    "RelatedRequirement": "BR-06",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-08 - Batch Processing The system must group operational service items into batches for financial processing.",
+    "RelatedRequirement": "BR-08",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-37 - Batch Integrity All items included in a batch must remain valid and traceable to their source records.",
+    "RelatedRequirement": "BRULE-37",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-09 - Payment Voucher Management The system must support the creation and management of payment vouchers for vendor payments.",
+    "RelatedRequirement": "BR-09",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-10 - Invoice Management The system must support billing of customers through invoices.",
+    "RelatedRequirement": "BR-10",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-19 - Void Invoice",
+    "RelatedRequirement": "FR-19",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-44 - Invoice Source Validity An invoice must be created only from valid billable business content.",
+    "RelatedRequirement": "BRULE-44",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-45 - Invoice Amount Integrity Invoice totals must accurately reflect the chargeable content from the underlying operational and financial records.",
+    "RelatedRequirement": "BRULE-45",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-11 - Proforma Invoice Management The system must support preliminary billing through proforma invoices.",
+    "RelatedRequirement": "BR-11",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-48 - Proforma as Non-Final Billing A proforma invoice must be treated as a preliminary billing document and not as a finalized financial settlement record.",
+    "RelatedRequirement": "BRULE-48",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-49 - Proforma Conversion Control Where conversion from proforma invoice to final invoice is supported, the conversion must preserve business consistency and avoid duplicated billing.",
+    "RelatedRequirement": "BRULE-49",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-12 - Receipt Management The system must support recording of payments received from customers.",
+    "RelatedRequirement": "BR-12",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-52 - Receipt Amount Limit The cumulative total of receipts applied to an invoice must not exceed the allowed receivable amount for that invoice unless overpayment handling is explicitly supported.",
+    "RelatedRequirement": "BRULE-52",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-54 - Receipt Traceability A receipt must remain traceable to the invoice or financial document against which it was recorded.",
+    "RelatedRequirement": "BRULE-54",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-55 - Receipt Void Preservation Voiding a receipt must preserve transaction history and audit visibility.",
+    "RelatedRequirement": "BRULE-55",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BR-13 - Reporting and Analytics The system must provide reporting capabilities for operational and financial data.",
+    "RelatedRequirement": "BR-13",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-56 - Reporting Accuracy All reports must reflect the current valid state of the underlying business data according to the reporting context.",
+    "RelatedRequirement": "BRULE-56",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-02 - Token Validation",
+    "RelatedRequirement": "FR-02",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-06 - Token Validity The system must reject expired, malformed, tampered, or otherwise invalid authentication tokens.",
+    "RelatedRequirement": "BRULE-06",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-03 - Create Customer",
+    "RelatedRequirement": "FR-03",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-06 - Create Vendor",
+    "RelatedRequirement": "FR-06",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-08 - Create Event",
+    "RelatedRequirement": "FR-08",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-09 - Create Job Card",
+    "RelatedRequirement": "FR-09",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-16 - Create Batch",
+    "RelatedRequirement": "FR-16",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-17 - Create Payment Voucher",
+    "RelatedRequirement": "FR-17",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-18 - Create Invoice",
+    "RelatedRequirement": "FR-18",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-20 - Create Receipt",
+    "RelatedRequirement": "FR-20",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-04 - Update Customer",
+    "RelatedRequirement": "FR-04",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-10 - Update Job Card",
+    "RelatedRequirement": "FR-10",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-13 - Update Service Item",
+    "RelatedRequirement": "FR-13",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-05 - Retrieve Customer",
+    "RelatedRequirement": "FR-05",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-07 - Retrieve Vendor",
+    "RelatedRequirement": "FR-07",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-11 - Close Job Card",
+    "RelatedRequirement": "FR-11",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-12 - Add Service Item",
+    "RelatedRequirement": "FR-12",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-21 - Service Type Validity A service item must be classified under a valid supported service category. Supported Types \u2022 Transportation \u2022 Hotel \u2022 Visa \u2022 Miscellaneous",
+    "RelatedRequirement": "BRULE-21",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-22 - Service Editability A service item may only be edited if its parent job card remains eligible for modification and the service has not been locked by downstream financial",
+    "RelatedRequirement": "BRULE-22",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-23 - Service Deletion Restriction A service item must not be removed if it has already been included in a finalized financial process unless the system supports controlled reversal procedures.",
+    "RelatedRequirement": "BRULE-23",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-27 - Visa Service Validity Visa-related services must include the required identifying or",
+    "RelatedRequirement": "BRULE-27",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-14 - Remove Service Item",
+    "RelatedRequirement": "FR-14",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-15 - Calculate Job Cost",
+    "RelatedRequirement": "FR-15",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate FR-21 - Generate Reports",
+    "RelatedRequirement": "FR-21",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-01 - Mandatory Data Integrity All records created, updated, or processed by the system must preserve referential and transactional integrity across related business entities.",
+    "RelatedRequirement": "BRULE-01",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-24 - Mandatory Cost Value Every service item that contributes to business cost must contain a valid cost value.",
+    "RelatedRequirement": "BRULE-24",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-02 - Valid Entity Reference A transaction must not reference a customer, vendor, event, job card, batch, invoice, or other entity unless that entity already exists and is valid for use. Explanation: The system must verify the existence of referenced entities before",
+    "RelatedRequirement": "BRULE-02",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-39 - Valid Batch Requirement for Voucher Creation A payment voucher must be linked to valid batch data or another valid source of payable operational items.",
+    "RelatedRequirement": "BRULE-39",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-51 - Valid Invoice Requirement for Receipt A receipt must be linked to a valid payable invoice or supported financial source.",
+    "RelatedRequirement": "BRULE-51",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-03 - Controlled Modification Records that have reached a finalized, closed, processed, or voided state must be subject to controlled modification rules.",
+    "RelatedRequirement": "BRULE-03",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-04 - Audit Preservation Where financial or operational actions have audit significance, the system must preserve transaction history and avoid destructive",
+    "RelatedRequirement": "BRULE-04",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-05 - Authenticated Access Required All protected API operations must require successful authentication.",
+    "RelatedRequirement": "BRULE-05",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-07 - Identity Context Every authorized transaction must be processed within the context of the authenticated user identity.",
+    "RelatedRequirement": "BRULE-07",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-14 - Job Card Identity Each job card must have a unique identifier.",
+    "RelatedRequirement": "BRULE-14",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-11 - Protected Deletion of Master Data A customer, vendor, or event must not be deleted if it is actively referenced by downstream business transactions unless the system explicitly supports safe deactivation instead of deletion.",
+    "RelatedRequirement": "BRULE-11",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-12 - Active Usage Constraint Only active or valid master data records should be available for new downstream transactions.",
+    "RelatedRequirement": "BRULE-12",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-15 - Job Card Lifecycle Control A job card must operate within defined lifecycle states. Minimum Expected States \u2022 Open \u2022 Closed",
+    "RelatedRequirement": "BRULE-15",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-17 - Closed Job Restriction A closed job card must not accept new operational service items or unrestricted modifications.",
+    "RelatedRequirement": "BRULE-17",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-18 - Job Closure Preconditions The system may require certain business conditions to be satisfied before a job card can be closed. Possible Conditions \u2022 Required operational data completed \u2022 Financial dependencies reviewed \u2022 No invalid incomplete service lines",
+    "RelatedRequirement": "BRULE-18",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-19 - Deletion Restriction for Financially Used Jobs A job card must not be deleted if it has already contributed to invoices, batches, vouchers, receipts, or other financially significant downstream records.",
+    "RelatedRequirement": "BRULE-19",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-20 - Service-to-Job Relationship Every operational service item must belong to a valid job card.",
+    "RelatedRequirement": "BRULE-20",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-25 - Transportation Route Validity For transportation entries, pickup and drop-off information must be valid and meaningful.",
+    "RelatedRequirement": "BRULE-25",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-26 - Hotel Stay Validity For hotel entries, stay duration must be logically valid.",
+    "RelatedRequirement": "BRULE-26",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-28 - Miscellaneous Service Clarity Miscellaneous items must contain sufficient descriptive information to justify their existence and financial value. Validation Requirements \u2022",
+    "RelatedRequirement": "BRULE-28",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-29 - Non-Negative Cost Rule All cost-bearing service entries must have non-negative amounts.",
+    "RelatedRequirement": "BRULE-29",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-30 - Recalculation on Change The total cost of a job card must be recalculated whenever a cost-bearing service item is added, updated, or removed.",
+    "RelatedRequirement": "BRULE-30",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-31 - Aggregated Total Accuracy The total job cost must equal the sum of all valid included service item costs associated with that job.",
+    "RelatedRequirement": "BRULE-31",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-32 - Financial Consistency Operational totals used in downstream financial",
+    "RelatedRequirement": "BRULE-32",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-33 - Invalid Numeric Rejection The system must reject invalid numeric values such as non-numeric costs, malformed decimals, or values outside supported limits.",
+    "RelatedRequirement": "BRULE-33",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-34 - Eligibility for Batching Only eligible operational items may be added to a batch. Typical Eligibility Conditions \u2022 Item exists \u2022 Item is valid \u2022 Item is not already processed in another conflicting financial workflow",
+    "RelatedRequirement": "BRULE-34",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-35 - Single Batch Membership An item must not belong to multiple active or conflicting batches when the business process expects exclusive grouping.",
+    "RelatedRequirement": "BRULE-35",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-36 - Empty Batch Prevention The system must not create or persist a financial batch without at least one valid item.",
+    "RelatedRequirement": "BRULE-36",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-38 - Processed Batch Restriction Once a batch has been processed into downstream financial transactions, unrestricted editing or item replacement should not be allowed.",
+    "RelatedRequirement": "BRULE-38",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-40 - Voucher Amount Accuracy The value of a payment voucher must match the payable amount derived from the included operational items according to business rules.",
+    "RelatedRequirement": "BRULE-40",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-43 - Voucher Traceability A voucher must remain traceable to the items, batches, or services that generated the payable amount.",
+    "RelatedRequirement": "BRULE-43",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-41 - Duplicate Voucher Prevention The system must prevent duplicate or conflicting payment voucher creation for the same payable business content unless intentional partial or revised voucher behavior is explicitly supported.",
+    "RelatedRequirement": "BRULE-41",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-50 - Duplicate Billing Prevention The system must prevent double invoicing of the same billable content unless explicitly allowed by the business model.",
+    "RelatedRequirement": "BRULE-50",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-46 - Finalized Invoice Restriction Once finalized, an invoice must not be freely modified.",
+    "RelatedRequirement": "BRULE-46",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-47 - Voided Invoice Preservation Voiding an invoice must preserve the invoice record and its historical relationship rather than erase it.",
+    "RelatedRequirement": "BRULE-47",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-53 - Voided or Invalid Target Restriction The system must prevent receipt application to a voided, invalid, or otherwise non-receivable financial document unless business rules explicitly permit it.",
+    "RelatedRequirement": "BRULE-53",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-57 - Profit and Loss Consistency Profit and loss reporting must be based on accurate revenue and cost figures derived from valid business records.",
+    "RelatedRequirement": "BRULE-57",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-58 - Historical Integrity Historical reports must preserve prior business events and should not be distorted by destructive deletion of financially relevant records.",
+    "RelatedRequirement": "BRULE-58",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-59 - Uninvoiced Identification Uninvoiced reporting must correctly identify valid business content that has not yet been invoiced according to the billing rules.",
+    "RelatedRequirement": "BRULE-59",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-60 - Auditability of Financial Events Financially significant actions such as invoice creation, voiding, receipt recording, and voucher creation must remain auditable.",
+    "RelatedRequirement": "BRULE-60",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-61 - Clear Validation Feedback When a request fails validation, the system must provide a clear and meaningful error response identifying the reason for rejection.",
+    "RelatedRequirement": "BRULE-61",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-62 - Consistent Error Handling Validation failures, missing references, state violations, and unauthorized access must be handled consistently across modules.",
+    "RelatedRequirement": "BRULE-62",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-63 - Downstream Dependency Protection A record must not be changed in a way that invalidates already completed downstream",
+    "RelatedRequirement": "BRULE-63",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  },
+  {
+    "TestName": "Validate BRULE-64 - Operational-to-Financial Continuity Operational records and financial records must remain connected throughout the lifecycle of a business transaction.",
+    "RelatedRequirement": "BRULE-64",
+    "Steps": [
+      "Prepare valid request data",
+      "Execute the relevant operation",
+      "Verify the response and business behavior"
+    ],
+    "Expected": "System behavior matches the requirement"
+  }
+]

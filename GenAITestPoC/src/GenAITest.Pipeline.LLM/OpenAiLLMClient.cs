@@ -1,4 +1,4 @@
-﻿using GenAITest.Framework.Abstractions;
+﻿using GenAITest.Engine.Abstractions;
 using OpenAI;
 using OpenAI.Chat;
 
