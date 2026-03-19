@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_Common", "Logi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_API.TestGen", "LogisticsPro_API.TestGen\LogisticsPro_API.TestGen.csproj", "{1A113894-55AD-4308-BF1D-0BD08886C778}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_API.Tests.Integration", "LogisticsPro_API.Tests.Integration\LogisticsPro_API.Tests.Integration.csproj", "{540648AB-1D35-475F-B75E-4DD250EFC35A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{1A113894-55AD-4308-BF1D-0BD08886C778}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A113894-55AD-4308-BF1D-0BD08886C778}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A113894-55AD-4308-BF1D-0BD08886C778}.Release|Any CPU.Build.0 = Release|Any CPU
+		{540648AB-1D35-475F-B75E-4DD250EFC35A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{540648AB-1D35-475F-B75E-4DD250EFC35A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{540648AB-1D35-475F-B75E-4DD250EFC35A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{540648AB-1D35-475F-B75E-4DD250EFC35A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

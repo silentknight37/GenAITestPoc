@@ -25,3 +25,6 @@
 /GenAITestPoC/src/GenAITest.Engine/obj
 /LogisticsPro_API/LogisticsPro_API.TestGen/obj
 /GenAITestPoC/src/GenAITest.Engine/bin
+/LogisticsPro_API/LogisticsPro_API.TestGen/bin
+/LogisticsPro_API/LogisticsPro_API.Tests.Integration/bin
+/LogisticsPro_API/LogisticsPro_API.Tests.Integration/obj

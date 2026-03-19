@@ -53,7 +53,8 @@ var engine = new TestGenerationEngine(
     new RequirementExtractor(),
     new SmartRequirementGrouper(),
     new ContextBuilderFactory(),
-    new StubTestGenerator()
+    new OpenAiTestGenerator(),
+    new XunitTestClassGenerator()
 );
 
 await engine.GenerateAsync(request);

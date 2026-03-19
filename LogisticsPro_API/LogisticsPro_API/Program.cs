@@ -86,3 +86,7 @@ void ConfigureService(IServiceCollection services)
         options.MultipartBodyLengthLimit = int.MaxValue;
     });
 }
+
+public partial class Program
+{
+}
