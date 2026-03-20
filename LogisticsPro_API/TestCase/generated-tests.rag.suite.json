@@ -2,206 +2,165 @@
   "ProjectName": "LogisticsPro_API",
   "PipelineName": "rag",
   "SourceDocument": "C:\\GIT\\GenAITestPoc_GIT\\BA Document\\LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT.pdf",
-  "GeneratedAtUtc": "2026-03-19T20:07:29.3323988Z",
+  "GeneratedAtUtc": "2026-03-20T03:04:19.2241274Z",
   "CorpusVersion": "v1",
-  "PromptVersion": "rag-v1",
+  "PromptVersion": "rag-v3-multiretrieval",
   "TestCases": [
     {
-      "TestName": "Successful Authentication with Valid Credentials",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-49",
+      "TestName": "Create Invoice from Valid Job Successfully",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-141",
       "ScenarioType": "Positive",
       "Priority": "High",
-      "ApiEndpoint": "/api/authenticate",
+      "ApiEndpoint": "/invoices",
       "HttpMethod": "POST",
-      "Preconditions": [],
-      "Steps": [
-        "Send POST request to /api/authenticate with valid username/email and password"
+      "Preconditions": [
+        "Job is valid",
+        "Job cost is finalized"
       ],
-      "Expected": "Response contains a valid authentication token",
+      "Steps": [
+        "User selects a valid job",
+        "User submits request to create invoice for the job"
+      ],
+      "Expected": "Invoice is generated matching the underlying job cost and is ready for payment",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Authentication Failure with Invalid Credentials",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-49",
+      "TestName": "Reject Invoice Creation for Invalid Job",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-141",
       "ScenarioType": "Negative",
       "Priority": "High",
-      "ApiEndpoint": "/api/authenticate",
+      "ApiEndpoint": "/invoices",
       "HttpMethod": "POST",
-      "Preconditions": [],
-      "Steps": [
-        "Send POST request to /api/authenticate with invalid username/email or password"
-      ],
-      "Expected": "Response contains unauthorized status and error message without sensitive information",
-      "ExpectedStatusCode": 401,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Token Validation Success with Valid Token",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-49",
-      "ScenarioType": "Auth",
-      "Priority": "High",
-      "ApiEndpoint": "/api/protected-resource",
-      "HttpMethod": "GET",
       "Preconditions": [
-        "Obtain a valid and non-expired JWT token via authentication"
+        "Job is invalid or does not exist"
       ],
       "Steps": [
-        "Send GET request to /api/protected-resource with valid JWT token in Authorization header"
+        "User attempts to create invoice for an invalid job"
       ],
-      "Expected": "Request is authorized and proceeds to return requested resource",
+      "Expected": "Invoice creation fails with error indicating invalid job; no invoice created",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Token Validation Failure with Expired Token",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-49",
-      "ScenarioType": "Auth",
-      "Priority": "High",
-      "ApiEndpoint": "/api/protected-resource",
-      "HttpMethod": "GET",
-      "Preconditions": [
-        "Have an expired JWT token"
-      ],
-      "Steps": [
-        "Send GET request to /api/protected-resource with expired JWT token in Authorization header"
-      ],
-      "Expected": "Request rejected with unauthorized response indicating expired token",
-      "ExpectedStatusCode": 401,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Token Validation Failure with Tampered Token",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-49",
-      "ScenarioType": "Auth",
-      "Priority": "High",
-      "ApiEndpoint": "/api/protected-resource",
-      "HttpMethod": "GET",
-      "Preconditions": [
-        "Create a tampered JWT token with invalid signature"
-      ],
-      "Steps": [
-        "Send GET request to /api/protected-resource with tampered JWT token in Authorization header"
-      ],
-      "Expected": "Request rejected with unauthorized response indicating invalid token",
-      "ExpectedStatusCode": 401,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Request Rejected When Authentication Token Missing",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-109",
-      "ScenarioType": "Auth",
-      "Priority": "High",
-      "ApiEndpoint": "/api/protected-resource",
-      "HttpMethod": "GET",
-      "Preconditions": [],
-      "Steps": [
-        "Send GET request to /api/protected-resource without Authorization header"
-      ],
-      "Expected": "Request rejected with unauthorized response indicating missing credentials",
-      "ExpectedStatusCode": 401,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Authentication Failure Does Not Leak Sensitive Information",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-109",
+      "TestName": "Prevent Duplicate Voucher Creation",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-141",
       "ScenarioType": "Negative",
       "Priority": "High",
-      "ApiEndpoint": "/api/authenticate",
+      "ApiEndpoint": "/vouchers",
       "HttpMethod": "POST",
-      "Preconditions": [],
-      "Steps": [
-        "Send POST request to /api/authenticate with invalid credentials"
-      ],
-      "Expected": "Response includes generic error message without revealing sensitive security details",
-      "ExpectedStatusCode": 401,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Reject Malformed Authentication Token",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-56",
-      "ScenarioType": "Auth",
-      "Priority": "High",
-      "ApiEndpoint": "/api/protected-resource",
-      "HttpMethod": "GET",
       "Preconditions": [
-        "Prepare a malformed JWT token"
+        "Batch for payment exists",
+        "Voucher already created for batch"
       ],
       "Steps": [
-        "Send GET request to /api/protected-resource with malformed JWT token in Authorization header"
+        "User submits request to create voucher for the same batch again"
       ],
-      "Expected": "Request rejected with unauthorized response due to invalid token structure",
-      "ExpectedStatusCode": 401,
+      "Expected": "Voucher creation rejected with error indicating duplicate voucher; no duplicate voucher created",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Verify Authenticated User Identity Context on Authorized Request",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-56",
-      "ScenarioType": "Auth",
+      "TestName": "Ensure Receipt Updates Invoice Balance Correctly",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-141",
+      "ScenarioType": "Positive",
+      "Priority": "High",
+      "ApiEndpoint": "/receipts",
+      "HttpMethod": "POST",
+      "Preconditions": [
+        "Invoice exists with outstanding balance"
+      ],
+      "Steps": [
+        "User selects invoice",
+        "User records payment amount less than or equal to invoice balance",
+        "System validates and creates receipt"
+      ],
+      "Expected": "Receipt is created linked to invoice and invoice balance is updated correctly",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Reject Receipt Exceeding Invoice Balance (Overpayment Prevention)",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-141",
+      "ScenarioType": "Negative",
+      "Priority": "High",
+      "ApiEndpoint": "/receipts",
+      "HttpMethod": "POST",
+      "Preconditions": [
+        "Invoice exists with a balance of 100"
+      ],
+      "Steps": [
+        "User selects invoice",
+        "User attempts to record payment amount of 150"
+      ],
+      "Expected": "Receipt creation rejected with error indicating overpayment disallowed",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Void Invoice and Preserve History",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-141",
+      "ScenarioType": "Positive",
       "Priority": "Medium",
-      "ApiEndpoint": "/api/user-actions",
+      "ApiEndpoint": "/invoices/{invoiceId}/void",
       "HttpMethod": "POST",
       "Preconditions": [
-        "Authenticate and obtain valid JWT token for user"
+        "Invoice exists and is valid for voiding"
       ],
       "Steps": [
-        "Send POST request to /api/user-actions with valid JWT token in Authorization header including user-specific action data"
+        "User requests void operation on invoice",
+        "System processes void request"
       ],
-      "Expected": "System processes action associating it with authenticated user identity",
+      "Expected": "Invoice status updated to voided and historical record preserved; invoice no longer valid for payment",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Consistent Status Code for Authentication Failure",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-109",
-      "ScenarioType": "Validation",
+      "TestName": "Create Proforma Invoice Successfully",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-46",
+      "ScenarioType": "Positive",
       "Priority": "High",
-      "ApiEndpoint": "/api/authenticate",
+      "ApiEndpoint": "/proforma-invoices",
       "HttpMethod": "POST",
-      "Preconditions": [],
-      "Steps": [
-        "Send POST request to /api/authenticate with invalid credentials",
-        "Send POST request to another authentication-related endpoint with invalid credentials (if applicable)"
+      "Preconditions": [
+        "Job exists with finalized cost"
       ],
-      "Expected": "Both responses return consistent status code (e.g., 401) without contradictory behaviors",
-      "ExpectedStatusCode": 401,
+      "Steps": [
+        "User submits request to create proforma invoice for job"
+      ],
+      "Expected": "Proforma invoice created as preliminary billing document",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Reject Expired Token for Protected Resource Access",
-      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-56",
-      "ScenarioType": "Auth",
+      "TestName": "Convert Proforma Invoice to Final Invoice Preserving Consistency",
+      "RelatedRequirement": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-46",
+      "ScenarioType": "Positive",
       "Priority": "High",
-      "ApiEndpoint": "/api/financial-data",
-      "HttpMethod": "GET",
+      "ApiEndpoint": "/proforma-invoices/{proformaId}/convert",
+      "HttpMethod": "POST",
       "Preconditions": [
-        "Expire the JWT token prior to request"
+        "Valid proforma invoice exists"
       ],
       "Steps": [
-        "Send GET request to /api/financial-data with expired JWT token in Authorization header"
+        "User requests conversion of proforma invoice to final invoice"
       ],
-      "Expected": "Request rejected with an unauthorized response indicating expired token",
-      "ExpectedStatusCode": 401,
+      "Expected": "Final invoice created maintaining business consistency; no duplicated billing occurs",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
