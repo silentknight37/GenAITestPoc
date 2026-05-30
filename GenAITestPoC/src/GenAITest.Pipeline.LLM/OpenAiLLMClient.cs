@@ -1,11 +1,8 @@
-﻿using GenAITest.Engine.Abstractions;
-using GenAITest.Engine.Models;
-using System;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
+using GenAITest.Engine.Abstractions;
+using GenAITest.Engine.Models;
 
 namespace GenAITest.Pipeline.LLM;
 
@@ -14,63 +11,69 @@ public sealed class OpenAiLLMClient : ILLMClient
     private readonly LlmOptions _options;
     private readonly HttpClient _httpClient;
 
-    public OpenAiLLMClient(LlmOptions options, HttpClient httpClient = null)
+    // Parameterless constructor reads entirely from environment variables.
+    public OpenAiLLMClient() : this(new LlmOptions()) { }
+
+    public OpenAiLLMClient(LlmOptions options, HttpClient? httpClient = null)
     {
         _options = options ?? throw new ArgumentNullException(nameof(options));
 
-        // Fallback to environment variables if not set in options
         if (string.IsNullOrWhiteSpace(_options.ApiKey))
-            _options.ApiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+            _options.ApiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? string.Empty;
         if (string.IsNullOrWhiteSpace(_options.Model))
-            _options.Model = Environment.GetEnvironmentVariable("OPENAI_MODEL");
+            _options.Model = Environment.GetEnvironmentVariable("OPENAI_MODEL") ?? "gpt-4o-mini";
         if (string.IsNullOrWhiteSpace(_options.BaseUrl))
-            _options.BaseUrl = Environment.GetEnvironmentVariable("OPENAI_BASE_URL") ?? "https://api.openai.com/v1/";
+            _options.BaseUrl = "https://api.openai.com/v1/chat/completions";
 
         if (string.IsNullOrWhiteSpace(_options.ApiKey))
-            throw new InvalidOperationException("OpenAI API key is not configured. Set OPENAI_API_KEY or appsettings.");
-        if (string.IsNullOrWhiteSpace(_options.Model))
-            throw new InvalidOperationException("OpenAI model is not configured. Set OPENAI_MODEL or appsettings.");
+            throw new InvalidOperationException(
+                "OpenAI API key is not configured. Set the OPENAI_API_KEY environment variable.");
 
         _httpClient = httpClient ?? new HttpClient();
-        _httpClient.BaseAddress = new Uri(_options.BaseUrl);
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _options.ApiKey);
+        _httpClient.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", _options.ApiKey);
     }
 
-    public async Task<string> CompleteAsync(string prompt)
+    public async Task<string> GenerateAsync(string prompt, CancellationToken cancellationToken = default)
     {
-        try
+        var requestBody = new
         {
-            var requestBody = new
+            model = _options.Model,
+            messages = new[]
             {
-                model = _options.Model,
-                prompt = prompt,
-                max_tokens = 512
-            };
+                new { role = "system", content = "You are a senior .NET test engineer. Output only valid C# code with no markdown fences." },
+                new { role = "user",   content = prompt }
+            },
+            max_tokens = 4096
+        };
 
-            var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("completions", content);
+        var content = new StringContent(
+            JsonSerializer.Serialize(requestBody),
+            Encoding.UTF8,
+            "application/json");
 
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                return $"OpenAI API error: {response.StatusCode} - {SanitizeForLog(errorContent)}";
-            }
+        var response = await _httpClient.PostAsync(
+            _options.BaseUrl,
+            content,
+            cancellationToken);
 
-            var responseContent = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(responseContent);
-            var completion = doc.RootElement.GetProperty("choices")[0].GetProperty("text").GetString();
-            return completion;
-        }
-        catch (Exception ex)
+        if (!response.IsSuccessStatusCode)
         {
-            return $"OpenAI client error: {SanitizeForLog(ex.Message)}";
+            var error = await response.Content.ReadAsStringAsync(cancellationToken);
+            throw new InvalidOperationException(
+                $"OpenAI API error {(int)response.StatusCode}: {Truncate(error)}");
         }
+
+        var json = await response.Content.ReadAsStringAsync(cancellationToken);
+        using var doc = JsonDocument.Parse(json);
+
+        return doc.RootElement
+            .GetProperty("choices")[0]
+            .GetProperty("message")
+            .GetProperty("content")
+            .GetString() ?? string.Empty;
     }
 
-    private string SanitizeForLog(string input)
-    {
-        if (string.IsNullOrEmpty(input)) return string.Empty;
-        var sanitized = input.Replace("\r", " ").Replace("\n", " ");
-        return sanitized.Length > 500 ? sanitized.Substring(0, 500) : sanitized;
-    }
+    private static string Truncate(string value, int max = 500) =>
+        value.Length > max ? value[..max] : value;
 }

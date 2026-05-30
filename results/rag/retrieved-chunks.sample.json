@@ -1,0 +1,37 @@
+[
+  {
+    "ChunkId": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-136",
+    "Text": "--- PAGE 103 ---\r\n10.3 Traceability Matrix Business Requirement Description Functional Requirement(s) Business Rules BR-01 Manage customer data FR-03, FR-04, FR-05 BRL-01, BRL-02 BR-02 Manage vendor data FR-06, FR-07 BRL-03 BR-03 Manage events FR-08 BRL-04 BR-04 Create and manage job cards FR-09, FR-10, FR-11 BRL-05, BRL-06 BR-05 Add and manage services FR-12, FR-13, FR-14 BRL-07, BRL-08 BR-06 Calculate job cost FR-15 BRL-09 BR-07 Group services into batches FR-16 BRL-10 BR-08 Manage vendor payments FR-17 BRL-11 BR-09 Generate invoices FR-18, FR-19 BRL-12, BRL-13 BR-10 Record customer payments FR-20 BRL-14 BR-11 Generate reports FR-21 BRL-15 BR-12 Secure system access FR-01, FR-02 BRL-16 10.4 Traceability Coverage Validation To ensure completeness, the following checks must be satisfied: \u2022 every business requirement is mapped to at least one functional requirement \u2022 every functional requirement supports at least one business requirement \u2022 every critical business rule is linked to relevant functional behavior \u2022 no orphan requirements exist without traceability\r\n--- PAGE 104 ---",
+    "Score": 0.5410170705012501,
+    "PageNumber": 1,
+    "SectionPath": null
+  },
+  {
+    "ChunkId": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-67",
+    "Text": "4.14 Validation Message Requirements BRULE-61: Clear Validation Feedback When a request fails validation, the system must provide a clear and meaningful error response identifying the reason for rejection. BRULE-62: Consistent Error Handling Validation failures, missing references, state violations, and unauthorized access must be handled consistently across modules. 4.15 Cross-Module Consistency Rules BRULE-63: Downstream Dependency Protection A record must not be changed in a way that invalidates already completed downstream processing unless reversal logic exists. BRULE-64: Operational-to-Financial Continuity Operational records and financial records must remain connected throughout the lifecycle of a business transaction. BRULE-65: No Contradictory States The system must not allow a business record to exist in mutually contradictory states across related modules. Example \u2022 A job cannot be treated as closed for operations while remaining openly editable for dependent services without explicit business support. \u2022 A voided invoice cannot simultaneously behave as an active collectible invoice. 4.16 Acceptance of Business Rules The business rules in this section are considered satisfied when: \u2022 the system enforces the defined conditions before processing transactions,",
+    "Score": 0.5328400878918381,
+    "PageNumber": 1,
+    "SectionPath": null
+  },
+  {
+    "ChunkId": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-53",
+    "Text": "4. Business Rules and Validation Requirements 4.1 Overview This section defines the business rules, validation rules, and operational constraints that govern the behavior of the LogisticsPro API. These rules ensure that the system processes data consistently, preserves business integrity, and prevents invalid or contradictory operations. Business rules are mandatory conditions derived from the business domain. They apply across modules such as master data management, job processing, operational services, financial processing, and reporting. Validation requirements define the checks that must be applied to incoming data before business transactions are accepted. The purpose of this section is to remove ambiguity from the functional requirements by stating exactly what conditions must hold true before a process can be executed, what transitions are allowed, and what actions must be restricted. 4.2 Rule Classification The business rules in this document are grouped into the following categories: \u2022 General system rules \u2022 Authentication and access rules \u2022 Master data rules \u2022 Job card lifecycle rules \u2022 Operational service rules \u2022 Cost and calculation rules \u2022 Batch processing rules \u2022 Payment voucher rules \u2022 Invoice and proforma invoice rules \u2022 Receipt rules",
+    "Score": 0.532452465195596,
+    "PageNumber": 1,
+    "SectionPath": null
+  },
+  {
+    "ChunkId": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-139",
+    "Text": "\u2022 business flow level \u2022 non-functional level These criteria will be used for validation, testing, stakeholder review, and final approval. 11.2 System-Level Acceptance Criteria The system shall be considered acceptable when: \u2022 all defined business requirements are implemented and traceable \u2022 all functional requirements behave as specified \u2022 all business rules are enforced without contradiction \u2022 no critical defects exist in core business or financial operations \u2022 data integrity is maintained across all modules \u2022 authentication and authorization controls are enforced \u2022 API responses are consistent and predictable \u2022 system behavior remains stable under normal operating conditions 11.3 Module-Level Acceptance Criteria 11.3.1 Customer and Vendor Management The module is acceptable when: \u2022 customers and vendors can be created, updated, and retrieved successfully \u2022 invalid or incomplete data is rejected \u2022 duplicate or inconsistent records are prevented according to rules \u2022 inactive entities cannot be used in new operations 11.3.2 Event Management The module is acceptable when:\r\n--- PAGE 107 ---",
+    "Score": 0.5302373356265903,
+    "PageNumber": 1,
+    "SectionPath": null
+  },
+  {
+    "ChunkId": "LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT-chunk-47",
+    "Text": "\u2022 The system must generate uninvoiced reports \u2022 The system must generate profit and loss reports Expected Outcome: Business users have access to accurate and meaningful insights. 2.4 Business Requirement Dependencies \u2022 Job Card Management depends on Customer and Event Management \u2022 Service Management depends on Job Card Management \u2022 Cost Management depends on Service Management \u2022 Batch Processing depends on Service Management \u2022 Payment Voucher Management depends on Batch Processing \u2022 Invoice Management depends on Job Card and Service data \u2022 Receipt Management depends on Invoice Management \u2022 Reporting depends on all modules 2.5 Business Requirement Constraints \u2022 Business operations must follow defined process sequences \u2022 Financial transactions must be traceable and auditable \u2022 Invalid operations must be rejected by the system \u2022 Data consistency must be maintained across all modules 2.6 Business Requirement Acceptance Criteria Each business requirement is considered satisfied when: \u2022 The functionality is implemented according to the defined requirement \u2022 All relevant business rules are enforced\r\n--- PAGE 29 ---",
+    "Score": 0.5253419805942484,
+    "PageNumber": 1,
+    "SectionPath": null
+  }
+]

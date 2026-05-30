@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using GenAITest.Engine;
 using GenAITest.Engine.Abstractions;
 using GenAITest.Engine.Models;
@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
 services.AddGenAITestEngine();
-
 var provider = services.BuildServiceProvider();
 
 if (args.Length == 0)
@@ -23,13 +22,14 @@ if (command != "generate")
     return;
 }
 
-string? mode = GetArg("--mode");
-string? target = GetArg("--target");
-string? outDir = GetArg("--out");
-string? docs = GetArg("--docs");
+string? mode      = GetArg("--mode");
+string? target    = GetArg("--target");
+string? outDir    = GetArg("--out");
+string? docs      = GetArg("--docs");
 string? framework = GetArg("--framework");
-string? style = GetArg("--style");
-string? module = GetArg("--module");
+string? style     = GetArg("--style");
+string? module    = GetArg("--module");
+string? query     = GetArg("--query");
 
 if (string.IsNullOrWhiteSpace(mode) ||
     string.IsNullOrWhiteSpace(target) ||
@@ -40,81 +40,88 @@ if (string.IsNullOrWhiteSpace(mode) ||
 }
 
 framework ??= TestFrameworkType.XUnit;
-style ??= TestStyleType.Integration;
+style     ??= TestStyleType.Integration;
 
 string? targetProject = null;
 if (Directory.Exists(target))
-{
     targetProject = Directory.GetFiles(target, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
-}
 
 var request = new GenerationRequest(
-    TargetPath: target,
-    DocsPath: docs,
-    OutputPath: outDir,
+    TargetPath:       target,
+    DocsPath:         docs,
+    OutputPath:       outDir,
     TargetProjectFile: targetProject,
-    ModelType: mode,
-    TestStyle: style,
-    TestFramework: framework,
-    ModuleFilter: module
+    ModelType:        mode,
+    TestStyle:        style,
+    TestFramework:    framework,
+    ModuleFilter:     module
 );
 
 Directory.CreateDirectory(request.OutputPath);
 
-var engine = new TestGenerationEngine(
-    new PdfDocumentExtractor(),
-    new RequirementExtractor(),
-    new SmartRequirementGrouper(),
-    new ContextBuilderFactory(),
-    new OpenAiTestGenerator(),
-    new XunitTestClassGenerator(),
-    new GeneratedTestJsonWriter()
-);
-
 switch (mode.ToLowerInvariant())
 {
     case "llm":
-        {
-            Console.WriteLine("Running LLM pipeline...");
-            await engine.GenerateAsync(request);
-            Console.WriteLine("LLM generation completed.");
-            break;
-        }
+    {
+        Console.WriteLine("Running LLM pipeline...");
+
+        var engine = new TestGenerationEngine(
+            new PdfDocumentExtractor(),
+            new RequirementExtractor(),
+            new SmartRequirementGrouper(),
+            new ContextBuilderFactory(),
+            new OpenAiTestGenerator(),
+            new XunitTestClassGenerator(),
+            new GeneratedTestJsonWriter());
+
+        await engine.GenerateAsync(request);
+        Console.WriteLine("LLM generation completed.");
+        break;
+    }
 
     case "rag":
-        {
-            Console.WriteLine("Running RAG pipeline (current step: ingestion + chunking only)...");
+    {
+        Console.WriteLine("Running RAG pipeline...");
 
-            if (string.IsNullOrWhiteSpace(request.DocsPath))
-                throw new ArgumentException("DocsPath is required for RAG mode. Use --docs <ba-pdf>");
+        if (string.IsNullOrWhiteSpace(request.DocsPath))
+            throw new ArgumentException(
+                "--docs is required for rag mode. Provide the path to the BA document PDF.");
 
-            var ingestor = provider.GetRequiredService<IDocumentIngestor>();
-            var chunker = provider.GetRequiredService<IChunker>();
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
+            ?? throw new InvalidOperationException(
+                "OPENAI_API_KEY environment variable is not set.");
 
-            var ingested = await ingestor.IngestAsync(request.DocsPath);
-            var chunks = await chunker.ChunkAsync(ingested, "v1");
+        var embeddingService = new OpenAiEmbeddingService(apiKey);
+        var retriever        = new CosineSimilarityRetriever(embeddingService);
 
-            var chunkPath = Path.Combine(request.OutputPath, "ba-chunks.v1.json");
+        var pdfExtractor = new PdfDocumentExtractor();
 
-            await File.WriteAllTextAsync(
-                chunkPath,
-                JsonSerializer.Serialize(chunks, new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                }));
+        var ragEngine = new RagTestGenerationEngine(
+            new PlainTextDocumentIngestor(pdfExtractor),
+            new SimpleChunker(),
+            embeddingService,
+            retriever,
+            new RagPromptBuilder(),
+            new OpenAiTestGenerator(),
+            new GeneratedTestJsonWriter(),
+            new XunitTestClassGenerator(),
+            pdfExtractor,               // IDocumentExtractor — for requirement extraction
+            new RequirementExtractor()); // IRequirementExtractor — per-requirement loop
 
-            Console.WriteLine($"Chunk file generated: {chunkPath}");
-            Console.WriteLine("RAG preprocessing completed.");
-            break;
-        }
+        var userQuery = string.IsNullOrWhiteSpace(query)
+            ? "Generate integration tests covering all business requirements and validation rules"
+            : query;
+
+        await ragEngine.GenerateAsync(request, userQuery);
+        Console.WriteLine("RAG generation completed.");
+        break;
+    }
 
     case "hybrid":
     case "lora":
     case "lora-rag":
-        {
-            Console.WriteLine($"Mode '{mode}' is not implemented yet.");
-            break;
-        }
+        Console.WriteLine($"Mode '{mode}' is not implemented yet.");
+        break;
 
     default:
         throw new ArgumentException($"Unsupported mode: {mode}");
@@ -129,5 +136,10 @@ string? GetArg(string key)
 static void PrintUsage()
 {
     Console.WriteLine("Usage:");
-    Console.WriteLine("  generate --mode llm|rag|hybrid|lora|lora-rag --target <path> --out <path> [--docs <ba-pdf>] [--framework xunit|nunit|mstest] [--style integration|api|unit] [--module <module-name>]");
+    Console.WriteLine("  generate --mode llm|rag --target <path> --out <path>");
+    Console.WriteLine("           --docs <ba-pdf>");
+    Console.WriteLine("           [--framework xunit|nunit|mstest]");
+    Console.WriteLine("           [--style integration|api|unit]");
+    Console.WriteLine("           [--module <module-name>]");
+    Console.WriteLine("           [--query \"<rag retrieval query>\"]   (rag mode only)");
 }
