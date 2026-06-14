@@ -63,6 +63,13 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                // BRULE-36: a batch must not be created without at least one valid item.
+                if (batchItemSaveRequest.Ids == null || batchItemSaveRequest.Ids.Count == 0)
+                {
+                    throw new InvalidOperationException("A batch cannot be created without at least one item (BRULE-36).");
+                }
+
+                // BRULE-35: an item must not already belong to another batch.
                 var isInValidList = await dB_LogisticsproContext.LpLBatchLineItem.Where(o => batchItemSaveRequest.Ids.Contains(o.ContextId.Value) && o.ContextType==(int)EnumContextType.Transpotation).ToListAsync();
                 if (isInValidList.Any())
                 {
@@ -540,6 +547,30 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                // BRULE-42: a vendor-specific voucher must reference a valid vendor.
+                if (paymentVoucherSaveRequest.VendorId <= 0 ||
+                    !await dB_LogisticsproContext.LpMVender.AnyAsync(v => v.Id == paymentVoucherSaveRequest.VendorId))
+                {
+                    throw new InvalidOperationException("Payment voucher requires a valid vendor (BRULE-42).");
+                }
+
+                // BRULE-39: a voucher must be linked to at least one payable operational item.
+                var voucherItemCount =
+                    (paymentVoucherSaveRequest.TransportationIds?.Count ?? 0) +
+                    (paymentVoucherSaveRequest.HotelIds?.Count ?? 0) +
+                    (paymentVoucherSaveRequest.VisaIds?.Count ?? 0) +
+                    (paymentVoucherSaveRequest.MiscellaneousIds?.Count ?? 0);
+                if (voucherItemCount == 0)
+                {
+                    throw new InvalidOperationException("A payment voucher must include at least one payable item (BRULE-39).");
+                }
+
+                // BRULE-40 / BRULE-29: the voucher amount must be non-negative.
+                if (paymentVoucherSaveRequest.PaymentVoucherAmount < 0)
+                {
+                    throw new InvalidOperationException("Payment voucher amount must be non-negative (BRULE-40).");
+                }
+
                 var paymentVoucherPrefix = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "PaymentVoucherPrefix");
                 var currentPaymentVoucherNumber = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "CurrentPaymentVoucherNumber");
                 string paymentVoucherPrefixCode = string.Empty;
@@ -1670,6 +1701,25 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                // BRULE-13 / BRULE-02: an invoice must reference a valid customer.
+                if (invoiceSaveRequest.CustomerId <= 0 ||
+                    !await dB_LogisticsproContext.LpMCustomer.AnyAsync(c => c.Id == invoiceSaveRequest.CustomerId))
+                {
+                    throw new InvalidOperationException("Invoice requires a valid customer (BRULE-13).");
+                }
+
+                // BRULE-44: an invoice must be created from valid billable content.
+                var invoiceItemCount =
+                    (invoiceSaveRequest.TransportationIds?.Count ?? 0) +
+                    (invoiceSaveRequest.HotelIds?.Count ?? 0) +
+                    (invoiceSaveRequest.VisaIds?.Count ?? 0) +
+                    (invoiceSaveRequest.MiscellaneousIds?.Count ?? 0) +
+                    (invoiceSaveRequest.PerformaInvoiceIds?.Count ?? 0);
+                if (invoiceItemCount == 0)
+                {
+                    throw new InvalidOperationException("An invoice must include at least one billable item (BRULE-44).");
+                }
+
                 var invoicePrefix = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "InvoicePrefix");
                 var currentInvoiceNumber = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "CurrentInvoiceNumber");
                 string invoicePrefixCode = string.Empty;
@@ -2240,6 +2290,12 @@ namespace LogisticsPro_Data.Repository
             if (invoice == null)
             {
                 return false;
+            }
+
+            // BRULE-46 / BRULE-65: an already-voided invoice must not be voided again.
+            if (invoice.StatusId == (int)EnumInvoiceStatus.Void)
+            {
+                throw new InvalidOperationException("Invoice is already voided (BRULE-46).");
             }
 
             var invoiceProformaInvoices = await dB_LogisticsproContext.LpFInvoiceProformaInvoice.Where(i=>i.InvoiceId== invoice.Id).ToListAsync();
@@ -3069,6 +3125,42 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                // BRULE-29 / BRULE-33: receipt amounts must be valid and non-negative.
+                if (receiptSaveRequest.Amount < 0)
+                {
+                    throw new InvalidOperationException("Receipt amount must be non-negative (BRULE-29).");
+                }
+
+                // BRULE-51 / BRULE-53: a receipt must target a valid, non-void invoice.
+                var targetInvoice = await dB_LogisticsproContext.LpFInvoice
+                    .FirstOrDefaultAsync(i => i.Id == receiptSaveRequest.InvoiceId);
+                if (targetInvoice == null)
+                {
+                    throw new InvalidOperationException("Receipt could not be saved because the target invoice does not exist (BRULE-51).");
+                }
+                if (targetInvoice.StatusId == (int)EnumInvoiceStatus.Void)
+                {
+                    throw new InvalidOperationException("A receipt cannot be applied to a voided invoice (BRULE-53).");
+                }
+
+                // BRULE-52: the cumulative total of receipts applied to an invoice must not
+                // exceed the invoice amount.
+                var allocatedTotal = await dB_LogisticsproContext.LpFReceiptAllocation
+                    .Where(a => a.InvoiceId == receiptSaveRequest.InvoiceId)
+                    .SumAsync(a => (decimal?)a.Amount) ?? 0m;
+                if (receiptSaveRequest.Id > 0)
+                {
+                    // Exclude this receipt's own existing allocations when re-validating an edit.
+                    var ownPrior = await dB_LogisticsproContext.LpFReceiptAllocation
+                        .Where(a => a.ReceiptId == receiptSaveRequest.Id)
+                        .SumAsync(a => (decimal?)a.Amount) ?? 0m;
+                    allocatedTotal -= ownPrior;
+                }
+                if (allocatedTotal + receiptSaveRequest.Amount > (targetInvoice.InvoiceAmount ?? 0m))
+                {
+                    throw new InvalidOperationException("Receipt amount would exceed the invoice's outstanding receivable balance (BRULE-52).");
+                }
+
                 if (receiptSaveRequest.Id > 0)
                 {
                     var lpFReceipt = await dB_LogisticsproContext.LpFReceipt.FirstOrDefaultAsync(i => i.Id == receiptSaveRequest.Id);

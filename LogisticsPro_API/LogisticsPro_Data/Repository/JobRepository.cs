@@ -16,6 +16,38 @@ namespace LogisticsPro_Data.Repository
             this.dB_LogisticsproContext = dB_LogisticsproContext;
         }
 
+        // Job card lifecycle status ids (LpMStatus): 1 = Open, 2 = Closed (BRULE-15).
+        private const int JobStatusOpen = 1;
+        private const int JobStatusClosed = 2;
+
+        // BRULE-20 / BRULE-17 / BRULE-22: a service item may only be created or modified
+        // while its parent job card exists and remains Open.
+        private async Task EnsureJobOpenAsync(int jobCardId)
+        {
+            var job = await dB_LogisticsproContext.LpJobCard.AsNoTracking()
+                .FirstOrDefaultAsync(j => j.Id == jobCardId);
+
+            if (job == null)
+            {
+                throw new InvalidOperationException("Service could not be saved because the referenced job card does not exist (BRULE-20).");
+            }
+
+            if (job.StatusId == JobStatusClosed)
+            {
+                throw new InvalidOperationException("A closed job card cannot accept new or modified service items (BRULE-17).");
+            }
+        }
+
+        // BRULE-24 / BRULE-29 / BRULE-33: cost-bearing service entries must carry valid,
+        // non-negative numeric amounts.
+        private static void EnsureNonNegativeAmounts(params decimal?[] amounts)
+        {
+            if (amounts.Any(a => a.HasValue && a.Value < 0))
+            {
+                throw new InvalidOperationException("Cost and sell amounts must be numeric and non-negative (BRULE-29).");
+            }
+        }
+
         public async Task<List<JobCard>> GetJobs(bool isFirstLoad, string? jobCardCode, string? jobCardDescription, List<int>? customerId, DateTime? effectiveDateFrom, DateTime? effectiveDateTo, List<int>? statusIds)
         {
             int takeValue = 100000;
@@ -94,11 +126,25 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                // BRULE-13 / BRULE-02: a job card must reference a valid, existing customer.
+                var customerExists = await dB_LogisticsproContext.LpMCustomer
+                    .AnyAsync(c => c.Id == jobSaveRequest.CustomerId);
+                if (jobSaveRequest.CustomerId <= 0 || !customerExists)
+                {
+                    throw new InvalidOperationException("Job card creation failed: a valid customer reference is required (BRULE-13).");
+                }
+
                 if (jobSaveRequest.Id > 0)
                 {
                     var lpJobCard = await dB_LogisticsproContext.LpJobCard.FirstOrDefaultAsync(i => i.Id == jobSaveRequest.Id);
                     if (lpJobCard != null)
                     {
+                        // BRULE-17 / FR-10: a closed job card cannot be modified.
+                        if (lpJobCard.StatusId == JobStatusClosed)
+                        {
+                            throw new InvalidOperationException("A closed job card cannot be modified (BRULE-17).");
+                        }
+
                         lpJobCard.JobDescription = jobSaveRequest.JobDescription;
                         lpJobCard.CustomerId = jobSaveRequest.CustomerId;
                         lpJobCard.Remarks = jobSaveRequest.Remarks;
@@ -203,6 +249,30 @@ namespace LogisticsPro_Data.Repository
             try
             {
                 var lpJobCard = await dB_LogisticsproContext.LpJobCard.FirstOrDefaultAsync(i => i.Id == id);
+
+                // BRULE-61: respond with a clear message rather than a null-reference failure.
+                if (lpJobCard == null)
+                {
+                    throw new InvalidOperationException("Job card not found.");
+                }
+
+                // BRULE-19: a job card must not be deleted once any of its service items has
+                // been batched, invoiced or payment-vouchered (financially significant usage).
+                var hasFinancialUsage =
+                    await dB_LogisticsproContext.LpJTransportation.AnyAsync(t => t.JobCardId == id &&
+                        (t.IsBatched || t.IsInvoiced == true || t.IsPaymentVouchered == true)) ||
+                    await dB_LogisticsproContext.LpJHotel.AnyAsync(h => h.JobCardId == id &&
+                        (h.IsInvoiced == true || h.IsPaymentVouchered == true)) ||
+                    await dB_LogisticsproContext.LpJVisa.AnyAsync(v => v.JobCardId == id &&
+                        (v.IsInvoiced == true || v.IsPaymentVouchered == true)) ||
+                    await dB_LogisticsproContext.LpJMiscellaneous.AnyAsync(m => m.JobCardId == id &&
+                        (m.IsInvoiced == true || m.IsPaymentVouchered == true));
+
+                if (hasFinancialUsage)
+                {
+                    throw new InvalidOperationException("Job card cannot be deleted because it has contributed to batches, invoices or payment vouchers (BRULE-19).");
+                }
+
                 dB_LogisticsproContext.LpJobCard.Remove(lpJobCard);
                 await dB_LogisticsproContext.SaveChangesAsync();
 
@@ -241,7 +311,13 @@ namespace LogisticsPro_Data.Repository
                 var lpJobCard = await dB_LogisticsproContext.LpJobCard.FirstOrDefaultAsync(i => i.Id == closeJobCardRequest.Id);
                 if (lpJobCard != null)
                 {
-                    lpJobCard.StatusId = 2;
+                    // BRULE-18 / BRULE-65: a job that is already closed cannot be closed again.
+                    if (lpJobCard.StatusId == JobStatusClosed)
+                    {
+                        throw new InvalidOperationException("Job card is already closed (BRULE-18).");
+                    }
+
+                    lpJobCard.StatusId = JobStatusClosed;
 
                     lpJobCard.UpdatedBy = closeJobCardRequest.UserId;
                     lpJobCard.UpdatedDate = DateTime.UtcNow;
@@ -1031,11 +1107,21 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                EnsureNonNegativeAmounts(jobCardTransportationRequest.CostBaseAmount, jobCardTransportationRequest.CostTaxAmount,
+                    jobCardTransportationRequest.SellBaseAmount, jobCardTransportationRequest.SellTaxAmount);
+
                 if (jobCardTransportationRequest.Id > 0)
                 {
                     var lpJTransportation = await dB_LogisticsproContext.LpJTransportation.FirstOrDefaultAsync(i => i.Id == jobCardTransportationRequest.Id);
                     if (lpJTransportation != null)
                     {
+                        // BRULE-23: a service item locked by downstream financial processing cannot be edited.
+                        if (lpJTransportation.IsInvoiced == true || lpJTransportation.IsBatched || lpJTransportation.IsPaymentVouchered == true)
+                        {
+                            throw new InvalidOperationException("Transportation service cannot be modified after it has been batched, invoiced or payment-vouchered (BRULE-23).");
+                        }
+                        await EnsureJobOpenAsync(lpJTransportation.JobCardId ?? jobCardTransportationRequest.JobCardId);
+
                         lpJTransportation.PaxName = jobCardTransportationRequest.PaxName;
                         lpJTransportation.CustomerRef = jobCardTransportationRequest.CustomerRef;
                         lpJTransportation.Remarks = jobCardTransportationRequest.Remarks;
@@ -1123,6 +1209,9 @@ namespace LogisticsPro_Data.Repository
                     }
                     return false;
                 }
+
+                // BRULE-17 / BRULE-20: services may only be added to an existing, open job card.
+                await EnsureJobOpenAsync(jobCardTransportationRequest.JobCardId);
 
                 var jobTransportationPrefix = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "JobTransportationPrefix");
                 var currentJobTransportationNumber = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "CurrentJobTransportationNumber");
@@ -1294,11 +1383,21 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                EnsureNonNegativeAmounts(jobCardHotelRequest.CostBaseAmount, jobCardHotelRequest.CostTaxAmount,
+                    jobCardHotelRequest.SellBaseAmount, jobCardHotelRequest.SellTaxAmount);
+
                 if (jobCardHotelRequest.Id > 0)
                 {
                     var lpJHotel = await dB_LogisticsproContext.LpJHotel.FirstOrDefaultAsync(i => i.Id == jobCardHotelRequest.Id);
                     if (lpJHotel != null)
                     {
+                        // BRULE-23: locked by downstream financial processing.
+                        if (lpJHotel.IsInvoiced == true || lpJHotel.IsPaymentVouchered == true)
+                        {
+                            throw new InvalidOperationException("Hotel service cannot be modified after it has been invoiced or payment-vouchered (BRULE-23).");
+                        }
+                        await EnsureJobOpenAsync(lpJHotel.JobCardId ?? jobCardHotelRequest.JobCardId);
+
                         lpJHotel.PaxName = jobCardHotelRequest.PaxName;
                         lpJHotel.VendorId = jobCardHotelRequest.VendorId;
                         lpJHotel.Remarks = jobCardHotelRequest.Remarks;
@@ -1363,6 +1462,9 @@ namespace LogisticsPro_Data.Repository
                     }
                     return false;
                 }
+
+                // BRULE-17 / BRULE-20: services may only be added to an existing, open job card.
+                await EnsureJobOpenAsync(jobCardHotelRequest.JobCardId);
 
                 var jobHotelPrefix = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "JobHotelPrefix");
                 var currentJobHotelNumber = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "CurrentJobHotelNumber");
@@ -1502,11 +1604,21 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                EnsureNonNegativeAmounts(jobCardVisaRequest.CostBaseAmount, jobCardVisaRequest.CostTaxAmount,
+                    jobCardVisaRequest.SellBaseAmount, jobCardVisaRequest.SellTaxAmount);
+
                 if (jobCardVisaRequest.Id > 0)
                 {
                     var lpJVisa = await dB_LogisticsproContext.LpJVisa.FirstOrDefaultAsync(i => i.Id == jobCardVisaRequest.Id);
                     if (lpJVisa != null)
                     {
+                        // BRULE-23: locked by downstream financial processing.
+                        if (lpJVisa.IsInvoiced == true || lpJVisa.IsPaymentVouchered == true)
+                        {
+                            throw new InvalidOperationException("Visa service cannot be modified after it has been invoiced or payment-vouchered (BRULE-23).");
+                        }
+                        await EnsureJobOpenAsync(lpJVisa.JobCardId ?? jobCardVisaRequest.JobCardId);
+
                         lpJVisa.PaxName = jobCardVisaRequest.PaxName;
                         lpJVisa.PassportNo = jobCardVisaRequest.PassportNo;
                         lpJVisa.VisaTypeId = jobCardVisaRequest.VisaTypeId;
@@ -1557,6 +1669,9 @@ namespace LogisticsPro_Data.Repository
                     }
                     return false;
                 }
+
+                // BRULE-17 / BRULE-20: services may only be added to an existing, open job card.
+                await EnsureJobOpenAsync(jobCardVisaRequest.JobCardId);
 
                 var jobVisaPrefix = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "JobVisaPrefix");
                 var currentJobVisaNumber = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "CurrentJobVisaNumber");
@@ -1678,11 +1793,27 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                EnsureNonNegativeAmounts(jobCardMiscellaneousRequest.CostBaseAmount, jobCardMiscellaneousRequest.CostTaxAmount,
+                    jobCardMiscellaneousRequest.SellBaseAmount, jobCardMiscellaneousRequest.SellTaxAmount);
+
+                // BRULE-28: a miscellaneous item must carry a meaningful description.
+                if (string.IsNullOrWhiteSpace(jobCardMiscellaneousRequest.Description))
+                {
+                    throw new InvalidOperationException("Miscellaneous service requires a description (BRULE-28).");
+                }
+
                 if (jobCardMiscellaneousRequest.Id > 0)
                 {
                     var lpJMiscellaneous = await dB_LogisticsproContext.LpJMiscellaneous.FirstOrDefaultAsync(i => i.Id == jobCardMiscellaneousRequest.Id);
                     if (lpJMiscellaneous != null)
                     {
+                        // BRULE-23: locked by downstream financial processing.
+                        if (lpJMiscellaneous.IsInvoiced == true || lpJMiscellaneous.IsPaymentVouchered == true)
+                        {
+                            throw new InvalidOperationException("Miscellaneous service cannot be modified after it has been invoiced or payment-vouchered (BRULE-23).");
+                        }
+                        await EnsureJobOpenAsync(lpJMiscellaneous.JobCardId ?? jobCardMiscellaneousRequest.JobCardId);
+
                         lpJMiscellaneous.VendorId = jobCardMiscellaneousRequest.VendorId;
                         lpJMiscellaneous.PaxName = jobCardMiscellaneousRequest.PaxName;
                         lpJMiscellaneous.PaxNumber = jobCardMiscellaneousRequest.PaxNumber;
@@ -1736,6 +1867,9 @@ namespace LogisticsPro_Data.Repository
                     }
                     return false;
                 }
+
+                // BRULE-17 / BRULE-20: services may only be added to an existing, open job card.
+                await EnsureJobOpenAsync(jobCardMiscellaneousRequest.JobCardId);
 
                 var jobMiscellaneousPrefix = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "JobMiscellaneousPrefix");
                 var currentJobMiscellaneousNumber = await dB_LogisticsproContext.LpSystemConfig.FirstOrDefaultAsync(o => o.SystemCode == "CurrentJobMiscellaneousNumber");

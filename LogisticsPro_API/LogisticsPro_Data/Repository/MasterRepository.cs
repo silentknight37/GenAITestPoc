@@ -42,6 +42,12 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                // BRULE-08: a customer record must carry a name.
+                if (string.IsNullOrWhiteSpace(customerSaveRequest.CustomerName))
+                {
+                    throw new InvalidOperationException("Customer name is required (BRULE-08).");
+                }
+
                 if (customerSaveRequest.Id > 0)
                 {
                     var lpCustomer = await dB_LogisticsproContext.LpMCustomer.FirstOrDefaultAsync(i => i.Id == customerSaveRequest.Id);
@@ -158,6 +164,12 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                // BRULE-09: a vendor record must carry a name.
+                if (string.IsNullOrWhiteSpace(vendorSaveRequest.VendorName))
+                {
+                    throw new InvalidOperationException("Vendor name is required (BRULE-09).");
+                }
+
                 if (vendorSaveRequest.Id > 0)
                 {
                     var lpMVender = await dB_LogisticsproContext.LpMVender.FirstOrDefaultAsync(i => i.Id == vendorSaveRequest.Id);
@@ -541,6 +553,19 @@ namespace LogisticsPro_Data.Repository
         {
             try
             {
+                // BRULE-08 equivalent for events: an event must carry a name.
+                if (string.IsNullOrWhiteSpace(eventSaveRequest.EventName))
+                {
+                    throw new InvalidOperationException("Event name is required.");
+                }
+
+                // BRULE-10: where both dates are provided, the end date must not precede the start date.
+                if (eventSaveRequest.EventFromDate.HasValue && eventSaveRequest.EventToDate.HasValue &&
+                    eventSaveRequest.EventToDate.Value < eventSaveRequest.EventFromDate.Value)
+                {
+                    throw new InvalidOperationException("Event end date cannot be earlier than the start date (BRULE-10).");
+                }
+
                 if (eventSaveRequest.Id > 0)
                 {
                     var lpMEvent = await dB_LogisticsproContext.LpMEvent.FirstOrDefaultAsync(i => i.Id == eventSaveRequest.Id);

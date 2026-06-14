@@ -1,0 +1,195 @@
+@page "/"
+@rendermode InteractiveServer
+@inject GenerationSession Session
+@inject GenerationOrchestrator Orchestrator
+@inject NavigationManager Nav
+@implements IDisposable
+
+<PageTitle>Configure — GenAI Test Framework</PageTitle>
+
+<div class="container py-4">
+<div class="row justify-content-center">
+<div class="col-xl-7 col-lg-9">
+
+    <div class="mb-4">
+        <h1 class="h3 fw-bold mb-1">Configure Generation</h1>
+        <p class="text-muted mb-0 small">Generate xUnit tests from business analysis documents.</p>
+    </div>
+
+    @if (_error is not null)
+    {
+        <div class="alert alert-danger d-flex align-items-center gap-2 mb-4">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span>@_error</span>
+            <button class="btn-close ms-auto" @onclick="() => _error = null"></button>
+        </div>
+    }
+
+    <!-- ── Configuration card ── -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header fw-semibold bg-white">1 · Configure</div>
+        <div class="card-body">
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    BA Document Path <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control font-monospace"
+                       placeholder="C:\path\to\document.pdf"
+                       @bind="Session.DocsPath" />
+                <div class="form-text">Full path to your PDF business analysis document.</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    Target API Path <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control font-monospace"
+                       placeholder="C:\path\to\YourApi"
+                       @bind="Session.TargetPath" />
+                <div class="form-text">Root folder of the API project to generate tests for.</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    Output Folder <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control font-monospace"
+                       placeholder="C:\path\to\output"
+                       @bind="Session.OutputFolder" />
+                <div class="form-text">Where generated test files will be saved.</div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Generation Mode</label>
+                <div class="d-flex flex-wrap gap-3 mt-1">
+                    @foreach (var (mode, tip) in _modes)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                   id="mode_@mode" name="genMode"
+                                   checked="@(Session.Mode == mode)"
+                                   disabled="@(mode is "hybrid" or "lora" or "lora-rag")"
+                                   @onchange="() => Session.Mode = mode" />
+                            <label class="form-check-label" for="mode_@mode"
+                                   title="@tip">
+                                <strong>@mode.ToUpperInvariant()</strong>
+                                @if (mode is "hybrid" or "lora" or "lora-rag")
+                                {
+                                    <span class="badge bg-secondary ms-1" style="font-size:.65rem">soon</span>
+                                }
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-lg w-100"
+                    disabled="@Session.IsGenerating"
+                    @onclick="StartGenerationAsync">
+                @if (Session.IsGenerating)
+                {
+                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    <span>@(string.IsNullOrWhiteSpace(Session.ProgressMessage) ? "Generating..." : Session.ProgressMessage)</span>
+                }
+                else
+                {
+                    <span>Generate Test Cases</span>
+                }
+            </button>
+
+        </div>
+    </div>
+
+    <!-- ── Live log ── -->
+    @if (Session.IsGenerating || Session.ProgressLog.Count > 0)
+    {
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header fw-semibold bg-dark text-white d-flex align-items-center gap-2">
+                @if (Session.IsGenerating)
+                {
+                    <span class="spinner-border spinner-border-sm text-warning"></span>
+                }
+                else
+                {
+                    <i class="fa-solid fa-circle-check text-success"></i>
+                }
+                Generation Log
+            </div>
+            <div class="card-body p-0">
+                <div id="logBox"
+                     class="bg-dark text-light p-3 rounded-bottom font-monospace"
+                     style="font-size:.8rem;max-height:240px;overflow-y:auto;">
+                    @foreach (var line in Session.ProgressLog)
+                    {
+                        <div>@line</div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+</div>
+</div>
+
+@code {
+    private string? _error;
+    private CancellationTokenSource _cts = new();
+
+    private static readonly (string mode, string tip)[] _modes =
+    {
+        ("llm",      "Direct LLM generation from BA documents"),
+        ("rag",      "Retrieval-Augmented Generation with semantic search"),
+        ("hybrid",   "RAG + static code analysis (coming soon)"),
+        ("lora",     "Fine-tuned LLM (coming soon)"),
+        ("lora-rag", "Fine-tuned LLM + RAG (coming soon)"),
+    };
+
+    protected override void OnInitialized()
+    {
+        Session.OnChange += Refresh;
+    }
+
+    private async void Refresh()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task StartGenerationAsync()
+    {
+        _error = null;
+
+        if (string.IsNullOrWhiteSpace(Session.DocsPath) ||
+            string.IsNullOrWhiteSpace(Session.TargetPath) ||
+            string.IsNullOrWhiteSpace(Session.OutputFolder))
+        {
+            _error = "Please fill in all required fields.";
+            return;
+        }
+
+        if (!File.Exists(Session.DocsPath))
+        {
+            _error = $"Document not found: {Session.DocsPath}";
+            return;
+        }
+
+        _cts = new CancellationTokenSource();
+
+        try
+        {
+            await Task.Run(() => Orchestrator.GenerateTestCasesAsync(Session, _cts.Token));
+            Nav.NavigateTo("/testcases");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+    }
+
+    public void Dispose()
+    {
+        Session.OnChange -= Refresh;
+        _cts.Dispose();
+    }
+}

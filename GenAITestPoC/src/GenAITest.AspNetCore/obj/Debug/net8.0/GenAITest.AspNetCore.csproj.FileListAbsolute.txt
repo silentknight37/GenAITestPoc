@@ -1,0 +1,15 @@
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\bin\Debug\net8.0\GenAITest.AspNetCore.deps.json
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\bin\Debug\net8.0\GenAITest.AspNetCore.dll
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\bin\Debug\net8.0\GenAITest.AspNetCore.pdb
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\bin\Debug\net8.0\GenAITest.Engine.dll
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\bin\Debug\net8.0\GenAITest.Engine.pdb
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\obj\Debug\net8.0\GenAITest.AspNetCore.csproj.AssemblyReference.cache
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\obj\Debug\net8.0\GenAITest.AspNetCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\obj\Debug\net8.0\GenAITest.AspNetCore.AssemblyInfoInputs.cache
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\obj\Debug\net8.0\GenAITest.AspNetCore.AssemblyInfo.cs
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\obj\Debug\net8.0\GenAITest.AspNetCore.csproj.CoreCompileInputs.cache
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\obj\Debug\net8.0\GenAITes.7F40FA32.Up2Date
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\obj\Debug\net8.0\GenAITest.AspNetCore.dll
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\obj\Debug\net8.0\refint\GenAITest.AspNetCore.dll
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\obj\Debug\net8.0\GenAITest.AspNetCore.pdb
+C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\obj\Debug\net8.0\ref\GenAITest.AspNetCore.dll

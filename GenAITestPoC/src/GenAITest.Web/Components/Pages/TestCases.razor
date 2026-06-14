@@ -1,0 +1,288 @@
+@page "/testcases"
+@rendermode InteractiveServer
+@inject GenerationSession Session
+@inject GenerationOrchestrator Orchestrator
+@inject NavigationManager Nav
+@implements IDisposable
+
+<PageTitle>Review Test Cases — GenAI Test Framework</PageTitle>
+
+<div class="container-fluid py-4 px-4">
+
+    @if (!Session.GeneratedTestCases.Any())
+    {
+        <div class="text-center py-5">
+            <p class="text-muted mb-3">No test cases generated yet.</p>
+            <a href="/" class="btn btn-primary">Go to Configure</a>
+        </div>
+    }
+    else
+    {
+        <!-- ── Stats bar ── -->
+        <div class="row g-3 mb-4">
+            <div class="col-auto">
+                <div class="stat-tile text-center px-4 py-2">
+                    <div class="stat-value">@Session.GeneratedTestCases.Count</div>
+                    <div class="stat-label">Generated</div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="stat-tile text-center px-4 py-2">
+                    <div class="stat-value">@Session.SelectedTestNames.Count</div>
+                    <div class="stat-label">Selected</div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="stat-tile text-center px-4 py-2">
+                    <div class="stat-value">@_filtered.Count</div>
+                    <div class="stat-label">Visible</div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="stat-tile text-center px-4 py-2">
+                    <div class="stat-value">@Session.Mode.ToUpperInvariant()</div>
+                    <div class="stat-label">Mode</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Filter + Actions bar ── -->
+        <div class="card shadow-sm mb-3">
+            <div class="card-body py-2">
+                <div class="row g-2 align-items-center">
+
+                    <div class="col-md-3">
+                        <input type="text" class="form-control form-control-sm"
+                               placeholder="Search name or requirement..."
+                               @bind="_search" @bind:event="oninput" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <select class="form-select form-select-sm" @bind="_filterScenario">
+                            <option value="">All Scenarios</option>
+                            @foreach (var s in _scenarios)
+                            {
+                                <option value="@s">@s</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <select class="form-select form-select-sm" @bind="_filterPriority">
+                            <option value="">All Priorities</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-5 d-flex gap-2 justify-content-end">
+                        <button class="btn btn-sm btn-outline-secondary"
+                                @onclick="() => Session.SelectAll()">
+                            Select All
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary"
+                                @onclick="() => Session.SelectNone()">
+                            Clear
+                        </button>
+                        <button class="btn btn-sm btn-success"
+                                disabled="@(_generating || Session.SelectedTestNames.Count == 0)"
+                                @onclick="GenerateFilesAsync">
+                            @if (_generating)
+                            {
+                                <span class="spinner-border spinner-border-sm me-1"></span>
+                            }
+                            Generate xUnit Tests (@Session.SelectedTestNames.Count)
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        @if (_error is not null)
+        {
+            <div class="alert alert-danger d-flex align-items-center gap-2 mb-3">
+                <i class="fa-solid fa-circle-exclamation"></i><span>@_error</span>
+            </div>
+        }
+
+        <!-- ── Test cases table ── -->
+        <div class="card shadow-sm">
+            <div class="table-responsive" style="max-height:62vh;overflow-y:auto;">
+                <table class="table table-sm table-hover mb-0 align-middle">
+                    <thead class="table-dark sticky-top">
+                        <tr>
+                            <th style="width:40px">
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       checked="@(_filtered.All(t => Session.SelectedTestNames.Contains(t.TestName)))"
+                                       @onchange="TogglePageSelection" />
+                            </th>
+                            <th>Requirement</th>
+                            <th>Test Name</th>
+                            <th>Scenario</th>
+                            <th>Priority</th>
+                            <th>Endpoint</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var t in _filtered)
+                        {
+                            var isSelected = Session.SelectedTestNames.Contains(t.TestName);
+                            <tr class="@(isSelected ? "table-primary" : "")">
+                                <td>
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           checked="@isSelected"
+                                           @onchange="e => Session.ToggleTest(t.TestName, (bool)(e.Value ?? false))" />
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary font-monospace">
+                                        @(t.RelatedRequirement ?? "—")
+                                    </span>
+                                </td>
+                                <td class="small">@t.TestName</td>
+                                <td>
+                                    <span class="badge @ScenarioBadge(t.ScenarioType)">
+                                        @(t.ScenarioType ?? "—")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge @PriorityBadge(t.Priority)">
+                                        @(t.Priority ?? "—")
+                                    </span>
+                                </td>
+                                <td class="small font-monospace text-truncate" style="max-width:160px"
+                                    title="@t.ApiEndpoint">
+                                    @(t.ApiEndpoint ?? "—")
+                                </td>
+                                <td>
+                                    @if (t.HttpMethod is not null)
+                                    {
+                                        <span class="badge @MethodBadge(t.HttpMethod)">@t.HttpMethod</span>
+                                    }
+                                    else
+                                    {
+                                        <span>—</span>
+                                    }
+                                </td>
+                                <td class="font-monospace small">
+                                    @(t.ExpectedStatusCode?.ToString() ?? "—")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    }
+</div>
+
+@code {
+    private string _search          = string.Empty;
+    private string _filterScenario  = string.Empty;
+    private string _filterPriority  = string.Empty;
+    private string? _error;
+    private bool _generating;
+
+    private IReadOnlyList<GeneratedTestCase> _filtered => ApplyFilters();
+    private IReadOnlyList<string> _scenarios =>
+        Session.GeneratedTestCases
+            .Select(t => t.ScenarioType ?? string.Empty)
+            .Where(s => !string.IsNullOrWhiteSpace(s))
+            .Distinct()
+            .OrderBy(s => s)
+            .ToList();
+
+    protected override void OnInitialized()
+    {
+        Session.OnChange += Refresh;
+    }
+
+    private async void Refresh() => await InvokeAsync(StateHasChanged);
+
+    private IReadOnlyList<GeneratedTestCase> ApplyFilters()
+    {
+        var q = Session.GeneratedTestCases.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(_search))
+        {
+            var s = _search.Trim().ToLowerInvariant();
+            q = q.Where(t =>
+                (t.TestName?.ToLowerInvariant().Contains(s) ?? false) ||
+                (t.RelatedRequirement?.ToLowerInvariant().Contains(s) ?? false));
+        }
+
+        if (!string.IsNullOrWhiteSpace(_filterScenario))
+            q = q.Where(t => t.ScenarioType == _filterScenario);
+
+        if (!string.IsNullOrWhiteSpace(_filterPriority))
+            q = q.Where(t => t.Priority == _filterPriority);
+
+        return q.ToList();
+    }
+
+    private void TogglePageSelection(ChangeEventArgs e)
+    {
+        var check = (bool)(e.Value ?? false);
+        foreach (var t in _filtered)
+            Session.ToggleTest(t.TestName, check);
+    }
+
+    private async Task GenerateFilesAsync()
+    {
+        _error    = null;
+        _generating = true;
+
+        try
+        {
+            await Task.Run(() => Orchestrator.GenerateTestFilesAsync(Session));
+            Nav.NavigateTo("/output");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _generating = false;
+        }
+    }
+
+    private static string ScenarioBadge(string? s) => s switch
+    {
+        "Positive"   => "bg-success",
+        "Negative"   => "bg-danger",
+        "Boundary"   => "bg-warning text-dark",
+        "Validation" => "bg-info text-dark",
+        "Auth"       => "bg-dark",
+        _            => "bg-secondary"
+    };
+
+    private static string PriorityBadge(string? p) => p switch
+    {
+        "High"   => "bg-danger",
+        "Medium" => "bg-warning text-dark",
+        "Low"    => "bg-secondary",
+        _        => "bg-light text-dark border"
+    };
+
+    private static string MethodBadge(string? m) => m?.ToUpperInvariant() switch
+    {
+        "GET"    => "bg-primary",
+        "POST"   => "bg-success",
+        "PUT"    => "bg-warning text-dark",
+        "DELETE" => "bg-danger",
+        "PATCH"  => "bg-info text-dark",
+        _        => "bg-secondary"
+    };
+
+    public void Dispose()
+    {
+        Session.OnChange -= Refresh;
+    }
+}

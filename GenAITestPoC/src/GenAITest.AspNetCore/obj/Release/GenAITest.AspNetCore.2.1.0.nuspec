@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>GenAITest.AspNetCore</id>
+    <version>2.1.0</version>
+    <authors>Shanaka</authors>
+    <description>GenAI Test Framework — adds a /genai-tests web UI endpoint to any ASP.NET Core API. Like Swagger, but for AI-powered test generation.</description>
+    <repository type="git" commit="9408daa695ec410538d442dc311487396d0a8d8f" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="GenAITest.Engine" version="1.0.28" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net8.0">
+        <frameworkReference name="Microsoft.AspNetCore.App" />
+      </group>
+    </frameworkReferences>
+  </metadata>
+  <files>
+    <file src="C:\GIT\GenAITestPoc_GIT\GenAITestPoC\src\GenAITest.AspNetCore\bin\Release\net8.0\GenAITest.AspNetCore.dll" target="lib\net8.0\GenAITest.AspNetCore.dll" />
+  </files>
+</package>

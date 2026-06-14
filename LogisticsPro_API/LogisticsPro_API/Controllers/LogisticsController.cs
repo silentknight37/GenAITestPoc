@@ -1,4 +1,4 @@
-﻿using LogisticsPro_API.Request;
+using LogisticsPro_API.Request;
 using LogisticsPro_Common.DTO;
 using LogisticsPro_Manager.Command;
 using LogisticsPro_Manager.Query;
@@ -9,7 +9,9 @@ using System.Collections.Generic;
 
 namespace LogisticsPro_API.Controllers
 {
-    [Route("api/[controller]")]
+    // Routes follow BA Section 8.6 (resource-oriented) and 8.5 (HTTP method usage):
+    // GET = retrieval, POST = create, PUT = update, DELETE = removal,
+    // POST .../{id:int}/void = controlled, non-destructive financial reversal (BA 7.9.4).
     [ApiController]
     [Authorize]
     public class LogisticsController : BaseController
@@ -20,8 +22,9 @@ namespace LogisticsPro_API.Controllers
             this.mediator = mediator;
         }
 
-        [HttpGet]
-        [Route("GetBatchItems")]
+        // ----- Batches -----
+
+        [HttpGet("~/api/batch-eligible-items")]
         public async Task<JsonResult> GetBatchItems(DateTime? batchDate)
         {
             var userId = GetUserIdFromToken();
@@ -29,8 +32,7 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(jobs);
         }
 
-        [HttpPost]
-        [Route("SavetBatchItems")]
+        [HttpPost("~/api/batches")]
         public async Task<JsonResult> SavetBatchItems(SaveBatchItemRequest saveBatchItemRequest)
         {
             var userId = GetUserIdFromToken();
@@ -39,31 +41,30 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetBatches")]
+        [HttpGet("~/api/batches")]
         public async Task<JsonResult> GetBatches(bool isFirstLoad,string? batchCode, string? vendorId, DateTime? batchDateFrom, DateTime? batchDateTo,string? jobCardNumber)
         {
             var userId = GetUserIdFromToken();
 
             var vendorIds= vendorId == null ? new List<int>() : vendorId.Split(',').Select(Int32.Parse).ToList();
-           
+
 
             var batches = await mediator.Send(new BatchEventQuery(isFirstLoad,(int)userId, batchCode, vendorIds, batchDateFrom, batchDateTo, jobCardNumber));
             return new JsonResult(batches);
         }
 
-        [HttpPost]
-        [Route("RemoveBatchItemFromList")]
-        public async Task<JsonResult> RemoveBatchItemFromList(RemoveRequest removeRequest)
+        [HttpDelete("~/api/batch-items/{id:int}")]
+        public async Task<JsonResult> RemoveBatchItemFromList(int id)
         {
             var userId = GetUserIdFromToken();
-            var result = await mediator.Send(new RemoveBatchItemCommand(removeRequest.Id,(int)userId));
+            var result = await mediator.Send(new RemoveBatchItemCommand(id,(int)userId));
 
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetBatchItemsByVendorId")]
+        // ----- Payment vouchers -----
+
+        [HttpGet("~/api/vendors/{vendorId:int}/payable-items")]
         public async Task<JsonResult> GetBatchItemsByVendorId(int vendorId, DateTime? fromDate, DateTime? toDate,string? jobCardNumber)
         {
             var userId = GetUserIdFromToken();
@@ -71,8 +72,7 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(jobs);
         }
 
-        [HttpPost]
-        [Route("SavePaymentVouchers")]
+        [HttpPost("~/api/payment-vouchers")]
         public async Task<JsonResult> SavePaymentVouchers(SavePaymentVoucherRequest savePaymentVoucherRequest)
         {
             var userId = GetUserIdFromToken();
@@ -81,8 +81,7 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetPaymentVouchers")]
+        [HttpGet("~/api/payment-vouchers")]
         public async Task<JsonResult> GetPaymentVouchers(bool isFirstLoad,string? paymentVoucherCode,string? invoiceNo, string? vendorId, DateTime? paymentVoucherDateFrom, DateTime? paymentVoucherDateTo,string? jobCardNumber)
         {
             var userId = GetUserIdFromToken();
@@ -91,8 +90,7 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(batches);
         }
 
-        [HttpGet]
-        [Route("GetPaymentVoucherById")]
+        [HttpGet("~/api/payment-vouchers/{id:int}")]
         public async Task<JsonResult> GetPaymentVoucherById(int id)
         {
             var userId = GetUserIdFromToken();
@@ -100,18 +98,18 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(batches);
         }
 
-        [HttpPost]
-        [Route("RemovePaymentVoucherItemFromList")]
-        public async Task<JsonResult> RemovePaymentVoucherItemFromList(PaymentVoucherRemoveRequest paymentVoucherRemoveRequest)
+        [HttpDelete("~/api/payment-voucher-items/{id:int}")]
+        public async Task<JsonResult> RemovePaymentVoucherItemFromList(int id, [FromQuery] string type)
         {
             var userId = GetUserIdFromToken();
-            var result = await mediator.Send(new RemovePaymentVoucherItemCommand(paymentVoucherRemoveRequest.Id, paymentVoucherRemoveRequest.Type,(int)userId));
+            var result = await mediator.Send(new RemovePaymentVoucherItemCommand(id, type,(int)userId));
 
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetJobCardItemsByCustomerId")]
+        // ----- Invoices -----
+
+        [HttpGet("~/api/customers/{customerId:int}/billable-items")]
         public async Task<JsonResult> GetJobCardItemsByCustomerId(int customerId, DateTime? fromDate, DateTime? toDate,string? jobCardNumber)
         {
             var userId = GetUserIdFromToken();
@@ -119,8 +117,7 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(jobs);
         }
 
-        [HttpPost]
-        [Route("SaveInvoice")]
+        [HttpPost("~/api/invoices")]
         public async Task<JsonResult> SaveInvoice(SaveInvoiceRequest saveInvoiceRequest)
         {
             var userId = GetUserIdFromToken();
@@ -129,8 +126,7 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetInvoices")]
+        [HttpGet("~/api/invoices")]
         public async Task<JsonResult> GetInvoices(bool isFirstLoad,string? invoiceCode, string? customerId, DateTime? invoiceDateFrom, DateTime? invoiceDateTo, DateTime? invoiceDueDateFrom, DateTime? invoiceDueDateTo, string? statusId,string? jobCardNumber)
         {
             var userId = GetUserIdFromToken();
@@ -140,18 +136,34 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(batches);
         }
 
-        [HttpPost]
-        [Route("VoidInvoice")]
-        public async Task<JsonResult> VoidInvoice(RemoveRequest removeRequest)
+        [HttpGet("~/api/invoices/{id:int}")]
+        public async Task<JsonResult> GetInvoice(int id)
         {
             var userId = GetUserIdFromToken();
-            var result = await mediator.Send(new VoidInvoiceCommand(removeRequest.Id,(int)userId));
+            var invoice = await mediator.Send(new InvoiceByIdEventQuery((int)userId, id));
+            return new JsonResult(invoice);
+        }
+
+        [HttpPost("~/api/invoices/{id:int}/void")]
+        public async Task<JsonResult> VoidInvoice(int id)
+        {
+            var userId = GetUserIdFromToken();
+            var result = await mediator.Send(new VoidInvoiceCommand(id,(int)userId));
 
             return new JsonResult(result);
         }
 
-        [HttpPost]
-        [Route("SaveProformaInvoice")]
+        [HttpGet("~/api/invoices/{id:int}/receipts")]
+        public async Task<JsonResult> GetReceipts(int id)
+        {
+            var userId = GetUserIdFromToken();
+            var receipts = await mediator.Send(new ReceiptsByInvoiceIdEventQuery((int)userId, id));
+            return new JsonResult(receipts);
+        }
+
+        // ----- Proforma invoices -----
+
+        [HttpPost("~/api/proforma-invoices")]
         public async Task<JsonResult> SaveProformaInvoice(SaveProformaInvoiceRequest saveProformaInvoiceRequest)
         {
             var userId = GetUserIdFromToken();
@@ -160,8 +172,7 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetProformaInvoices")]
+        [HttpGet("~/api/proforma-invoices")]
         public async Task<JsonResult> GetProformaInvoices(bool isFirstLoad,string? invoiceCode, string? customerId, DateTime? invoiceDateFrom, DateTime? invoiceDateTo, DateTime? invoiceDueDateFrom, DateTime? invoiceDueDateTo, string? statusId, string? jobCardNumber)
         {
             var userId = GetUserIdFromToken();
@@ -172,18 +183,7 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(batches);
         }
 
-        [HttpPost]
-        [Route("VoidProformaInvoice")]
-        public async Task<JsonResult> VoidProformaInvoice(RemoveRequest removeRequest)
-        {
-            var userId = GetUserIdFromToken();
-            var result = await mediator.Send(new VoidProformaInvoiceCommand(removeRequest.Id,(int)userId));
-
-            return new JsonResult(result);
-        }
-
-        [HttpGet]
-        [Route("GetProformaInvoice")]
+        [HttpGet("~/api/proforma-invoices/{id:int}")]
         public async Task<JsonResult> GetProformaInvoice(int id)
         {
             var userId = GetUserIdFromToken();
@@ -191,8 +191,16 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(invoice);
         }
 
-        [HttpGet]
-        [Route("GetProformaInvoiceReceipts")]
+        [HttpPost("~/api/proforma-invoices/{id:int}/void")]
+        public async Task<JsonResult> VoidProformaInvoice(int id)
+        {
+            var userId = GetUserIdFromToken();
+            var result = await mediator.Send(new VoidProformaInvoiceCommand(id,(int)userId));
+
+            return new JsonResult(result);
+        }
+
+        [HttpGet("~/api/proforma-invoices/{id:int}/receipts")]
         public async Task<JsonResult> GetProformaInvoiceReceipts(int id)
         {
             var userId = GetUserIdFromToken();
@@ -200,9 +208,7 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(invoice);
         }
 
-
-        [HttpPost]
-        [Route("SaveProformaInvoiceReceipt")]
+        [HttpPost("~/api/proforma-invoice-receipts")]
         public async Task<JsonResult> SaveProformaInvoiceReceipt(SaveProformaInvoiceReceiptRequest saveProformaInvoiceReceiptRequest)
         {
             var userId = GetUserIdFromToken();
@@ -211,38 +217,18 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpPost]
-        [Route("RemoveProformaInvoiceReceipt")]
-        public async Task<JsonResult> RemoveProformaInvoiceReceipt(RemoveRequest removeRequest)
+        [HttpDelete("~/api/proforma-invoice-receipts/{id:int}")]
+        public async Task<JsonResult> RemoveProformaInvoiceReceipt(int id)
         {
             var userId = GetUserIdFromToken();
-            var result = await mediator.Send(new RemoveProformaInvoiceReceiptCommand(removeRequest.Id, (int)userId));
+            var result = await mediator.Send(new RemoveProformaInvoiceReceiptCommand(id, (int)userId));
 
             return new JsonResult(result);
         }
 
+        // ----- Receipts -----
 
-        [HttpGet]
-        [Route("GetInvoice")]
-        public async Task<JsonResult> GetInvoice(int id)
-        {
-            var userId = GetUserIdFromToken();
-            var invoice = await mediator.Send(new InvoiceByIdEventQuery((int)userId, id));
-            return new JsonResult(invoice);
-        }
-
-        [HttpGet]
-        [Route("GetReceipts")]
-        public async Task<JsonResult> GetReceipts(int id)
-        {
-            var userId = GetUserIdFromToken();
-            var receipts = await mediator.Send(new ReceiptsByInvoiceIdEventQuery((int)userId, id));
-            return new JsonResult(receipts);
-        }
-
-
-        [HttpPost]
-        [Route("SaveReceipt")]
+        [HttpPost("~/api/receipts")]
         public async Task<JsonResult> SaveReceipt(SaveReceiptRequest saveReceiptRequest)
         {
             var userId = GetUserIdFromToken();
@@ -259,28 +245,27 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpPost]
-        [Route("RemoveReceipt")]
-        public async Task<JsonResult> RemoveReceipt(RemoveRequest removeRequest)
+        [HttpDelete("~/api/receipts/{id:int}")]
+        public async Task<JsonResult> RemoveReceipt(int id)
         {
             var userId = GetUserIdFromToken();
-            var result = await mediator.Send(new RemoveProformaInvoiceReceiptCommand(removeRequest.Id, (int)userId));
+            var result = await mediator.Send(new RemoveProformaInvoiceReceiptCommand(id, (int)userId));
 
             return new JsonResult(result);
         }
 
-        [HttpPost]
-        [Route("VoidReceipt")]
-        public async Task<JsonResult> VoidReceipt(VoidRequest voidRequest)
+        [HttpPost("~/api/receipts/{id:int}/void")]
+        public async Task<JsonResult> VoidReceipt(int id)
         {
             var userId = GetUserIdFromToken();
-            var result = await mediator.Send(new VoidInvoiceReceiptCommand(voidRequest.Id, (int)userId));
+            var result = await mediator.Send(new VoidInvoiceReceiptCommand(id, (int)userId));
 
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetPnL")]
+        // ----- Reporting -----
+
+        [HttpGet("~/api/reports/profit-and-loss")]
         public async Task<JsonResult> GetPnL(string? customerId, DateTime? dateFrom, DateTime? dateTo, string? jobCardNumber)
         {
             var userId = GetUserIdFromToken();

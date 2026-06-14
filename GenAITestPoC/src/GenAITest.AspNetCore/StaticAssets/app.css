@@ -1,0 +1,14 @@
+.font-monospace { font-family: "Consolas", "Courier New", monospace; }
+
+/* Sticky table header */
+.sticky-top { position: sticky; top: 0; z-index: 1; }
+
+/* Log box auto-scroll target */
+#logBox > div:last-child { padding-bottom: 4px; }
+
+/* Selected row highlight */
+tr.table-primary td { background-color: #cfe2ff !important; }
+
+/* Smooth card hover */
+.card { transition: box-shadow .15s ease-in-out; }
+.card:hover { box-shadow: 0 .25rem .75rem rgba(0,0,0,.1) !important; }

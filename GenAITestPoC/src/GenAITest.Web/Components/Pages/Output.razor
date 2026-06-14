@@ -1,0 +1,146 @@
+@page "/output"
+@rendermode InteractiveServer
+@inject GenerationSession Session
+@inject GenerationOrchestrator Orchestrator
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Output — GenAI Test Framework</PageTitle>
+
+<div class="container py-4">
+<div class="row justify-content-center">
+<div class="col-xl-8 col-lg-10">
+
+    @if (!Session.GeneratedFiles.Any())
+    {
+        <div class="text-center py-5">
+            <p class="text-muted mb-3">No files generated yet. Select test cases and click Generate.</p>
+            <a href="/testcases" class="btn btn-primary">Back to Test Cases</a>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h1 class="h4 fw-bold mb-0">Generated Test Files</h1>
+            <div class="d-flex gap-2">
+                <a href="/testcases" class="btn btn-outline-secondary btn-sm">
+                    <i class="fa-solid fa-arrow-left me-1"></i>Back to Test Cases
+                </a>
+                <button class="btn btn-success btn-sm" @onclick="DownloadZipAsync">
+                    <i class="fa-solid fa-download me-1"></i>Download All (.zip)
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Summary banner ── -->
+        <div class="alert alert-success d-flex gap-3 align-items-center mb-4">
+            <i class="fa-solid fa-circle-check fs-4"></i>
+            <div>
+                <strong>@Session.GeneratedFiles.Count file(s)</strong> generated with
+                <strong>@Session.SelectedTestNames.Count test(s)</strong>
+                in mode <strong>@Session.Mode.ToUpperInvariant()</strong>.
+                <div class="small text-muted mt-1 font-monospace">
+                    @(string.IsNullOrWhiteSpace(Session.LastOutputDir)
+                          ? Path.Combine(Session.OutputFolder, "Generated", Session.Mode.ToUpperInvariant())
+                          : Session.LastOutputDir)
+                </div>
+            </div>
+        </div>
+
+        <!-- ── File cards ── -->
+        @foreach (var file in Session.GeneratedFiles)
+        {
+            var name      = Path.GetFileName(file);
+            var testCount = CountTestsInFile(file);
+
+            <div class="card shadow-sm mb-3">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <i class="fa-regular fa-file-code fs-4 text-muted"></i>
+                    <div class="flex-grow-1">
+                        <div class="fw-semibold font-monospace">@name</div>
+                        <div class="small text-muted font-monospace">@file</div>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">@testCount tests</span>
+                    <button class="btn btn-outline-primary btn-sm"
+                            @onclick="() => DownloadFileAsync(file)">
+                        <i class="fa-solid fa-download me-1"></i>Download
+                    </button>
+                </div>
+
+                <!-- Preview first 20 lines -->
+                <div class="card-footer p-0">
+                    <div class="code-box text-light p-3 rounded-bottom font-monospace"
+                         style="font-size:.75rem;max-height:160px;overflow-y:auto;">
+                        @foreach (var line in ReadPreview(file))
+                        {
+                            <div>@line</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="text-center mt-4 d-flex justify-content-center gap-3">
+            <a href="/" class="btn btn-outline-secondary">
+                New Generation
+            </a>
+            <button class="btn btn-success" @onclick="DownloadZipAsync">
+                <i class="fa-solid fa-download me-1"></i>Download All as ZIP
+            </button>
+        </div>
+    }
+
+</div>
+</div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Session.OnChange += Refresh;
+    }
+
+    private async void Refresh() => await InvokeAsync(StateHasChanged);
+
+    private async Task DownloadFileAsync(string filePath)
+    {
+        if (!File.Exists(filePath)) return;
+        var bytes = await File.ReadAllBytesAsync(filePath);
+        await JS.InvokeVoidAsync("downloadFileFromBytes",
+            Path.GetFileName(filePath),
+            "text/plain",
+            bytes);
+    }
+
+    private async Task DownloadZipAsync()
+    {
+        var zipBytes = Orchestrator.CreateZip(Session.GeneratedFiles);
+        await JS.InvokeVoidAsync("downloadFileFromBytes",
+            $"generated-tests-{Session.Mode}-{DateTime.Now:yyyyMMddHHmm}.zip",
+            "application/zip",
+            zipBytes);
+    }
+
+    private static int CountTestsInFile(string filePath)
+    {
+        if (!File.Exists(filePath)) return 0;
+        try
+        {
+            return File.ReadLines(filePath)
+                .Count(l => l.TrimStart().StartsWith("[Fact]", StringComparison.Ordinal));
+        }
+        catch { return 0; }
+    }
+
+    private static IEnumerable<string> ReadPreview(string filePath)
+    {
+        if (!File.Exists(filePath)) return Enumerable.Empty<string>();
+        try { return File.ReadLines(filePath).Take(22); }
+        catch { return Enumerable.Empty<string>(); }
+    }
+
+    public void Dispose()
+    {
+        Session.OnChange -= Refresh;
+    }
+}

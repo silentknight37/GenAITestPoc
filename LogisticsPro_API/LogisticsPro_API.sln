@@ -3,17 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_API", "LogisticsPro_API\LogisticsPro_API.csproj", "{17B98502-7A06-4BDB-91A5-F2E4B9E2DC54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticsPro_API", "LogisticsPro_API\LogisticsPro_API.csproj", "{17B98502-7A06-4BDB-91A5-F2E4B9E2DC54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_Data", "LogisticsPro_Data\LogisticsPro_Data.csproj", "{CC210E47-F0C8-45F5-BA75-51E4954D3483}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticsPro_Data", "LogisticsPro_Data\LogisticsPro_Data.csproj", "{CC210E47-F0C8-45F5-BA75-51E4954D3483}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_Manager", "LogisticsPro_Manager\LogisticsPro_Manager.csproj", "{B5FB57FD-253B-4C02-8CE7-EC6941EA8792}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticsPro_Manager", "LogisticsPro_Manager\LogisticsPro_Manager.csproj", "{B5FB57FD-253B-4C02-8CE7-EC6941EA8792}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_Common", "LogisticsPro_Common\LogisticsPro_Common.csproj", "{27ACFB3C-8012-4A6A-81F3-4148630107F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticsPro_Common", "LogisticsPro_Common\LogisticsPro_Common.csproj", "{27ACFB3C-8012-4A6A-81F3-4148630107F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_API.TestGen", "LogisticsPro_API.TestGen\LogisticsPro_API.TestGen.csproj", "{1A113894-55AD-4308-BF1D-0BD08886C778}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsPro_API.Tests.Integration", "LogisticsPro_API.Tests.Integration\LogisticsPro_API.Tests.Integration.csproj", "{540648AB-1D35-475F-B75E-4DD250EFC35A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticsPro_API.GenAI.Tests.Integration", "LogisticsPro_API.GenAI.Tests.Integration\LogisticsPro_API.GenAI.Tests.Integration.csproj", "{DF32CF9D-F682-4128-BDA0-D12827D9E1A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +35,10 @@ Global
 		{27ACFB3C-8012-4A6A-81F3-4148630107F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27ACFB3C-8012-4A6A-81F3-4148630107F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27ACFB3C-8012-4A6A-81F3-4148630107F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1A113894-55AD-4308-BF1D-0BD08886C778}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A113894-55AD-4308-BF1D-0BD08886C778}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1A113894-55AD-4308-BF1D-0BD08886C778}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A113894-55AD-4308-BF1D-0BD08886C778}.Release|Any CPU.Build.0 = Release|Any CPU
-		{540648AB-1D35-475F-B75E-4DD250EFC35A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{540648AB-1D35-475F-B75E-4DD250EFC35A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{540648AB-1D35-475F-B75E-4DD250EFC35A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{540648AB-1D35-475F-B75E-4DD250EFC35A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF32CF9D-F682-4128-BDA0-D12827D9E1A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF32CF9D-F682-4128-BDA0-D12827D9E1A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF32CF9D-F682-4128-BDA0-D12827D9E1A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF32CF9D-F682-4128-BDA0-D12827D9E1A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

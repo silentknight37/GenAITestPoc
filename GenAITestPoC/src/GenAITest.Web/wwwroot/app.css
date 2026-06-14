@@ -1,0 +1,164 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   GenAI Test Framework — application theme
+   A restrained, neutral design system layered over Bootstrap 5.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+    --bg: #f5f6f8;
+    --panel: #fff;
+    --ink: #1f2328;
+    --muted: #656d76;
+    --border: #d6dbe1;
+    --accent: #4f46e5;
+    --accent-hover: #4338ca;
+    --header: #16181d;
+}
+
+body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+}
+
+.font-monospace,
+code {
+    font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+/* ── Navbar ─────────────────────────────────────────────────────────────── */
+.navbar {
+    background: var(--header) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: .2px;
+    font-size: .95rem;
+    color: #e6e8eb !important;
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+}
+
+.navbar-brand .brand-mark { color: var(--accent); opacity: .95; }
+
+.nav-tabs-custom .btn {
+    border: none;
+    background: transparent;
+    color: #9aa1aa;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: .35rem .85rem;
+}
+
+.nav-tabs-custom .btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .07);
+}
+
+.nav-tabs-custom .btn.active {
+    color: #fff;
+    background: rgba(255, 255, 255, .13);
+}
+
+/* ── Cards ──────────────────────────────────────────────────────────────── */
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: none !important;
+    transition: box-shadow .15s ease-in-out;
+}
+
+.card:hover { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06) !important; }
+
+.card-header {
+    background: var(--panel) !important;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+}
+
+.card-header.bg-dark { background: var(--header) !important; }
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+.btn { border-radius: 6px; font-weight: 500; }
+
+.btn-primary,
+.btn-success {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.btn-primary:hover, .btn-primary:focus,
+.btn-success:hover, .btn-success:focus {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.btn-outline-secondary { color: var(--ink); border-color: var(--border); }
+.btn-outline-secondary:hover { background: #eceef1; color: var(--ink); border-color: #c2c8cf; }
+.btn-outline-light { border-color: rgba(255, 255, 255, .25); }
+
+/* ── Form controls ──────────────────────────────────────────────────────── */
+.form-control,
+.form-select {
+    border-color: var(--border);
+    font-size: .875rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 .15rem rgba(79, 70, 229, .15);
+}
+
+/* ── Log / preview boxes ────────────────────────────────────────────────── */
+#logBox,
+.code-box {
+    background: #0f1115;
+    color: #d7dae0;
+    font-family: ui-monospace, Consolas, monospace;
+    line-height: 1.5;
+}
+
+#logBox > div:last-child { padding-bottom: 4px; }
+
+/* ── Tables ─────────────────────────────────────────────────────────────── */
+.table { font-size: .85rem; }
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--header);
+    color: #e6e8eb;
+    z-index: 1;
+    font-weight: 600;
+    font-size: .72rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    border-color: #2a2d34;
+}
+
+tr.table-primary td { background: #eef0fe !important; }
+.table-hover tbody tr:hover td { background: #f3f4f6; }
+
+/* ── Badges ─────────────────────────────────────────────────────────────── */
+.badge { font-weight: 600; letter-spacing: .02em; }
+
+/* ── Stat tiles ─────────────────────────────────────────────────────────── */
+.stat-tile {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.stat-tile .stat-value { font-size: 1.5rem; font-weight: 700; line-height: 1.1; }
+.stat-tile .stat-label {
+    font-size: .7rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+}

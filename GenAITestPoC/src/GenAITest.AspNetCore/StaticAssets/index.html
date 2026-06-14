@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>GenAI Test Framework</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<style>
+  /* Standard Bootstrap colours throughout — only layout/utility tweaks here. */
+  body{font-size:14px;-webkit-font-smoothing:antialiased}
+  code,.font-monospace{font-family:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+
+  .navbar-brand{display:inline-flex;align-items:center;gap:.55rem}
+
+  /* Dark console-style log + run output, using Bootstrap's dark token. */
+  #logBox{background:var(--bs-dark);color:#dee2e6;font-family:ui-monospace,Consolas,monospace;
+          font-size:.78rem;height:220px;overflow-y:auto;padding:14px;line-height:1.5}
+
+  /* Scroll body within a fixed height, keep the header pinned. */
+  .table-wrap{max-height:60vh;overflow-y:auto}
+  .table-wrap thead th{position:sticky;top:0;z-index:1}
+
+  .toggle{display:inline-block;width:1rem;color:var(--bs-secondary);font-family:ui-monospace,monospace}
+  .step-btn{min-width:150px}
+  #errorBox{display:none}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark px-4 py-2 shadow-sm mb-0">
+  <span class="navbar-brand"><i class="fa-solid fa-flask-vial text-info"></i>GenAI Test Framework</span>
+  <div class="d-flex gap-2" id="navTabs">
+    <button class="btn btn-sm btn-outline-light active" onclick="showTab('configure')">Configure</button>
+    <button class="btn btn-sm btn-outline-light" onclick="showTab('testcases')" id="btnTestCases" disabled>Test Cases</button>
+    <button class="btn btn-sm btn-outline-light" onclick="showTab('output')" id="btnOutput" disabled>Output</button>
+  </div>
+</nav>
+
+<!-- ── Configure ── -->
+<div id="tab-configure" class="container py-4" style="max-width:760px">
+  <div class="mb-4">
+    <h1 class="h4 fw-bold mb-1">Configure Generation</h1>
+    <p class="text-muted small mb-0">Generate xUnit integration tests from a business analysis document.</p>
+  </div>
+  <div class="card shadow-sm">
+    <div class="card-header fw-semibold bg-white">Source &amp; Mode</div>
+    <div class="card-body">
+
+      <div id="errorBox" class="alert alert-danger" style="display:none"></div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">BA Document Path <span class="text-danger">*</span></label>
+        <input id="docsPath" type="text" class="form-control font-monospace" placeholder="C:\path\to\requirements.pdf"/>
+        <div class="form-text">Full path to your PDF business analysis document.</div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Generation Mode</label>
+        <div class="row row-cols-1 row-cols-md-2 g-2 mt-1">
+          <div class="col">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="mode" id="modeLlm" value="llm" checked/>
+              <label class="form-check-label" for="modeLlm"><strong>LLM</strong> — Direct generation from requirements</label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="mode" id="modeRag" value="rag"/>
+              <label class="form-check-label" for="modeRag"><strong>RAG</strong> — Retrieval-augmented generation</label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="mode" id="modeHybrid" value="hybrid"/>
+              <label class="form-check-label" for="modeHybrid"><strong>Hybrid</strong> — RAG + static endpoint analysis</label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="mode" id="modeLora" value="lora"/>
+              <label class="form-check-label" for="modeLora"><strong>LoRA</strong> — Fine-tuned model</label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="mode" id="modeLoraRag" value="lora-rag"/>
+              <label class="form-check-label" for="modeLoraRag"><strong>LoRA + RAG</strong> — Fine-tuned model + retrieval</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-text">LoRA and LoRA + RAG require a configured fine-tuned model (<code>OPENAI_LORA_MODEL</code>).</div>
+      </div>
+
+      <button id="btnGenerate" class="btn btn-primary btn-lg w-100" onclick="startGeneration()">
+        Generate Test Cases
+      </button>
+    </div>
+  </div>
+
+  <div id="logCard" class="card shadow-sm mt-4" style="display:none">
+    <div class="card-header bg-dark text-white d-flex align-items-center gap-2 fw-semibold">
+      <span id="logSpinner" class="spinner-border spinner-border-sm text-warning"></span>
+      <span id="logTitle">Generating...</span>
+    </div>
+    <div id="logBox"></div>
+    <div id="logFooter" class="card-footer d-flex justify-content-end" style="display:none!important">
+      <button class="btn btn-success step-btn" onclick="showTab('testcases')">
+        Review Test Cases
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Test Cases ── -->
+<div id="tab-testcases" class="container-fluid py-3 px-4" style="display:none">
+
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-md-3">
+      <div class="card text-center h-100">
+        <div class="card-body py-3">
+          <div class="fs-4 fw-bold text-primary" id="statGenerated">0</div>
+          <div class="small text-muted text-uppercase">Generated</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center h-100">
+        <div class="card-body py-3">
+          <div class="fs-4 fw-bold text-success" id="statSelected">0</div>
+          <div class="small text-muted text-uppercase">Selected</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center h-100">
+        <div class="card-body py-3">
+          <div class="fs-4 fw-bold text-info" id="statVisible">0</div>
+          <div class="small text-muted text-uppercase">Visible</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center h-100">
+        <div class="card-body py-3">
+          <div class="fs-4 fw-bold text-secondary" id="statMode">LLM</div>
+          <div class="small text-muted text-uppercase">Mode</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body py-2">
+      <div class="row g-2 align-items-center">
+        <div class="col-md-3">
+          <input type="text" id="searchBox" class="form-control form-control-sm"
+            placeholder="Search name or requirement..." oninput="applyFilters()"/>
+        </div>
+        <div class="col-md-2">
+          <select id="scenarioFilter" class="form-select form-select-sm" onchange="applyFilters()">
+            <option value="">All Scenarios</option>
+            <option>Positive</option><option>Negative</option>
+            <option>Validation</option><option>Boundary</option><option>Auth</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select id="priorityFilter" class="form-select form-select-sm" onchange="applyFilters()">
+            <option value="">All Priorities</option>
+            <option>High</option><option>Medium</option><option>Low</option>
+          </select>
+        </div>
+        <div class="col-md-5 d-flex gap-2 justify-content-end">
+          <button class="btn btn-sm btn-outline-secondary" onclick="selectAll()">Select All</button>
+          <button class="btn btn-sm btn-outline-secondary" onclick="selectNone()">Clear</button>
+          <button id="btnWrite" class="btn btn-sm btn-success step-btn" onclick="writeTests()">
+            Generate xUnit Tests (<span id="selCount">0</span>)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="writeError" class="alert alert-danger" style="display:none"></div>
+
+  <div class="card shadow-sm">
+    <div class="table-wrap">
+      <table class="table table-sm table-striped table-bordered table-hover mb-0 align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th style="width:36px"><input type="checkbox" class="form-check-input" id="chkAll" onchange="toggleAll(this.checked)"/></th>
+            <th>Requirement</th><th>Test Name</th><th>Scenario</th>
+            <th>Priority</th><th>Endpoint</th><th>Method</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tcBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── Output ── -->
+<div id="tab-output" class="container py-4" style="display:none;max-width:900px">
+
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h1 class="h5 fw-semibold mb-0">Generated Test Files</h1>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-secondary btn-sm" onclick="showTab('testcases')">Back</button>
+      <button id="btnRun" class="btn btn-primary btn-sm" onclick="runTests()"><i class="fa-solid fa-play me-1"></i>Run Selected</button>
+      <button class="btn btn-outline-secondary btn-sm" onclick="downloadZip()"><i class="fa-solid fa-download me-1"></i>Download .zip</button>
+    </div>
+  </div>
+
+  <div id="outputSummary" class="alert alert-success mb-4"></div>
+
+  <!-- Generated tests grouped by mode → class, with run selection -->
+  <div id="genTree" class="mb-4"></div>
+
+  <div id="runResults" class="mb-4" style="display:none"></div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const API = '__PATH_PREFIX__';
+let allCases = [], filtered = [], selected = new Set(), pollingId = null, expanded = new Set();
+
+// ── Tab navigation ─────────────────────────────────────────────────────────
+function showTab(name) {
+  ['configure','testcases','output'].forEach(t =>
+    document.getElementById('tab-'+t).style.display = t===name ? '' : 'none');
+  document.querySelectorAll('#navTabs button').forEach((b,i) => {
+    const tabs = ['configure','testcases','output'];
+    b.classList.toggle('active', tabs[i]===name);
+  });
+}
+
+// ── Configure: start generation ────────────────────────────────────────────
+async function startGeneration() {
+  const err = document.getElementById('errorBox');
+  err.style.display='none';
+
+  const docsPath = document.getElementById('docsPath').value.trim();
+  const mode     = document.querySelector('input[name="mode"]:checked').value;
+
+  if (!docsPath) {
+    err.textContent='Please enter the BA Document Path.'; err.style.display=''; return;
+  }
+
+  document.getElementById('btnGenerate').disabled = true;
+  document.getElementById('logCard').style.display = '';
+  document.getElementById('logFooter').style.display = 'none';
+  document.getElementById('logBox').innerHTML = '';
+  document.getElementById('logTitle').textContent = 'Generating...';
+  document.getElementById('logSpinner').style.display = '';
+  logLines = 0;
+
+  const resp = await fetch(`${API}/api/generate`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({docsPath, mode})
+  });
+
+  if (!resp.ok) {
+    const data = await resp.json().catch(()=>({}));
+    err.textContent = data.error || 'Failed to start generation.';
+    err.style.display='';
+    document.getElementById('btnGenerate').disabled=false;
+    return;
+  }
+
+  pollingId = setInterval(pollStatus, 2000);
+}
+
+async function pollStatus() {
+  try {
+    const r = await fetch(`${API}/api/status`);
+    const d = await r.json();
+    updateLog(d.log||[]);
+    if (!d.isGenerating) {
+      clearInterval(pollingId);
+      document.getElementById('logSpinner').style.display='none';
+      if (d.error) {
+        document.getElementById('logTitle').textContent='Failed';
+        document.getElementById('btnGenerate').disabled=false;
+      } else {
+        document.getElementById('logTitle').textContent='Done — '+d.testCaseCount+' test cases generated';
+        document.getElementById('logFooter').style.cssText='';
+        document.getElementById('btnTestCases').disabled=false;
+        await loadTestCases();
+        document.getElementById('statMode').textContent=
+          document.querySelector('input[name="mode"]:checked').value.toUpperCase();
+        showTab('testcases');
+      }
+    }
+  } catch(e) { /* ignore transient errors */ }
+}
+
+let logLines=0;
+function updateLog(lines) {
+  const box=document.getElementById('logBox');
+  if (lines.length>logLines) {
+    lines.slice(logLines).forEach(l=>{
+      const d=document.createElement('div'); d.textContent=l; box.appendChild(d);
+    });
+    logLines=lines.length;
+    box.scrollTop=box.scrollHeight;
+  }
+}
+
+// ── Test Cases ─────────────────────────────────────────────────────────────
+async function loadTestCases() {
+  const r=await fetch(`${API}/api/testcases`);
+  allCases=await r.json();
+  selected=new Set(allCases.map(c=>c.testName));
+  applyFilters();
+  updateStats();
+}
+
+function applyFilters() {
+  const q=(document.getElementById('searchBox').value||'').toLowerCase();
+  const sc=document.getElementById('scenarioFilter').value;
+  const pr=document.getElementById('priorityFilter').value;
+  filtered=allCases.filter(c=>
+    (!q || (c.testName||'').toLowerCase().includes(q) || (c.relatedRequirement||'').toLowerCase().includes(q)) &&
+    (!sc || c.scenarioType===sc) &&
+    (!pr || c.priority===pr)
+  );
+  renderTable();
+  updateStats();
+}
+
+function renderTable() {
+  const body=document.getElementById('tcBody');
+  body.innerHTML=filtered.map(c=>{
+    const open=expanded.has(c.testName);
+    return `
+    <tr class="tc-row ${selected.has(c.testName)?'table-primary':''}" style="cursor:pointer"
+        onclick="toggleDetail('${esc(c.testName)}')">
+      <td onclick="event.stopPropagation()"><input type="checkbox" class="form-check-input" ${selected.has(c.testName)?'checked':''}
+           onchange="toggleRow('${esc(c.testName)}',this.checked)"/></td>
+      <td><span class="badge bg-secondary font-monospace">${esc(c.relatedRequirement||'—')}</span></td>
+      <td class="small"><span class="toggle">${open?'−':'+'}</span>${esc(c.testName||'—')}</td>
+      <td><span class="badge ${scenarioCls(c.scenarioType)}">${esc(c.scenarioType||'—')}</span></td>
+      <td><span class="badge ${priorityCls(c.priority)}">${esc(c.priority||'—')}</span></td>
+      <td class="small font-monospace text-truncate" style="max-width:160px" title="${esc(c.apiEndpoint||'')}">${esc(c.apiEndpoint||'—')}</td>
+      <td><span class="badge ${methodCls(c.httpMethod)}">${esc(c.httpMethod||'—')}</span></td>
+      <td class="small font-monospace">${c.expectedStatusCode||'—'}</td>
+    </tr>
+    <tr class="tc-detail" style="display:${open?'':'none'}">
+      <td colspan="8" class="bg-light">${detailHtml(c)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('statVisible').textContent=filtered.length;
+}
+
+function toggleDetail(name) {
+  if(expanded.has(name)) expanded.delete(name); else expanded.add(name);
+  renderTable();
+}
+
+function detailHtml(c) {
+  const ul = arr => (arr&&arr.length)
+    ? '<ul class="mb-2 ps-3">'+arr.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>'
+    : '<div class="text-muted mb-2">—</div>';
+  const ol = arr => (arr&&arr.length)
+    ? '<ol class="mb-2 ps-3">'+arr.map(x=>`<li>${esc(x)}</li>`).join('')+'</ol>'
+    : '<div class="text-muted mb-2">—</div>';
+
+  const asserts=[];
+  if(c.expectedStatusCode) asserts.push(`Status = <code>${esc(String(c.expectedStatusCode))}</code>`);
+  if(c.expectedCreated!==null && c.expectedCreated!==undefined) asserts.push(`created = <code>${c.expectedCreated}</code>`);
+  if(c.expectErrorObject) asserts.push('response contains an <code>error</code> object');
+  if(c.expectedErrorMessageContains) asserts.push(`error.message contains <code>${esc(c.expectedErrorMessageContains)}</code>`);
+
+  return `
+    <div class="row g-3 p-2">
+      <div class="col-md-6">
+        <div class="fw-bold small text-uppercase text-muted">Preconditions</div>
+        ${ul(c.preconditions)}
+        <div class="fw-bold small text-uppercase text-muted">Steps</div>
+        ${ol(c.steps)}
+      </div>
+      <div class="col-md-6">
+        <div class="fw-bold small text-uppercase text-muted">Expected Result</div>
+        <div class="mb-2">${esc(c.expected||'—')}</div>
+        <div class="fw-bold small text-uppercase text-muted">Target</div>
+        <div class="mb-2 font-monospace small">${esc(c.httpMethod||'')} ${esc(c.apiEndpoint||'—')}</div>
+        <div class="fw-bold small text-uppercase text-muted">Assertions</div>
+        ${ asserts.length ? '<ul class="mb-0 ps-3">'+asserts.map(a=>`<li>${a}</li>`).join('')+'</ul>' : '<div class="text-muted">—</div>' }
+      </div>
+    </div>`;
+}
+
+function toggleRow(name,checked) {
+  if(checked) selected.add(name); else selected.delete(name);
+  updateStats(); renderTable();
+}
+function toggleAll(checked) { filtered.forEach(c=> checked?selected.add(c.testName):selected.delete(c.testName)); updateStats();renderTable(); }
+function selectAll()  { allCases.forEach(c=>selected.add(c.testName));    applyFilters(); }
+function selectNone() { selected.clear(); applyFilters(); }
+
+function updateStats() {
+  document.getElementById('statGenerated').textContent=allCases.length;
+  document.getElementById('statSelected').textContent=selected.size;
+  document.getElementById('selCount').textContent=selected.size;
+}
+
+// ── Write tests ────────────────────────────────────────────────────────────
+async function writeTests() {
+  if(selected.size===0){ alert('Select at least one test.'); return; }
+  document.getElementById('btnWrite').disabled=true;
+  document.getElementById('writeError').style.display='none';
+
+  // Sync selection to server
+  await fetch(`${API}/api/select`,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({selected:[...selected]})
+  });
+
+  const r=await fetch(`${API}/api/write`,{method:'POST'});
+  const d=await r.json();
+
+  document.getElementById('btnWrite').disabled=false;
+
+  if(!r.ok){ document.getElementById('writeError').textContent=d.error||'Write failed'; document.getElementById('writeError').style.display=''; return; }
+
+  document.getElementById('btnOutput').disabled=false;
+  renderOutput(d);
+  showTab('output');
+}
+
+// ── Output ─────────────────────────────────────────────────────────────────
+function renderOutput(d) {
+  document.getElementById('outputSummary').innerHTML=
+    `Tests generated in mode <strong>${
+       document.querySelector('input[name="mode"]:checked')?.value.toUpperCase()||''
+    }</strong>. Select which tests to run below, then use <strong>Run Selected</strong>.
+    <br><small class="font-monospace text-muted">${esc(d.outputDir||'')}</small>`;
+  document.getElementById('runResults').style.display='none';
+  loadGeneratedTree();
+}
+
+// ── Generated tests: mode → class selection tree ────────────────────────────
+let genModes = [];
+
+async function loadGeneratedTree() {
+  const box = document.getElementById('genTree');
+  box.innerHTML = '<div class="text-muted small">Loading generated tests…</div>';
+  try {
+    const r = await fetch(`${API}/api/generated`);
+    const d = await r.json();
+    genModes = d.modes || [];
+  } catch(e) { genModes = []; }
+  renderGenTree();
+}
+
+function renderGenTree() {
+  const box = document.getElementById('genTree');
+  if (!genModes.length) {
+    box.innerHTML = '<div class="alert alert-secondary mb-0">No generated test files found yet.</div>';
+    return;
+  }
+  const total = genModes.reduce((s,m)=>s+m.testCount,0);
+  box.innerHTML = `
+    <div class="card">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <span class="fw-semibold">Select tests to run <span class="badge text-bg-secondary ms-1">${total}</span></span>
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-outline-secondary" onclick="genSelectAll(true)">Select all</button>
+          <button class="btn btn-outline-secondary" onclick="genSelectAll(false)">Clear</button>
+        </div>
+      </div>
+      <div class="card-body py-2">
+        ${genModes.map((m, mi) => `
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input gen-mode" type="checkbox" id="gm${mi}" checked
+                     onchange="genToggleMode(${mi}, this.checked)"/>
+              <label class="form-check-label fw-semibold" for="gm${mi}">
+                ${esc(m.mode)} <span class="badge text-bg-secondary ms-1">${m.testCount}</span>
+              </label>
+            </div>
+            <div class="ms-4 mt-1">
+              ${m.classes.map((c, ci) => `
+                <div class="mb-1">
+                  <div class="d-flex align-items-center">
+                    <span class="toggle" style="cursor:pointer" id="gx${mi}_${ci}"
+                          onclick="genToggleExpand(${mi},${ci})">+</span>
+                    <div class="form-check mb-0 ms-1">
+                      <input class="form-check-input gen-class" type="checkbox" id="gc${mi}_${ci}" checked
+                             data-mi="${mi}" onchange="genToggleClass(${mi},${ci},this.checked)"/>
+                      <label class="form-check-label font-monospace small" for="gc${mi}_${ci}">
+                        ${esc(c.name)} <span class="text-muted">(${c.testCount})</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="ms-4 ps-2" id="gt${mi}_${ci}" style="display:none">
+                    ${(c.tests||[]).map((t, ti) => `
+                      <div class="form-check">
+                        <input class="form-check-input gen-test" type="checkbox" id="gtc${mi}_${ci}_${ti}" checked
+                               data-key="${mi}_${ci}" data-filter="${esc(t.filter)}"
+                               onchange="genSyncFromTest(${mi},${ci})"/>
+                        <label class="form-check-label font-monospace" style="font-size:.74rem"
+                               for="gtc${mi}_${ci}_${ti}">${esc(t.name)}</label>
+                      </div>`).join('')}
+                  </div>
+                </div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function genToggleExpand(mi, ci) {
+  const body = document.getElementById(`gt${mi}_${ci}`);
+  const tog  = document.getElementById(`gx${mi}_${ci}`);
+  const open = body.style.display === 'none';
+  body.style.display = open ? '' : 'none';
+  tog.textContent = open ? '−' : '+';
+}
+
+// Mode checkbox → set every class + test under it.
+function genToggleMode(mi, checked) {
+  document.querySelectorAll(`.gen-class[data-mi="${mi}"]`).forEach(cb => { cb.checked = checked; cb.indeterminate = false; });
+  document.querySelectorAll(`#genTree input.gen-test`).forEach(cb => {
+    if (cb.getAttribute('data-key').startsWith(mi + '_')) cb.checked = checked;
+  });
+  document.getElementById('gm'+mi).indeterminate = false;
+}
+
+// Class checkbox → set its tests, then refresh the mode state.
+function genToggleClass(mi, ci, checked) {
+  document.querySelectorAll(`.gen-test[data-key="${mi}_${ci}"]`).forEach(cb => cb.checked = checked);
+  document.getElementById(`gc${mi}_${ci}`).indeterminate = false;
+  genUpdateModeState(mi);
+}
+
+// A test changed → refresh its class (checked/indeterminate) then the mode.
+function genSyncFromTest(mi, ci) {
+  const tests = [...document.querySelectorAll(`.gen-test[data-key="${mi}_${ci}"]`)];
+  const anyOn = tests.some(t => t.checked);
+  const allOn = tests.every(t => t.checked);
+  const cls = document.getElementById(`gc${mi}_${ci}`);
+  cls.checked = anyOn;
+  cls.indeterminate = anyOn && !allOn;
+  genUpdateModeState(mi);
+}
+
+function genUpdateModeState(mi) {
+  const classes = [...document.querySelectorAll(`.gen-class[data-mi="${mi}"]`)];
+  const anyOn = classes.some(c => c.checked);
+  const allFull = classes.every(c => c.checked && !c.indeterminate);
+  const m = document.getElementById('gm'+mi);
+  m.checked = anyOn;
+  m.indeterminate = anyOn && !allFull;
+}
+
+function genSelectAll(v) {
+  document.querySelectorAll('#genTree .gen-mode, #genTree .gen-class, #genTree .gen-test')
+    .forEach(cb => { cb.checked = v; cb.indeterminate = false; });
+}
+
+// Build a compact filter list: a fully-checked class collapses to its class filter;
+// a partially-checked class contributes its individually checked test filters.
+function genSelectedFilters() {
+  const filters = [];
+  genModes.forEach((m, mi) => {
+    m.classes.forEach((c, ci) => {
+      const tests   = [...document.querySelectorAll(`.gen-test[data-key="${mi}_${ci}"]`)];
+      const checked = tests.filter(t => t.checked);
+      if (checked.length === 0) return;
+      if (checked.length === tests.length) filters.push(c.filter);
+      else checked.forEach(t => filters.push(t.getAttribute('data-filter')));
+    });
+  });
+  return filters;
+}
+
+async function downloadZip() {
+  const a=document.createElement('a');
+  a.href=`${API}/api/download`;
+  a.download='generated-tests.zip';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+// ── Run tests ──────────────────────────────────────────────────────────────
+async function runTests() {
+  const filters = genSelectedFilters();
+  if (genModes.length && filters.length === 0) {
+    alert('Select at least one test class to run.');
+    return;
+  }
+
+  const btn=document.getElementById('btnRun');
+  const box=document.getElementById('runResults');
+  btn.disabled=true; const label=btn.textContent; btn.textContent='Running…';
+  box.style.display='';
+  box.innerHTML=`<div class="card"><div class="card-body d-flex align-items-center gap-2">
+    <span class="spinner-border spinner-border-sm"></span><span class="small text-muted">Running selected tests… this may take a moment.</span></div></div>`;
+
+  let d;
+  try {
+    const r=await fetch(`${API}/api/run`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ filters })
+    });
+    d=await r.json();
+  } catch(e) {
+    box.innerHTML=`<div class="alert alert-danger mb-0">Failed to run tests: ${esc(e.message)}</div>`;
+    btn.disabled=false; btn.textContent=label; return;
+  }
+  btn.disabled=false; btn.textContent=label;
+
+  if(!d.ran){
+    box.innerHTML=`<div class="card"><div class="card-header fw-semibold text-danger">Run failed</div>
+      <div class="card-body"><div class="mb-2">${esc(d.error||'Unknown error')}</div>
+      ${d.output?`<pre class="mb-0 p-2 small text-light" style="background:var(--bs-dark);border-radius:6px;max-height:300px;overflow:auto">${esc(d.output)}</pre>`:''}</div></div>`;
+    return;
+  }
+
+  lastResults = d.results||[];
+  lastRunMeta = d;
+  explorerOpen = new Set();
+  // expand classes containing failures on the first render
+  lastResults.forEach(r=>{ if((r.outcome||'').toLowerCase()==='failed') explorerOpen.add(r.cls); });
+  renderTestExplorer(d);
+}
+
+// Test Explorer: classes → methods, with pass/fail/skip status.
+let lastResults=[], lastRunMeta={}, explorerOpen=new Set();
+
+function outcomeMeta(o){
+  o=(o||'').toLowerCase();
+  if(o==='passed')      return {dot:'#198754', label:'Passed', cls:'text-success'};
+  if(o==='failed')      return {dot:'#dc3545', label:'Failed', cls:'text-danger'};
+  return {dot:'#6c757d', label:'Skipped', cls:'text-muted'};
+}
+
+function renderTestExplorer(d){
+  const box=document.getElementById('runResults');
+  const allPass=d.failed===0;
+  const pill=(n,txt,cls)=>`<span class="badge ${cls} me-2" style="font-size:.8rem">${n} ${txt}</span>`;
+
+  // group results by class
+  const groups={};
+  (lastResults||[]).forEach(r=>{ (groups[r.cls]=groups[r.cls]||[]).push(r); });
+  const classNames=Object.keys(groups).sort();
+
+  const header=`
+    <div class="card mb-3"><div class="card-body py-2">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div class="fw-semibold">
+          ${allPass?'<span class="text-success">All tests passed</span>':'<span class="text-danger">Tests failed</span>'}
+          ${d.durationText?`<span class="text-muted small fw-normal ms-2"><i class="fa-regular fa-clock me-1"></i>${esc(d.durationText)}</span>`:''}
+        </div>
+        <div>${pill(d.passed,'passed','text-bg-success')}${pill(d.failed,'failed',d.failed?'text-bg-danger':'text-bg-secondary')}${pill(d.skipped,'skipped','text-bg-secondary')}<span class="text-muted small">of ${d.total}</span></div>
+      </div>
+    </div></div>`;
+
+  const tree=classNames.map(c=>{
+    const items=groups[c];
+    const p=items.filter(r=>(r.outcome||'').toLowerCase()==='passed').length;
+    const f=items.filter(r=>(r.outcome||'').toLowerCase()==='failed').length;
+    const s=items.length-p-f;
+    const open=explorerOpen.has(c);
+    const rows=items.map(r=>{
+      const m=outcomeMeta(r.outcome);
+      return `<div class="list-group-item py-2">
+        <div class="d-flex align-items-center">
+          <span style="width:9px;height:9px;border-radius:50%;background:${m.dot};display:inline-block;margin-right:.6rem;flex:0 0 auto"></span>
+          <span class="font-monospace small flex-grow-1">${esc(r.method)}</span>
+          ${r.duration?`<span class="text-muted me-3" style="font-size:.72rem;font-variant-numeric:tabular-nums">${esc(r.duration)}</span>`:''}
+          <span class="small ${m.cls}">${m.label}</span>
+        </div>
+        ${ (r.message && (r.outcome||'').toLowerCase()==='failed')
+            ? `<pre class="mb-0 mt-2 small text-muted" style="white-space:pre-wrap;padding-left:1.5rem">${esc(r.message)}</pre>` : '' }
+      </div>`;
+    }).join('');
+
+    return `<div class="card mb-2">
+      <div class="card-header d-flex align-items-center" style="cursor:pointer" onclick="toggleClass('${esc(c)}')">
+        <span class="toggle">${open?'−':'+'}</span>
+        <span class="fw-semibold font-monospace ms-1 flex-grow-1">${esc(c)}</span>
+        ${f?`<span class="badge text-bg-danger me-1">${f} failed</span>`:''}
+        ${s?`<span class="badge text-bg-secondary me-1">${s} skipped</span>`:''}
+        <span class="badge text-bg-success">${p} passed</span>
+      </div>
+      <div class="list-group list-group-flush" style="display:${open?'':'none'}">${rows}</div>
+    </div>`;
+  }).join('');
+
+  box.innerHTML=header+tree;
+}
+
+function toggleClass(name){
+  if(explorerOpen.has(name)) explorerOpen.delete(name); else explorerOpen.add(name);
+  // re-render using the stored summary (counts + run time) from the last run
+  renderTestExplorer(lastRunMeta);
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function esc(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+function scenarioCls(s){ return {Positive:'text-bg-success',Negative:'text-bg-danger',Validation:'text-bg-info',Boundary:'text-bg-warning',Auth:'text-bg-dark'}[s]||'text-bg-secondary'; }
+function priorityCls(p){ return {High:'text-bg-danger',Medium:'text-bg-warning',Low:'text-bg-secondary'}[p]||'text-bg-light border'; }
+function methodCls(m){ return {GET:'text-bg-primary',POST:'text-bg-success',PUT:'text-bg-warning',DELETE:'text-bg-danger'}[(m||'').toUpperCase()]||'text-bg-secondary'; }
+
+// ── Init ───────────────────────────────────────────────────────────────────
+showTab('configure');
+</script>
+</body>
+</html>

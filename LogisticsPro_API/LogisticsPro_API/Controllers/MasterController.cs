@@ -1,4 +1,4 @@
-﻿using LogisticsPro_API.Request;
+using LogisticsPro_API.Request;
 using LogisticsPro_Common.Common;
 using LogisticsPro_Common.DTO;
 using LogisticsPro_Data.Repository;
@@ -11,7 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticsPro_API.Controllers
 {
-    [Route("api/[controller]")]
+    // Routes follow BA Section 8.6 (resource-oriented) and 8.5 (HTTP method usage):
+    // GET = retrieval, POST = create, PUT = update, DELETE = removal.
     [ApiController]
     public class MasterController : BaseController
     {
@@ -21,8 +22,7 @@ namespace LogisticsPro_API.Controllers
             this.mediator = mediator;
         }
 
-        [HttpGet]
-        [Route("GetReferanceData")]
+        [HttpGet("~/api/reference-data")]
         [Authorize]
         public async Task<JsonResult> GetReferanceData()
         {
@@ -31,9 +31,7 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(referances);
         }
 
-
-        [HttpGet]
-        [Route("GetJobCardReferanceData")]
+        [HttpGet("~/api/jobcards/reference-data")]
         [Authorize]
         public async Task<JsonResult> GetJobCardReferanceData(int customerId)
         {
@@ -42,8 +40,9 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(referances);
         }
 
-        [HttpGet]
-        [Route("GetCustomers")]
+        // ----- Customers -----
+
+        [HttpGet("~/api/customers")]
         [Authorize]
         public async Task<JsonResult> GetCustomers()
         {
@@ -52,8 +51,8 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(customers);
         }
 
-        [HttpPost]
-        [Route("SaveCustomer")]
+        [HttpPost("~/api/customers")]
+        [HttpPut("~/api/customers")]
         [Authorize]
         public async Task<JsonResult> SaveCustomer(SaveCustomerRequest saveCustomerRequest)
         {
@@ -63,19 +62,19 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpPost]
-        [Route("RemoveCustomer")]
+        [HttpDelete("~/api/customers/{id:int}")]
         [Authorize]
-        public async Task<JsonResult> RemoveCustomer(RemoveRequest removeRequest)
+        public async Task<JsonResult> RemoveCustomer(int id)
         {
             var userId = GetUserIdFromToken();
-            var result = await mediator.Send(new RemoveCustomerCommand(removeRequest.Id, (int)userId));
+            var result = await mediator.Send(new RemoveCustomerCommand(id, (int)userId));
 
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetVendors")]
+        // ----- Vendors -----
+
+        [HttpGet("~/api/vendors")]
         [Authorize]
         public async Task<JsonResult> GetVendors()
         {
@@ -84,8 +83,8 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(customers);
         }
 
-        [HttpPost]
-        [Route("SaveVendor")]
+        [HttpPost("~/api/vendors")]
+        [HttpPut("~/api/vendors")]
         [Authorize]
         public async Task<JsonResult> SaveVendor(SaveVendorRequest saveVendorRequest)
         {
@@ -95,19 +94,19 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpPost]
-        [Route("RemoveVendor")]
+        [HttpDelete("~/api/vendors/{id:int}")]
         [Authorize]
-        public async Task<JsonResult> RemoveVendor(RemoveRequest removeRequest)
+        public async Task<JsonResult> RemoveVendor(int id)
         {
             var userId = GetUserIdFromToken();
-            var result = await mediator.Send(new RemoveVendorCommand(removeRequest.Id, (int)userId));
+            var result = await mediator.Send(new RemoveVendorCommand(id, (int)userId));
 
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetUsers")]
+        // ----- Users & Authentication -----
+
+        [HttpGet("~/api/users")]
         [Authorize]
         public async Task<JsonResult> GetUsers()
         {
@@ -116,8 +115,8 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(users);
         }
 
-        [HttpPost]
-        [Route("SaveUser")]
+        [HttpPost("~/api/users")]
+        [HttpPut("~/api/users")]
         [Authorize]
         public async Task<JsonResult> SaveUser(SaveUserRequest saveUserRequest)
         {
@@ -127,8 +126,8 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpPost]
-        [Route("LoginUser")]
+        // BA 8.9: authentication endpoint.
+        [HttpPost("~/api/auth/login")]
         public async Task<JsonResult> LoginUser(LoginUserRequest loginUserRequest)
         {
             if (string.IsNullOrEmpty(loginUserRequest.UserName) || string.IsNullOrEmpty(loginUserRequest.Password))
@@ -143,8 +142,9 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetEvents")]
+        // ----- Events -----
+
+        [HttpGet("~/api/events")]
         [Authorize]
         public async Task<JsonResult> GetEvents()
         {
@@ -153,8 +153,8 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(customers);
         }
 
-        [HttpPost]
-        [Route("SaveEvent")]
+        [HttpPost("~/api/events")]
+        [HttpPut("~/api/events")]
         [Authorize]
         public async Task<JsonResult> SaveEvent(SaveEventRequest saveEventRequest)
         {
@@ -164,19 +164,17 @@ namespace LogisticsPro_API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpPost]
-        [Route("RemoveEvent")]
+        [HttpDelete("~/api/events/{id:int}")]
         [Authorize]
-        public async Task<JsonResult> RemoveEvent(RemoveRequest removeRequest)
+        public async Task<JsonResult> RemoveEvent(int id)
         {
             var userId = GetUserIdFromToken();
-            var result = await mediator.Send(new RemoveEventCommand(removeRequest.Id, (int)userId));
+            var result = await mediator.Send(new RemoveEventCommand(id, (int)userId));
 
             return new JsonResult(result);
         }
 
-        [HttpGet]
-        [Route("GetDashboardItems")]
+        [HttpGet("~/api/dashboard")]
         [Authorize]
         public async Task<JsonResult> GetDashboardItems()
         {

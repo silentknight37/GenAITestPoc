@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>true</IsPackable>
+    <PackageId>GenAITest.AspNetCore</PackageId>
+    <Version>2.30.0</Version>
+    <Authors>Shanaka</Authors>
+    <Description>GenAI Test Framework — adds a /genai-tests web UI endpoint to any ASP.NET Core API. Like Swagger, but for AI-powered test generation.</Description>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\GenAITest.Engine\GenAITest.Engine.csproj" />
+  </ItemGroup>
+
+  <!-- HTML + JS UI embedded so they travel inside the .nupkg -->
+  <ItemGroup>
+    <EmbeddedResource Include="StaticAssets\**" />
+  </ItemGroup>
+
+</Project>

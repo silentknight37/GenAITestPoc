@@ -1,4 +1,6 @@
+using GenAITest.AspNetCore;
 using LogisticsPro_API;
+using LogisticsPro_API.Filters;
 using LogisticsPro_Data.Models;
 using LogisticsPro_Manager.Handler;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +20,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+// GenAI Test Framework — UI at http://localhost:{port}/genai-tests
+builder.Services.AddGenAITestFramework(opt =>
+{
+    // opt.OpenAiApiKey = "sk-proj-..."; // or set OPENAI_API_KEY env var
+    // opt.PathPrefix = "/genai-tests";  // default
+});
+
+// BA 8.8 / 8.11: map business-envelope failures to correct HTTP status codes globally.
+builder.Services.AddControllers(options => options.Filters.Add<BusinessResultStatusFilter>());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -45,6 +55,9 @@ void ConfigureApp(WebApplicationBuilder builder)
     app.UseAuthorization();
 
     app.MapControllers();
+
+    // GenAI Test Framework UI — http://localhost:{port}/genai-tests
+    app.MapGenAITestFramework();
 
     app.Run();
 }

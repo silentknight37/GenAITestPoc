@@ -1,0 +1,70 @@
+{
+  "Version": 1,
+  "Hash": "kAVsd+WVfxQCCPFWcFdITJeCHh/3WM7H4VLgdMVu7so=",
+  "Source": "GenAITest.Web",
+  "BasePath": "_content/GenAITest.Web",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.AspNetCore\\GenAITest.AspNetCore.csproj",
+      "Version": 2,
+      "Source": "GenAITest.AspNetCore",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [
+    {
+      "Name": "GenAITest.Web\\wwwroot",
+      "Source": "GenAITest.Web",
+      "ContentRoot": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.Web\\wwwroot\\",
+      "BasePath": "_content/GenAITest.Web",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.Web\\wwwroot\\app.css",
+      "SourceId": "GenAITest.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.Web\\wwwroot\\",
+      "BasePath": "_content/GenAITest.Web",
+      "RelativePath": "app.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\app.css"
+    },
+    {
+      "Identity": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.Web\\wwwroot\\js\\fileDownload.js",
+      "SourceId": "GenAITest.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.Web\\wwwroot\\",
+      "BasePath": "_content/GenAITest.Web",
+      "RelativePath": "js/fileDownload.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\fileDownload.js"
+    }
+  ]
+}

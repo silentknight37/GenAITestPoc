@@ -1,0 +1,25 @@
+@inherits LayoutComponentBase
+
+<div class="min-vh-100 d-flex flex-column bg-light">
+
+    <nav class="navbar px-4 py-2">
+        <a class="navbar-brand" href="/">
+            <i class="fa-solid fa-flask-vial brand-mark"></i>
+            GenAI Test Framework
+        </a>
+        <div class="d-flex gap-2 nav-tabs-custom">
+            <a href="/"          class="btn btn-sm">Configure</a>
+            <a href="/testcases" class="btn btn-sm">Test Cases</a>
+            <a href="/output"    class="btn btn-sm">Output</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow-1">
+        @Body
+    </main>
+
+    <footer class="text-center text-muted small py-2 border-top bg-white">
+        GenAI Testing Framework — MSc Research
+    </footer>
+
+</div>
