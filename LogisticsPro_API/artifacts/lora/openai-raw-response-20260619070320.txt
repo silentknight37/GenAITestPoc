@@ -1,0 +1,86 @@
+[
+  {
+    "TestName": "Auditability of Invoice Creation",
+    "RelatedRequirement": "BRULE-60",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user is logged in and has permissions to create invoices."
+    ],
+    "Steps": [
+      "Send a POST request to /api/invoices with the following JSON body:",
+      '{"client_id": "123", "items": [{"item_name": "Test Item 1", "quantity": 1, "price": 10.50}]}'
+    ],
+    "Expected": "A new invoice should be created. The invoice ID in the response should match the expected format and reflect the creation of the invoice.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Auditability of Invoice Voiding",
+    "RelatedRequirement": "BRULE-60",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user is logged in and has permissions to void invoices.",
+      "There exists an invoice with a valid ID for this test."
+    ],
+    "Steps": [
+      "Send a POST request to /api/invoices/{id}/void, where {id} is the identifier of an existing invoice.",
+      "The system should respond with a 201 status and include the new void record in the response body."
+    ],
+    "Expected": "An item named 'Voucher Void' should be added to the invoice's history, and the original receipts should remain untouched.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Auditability of Invoice Receipt Recording",
+    "RelatedRequirement": "BRULE-60",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user is logged in and has permissions to record receipts."
+    ],
+    "Steps": [
+      "Send a POST request to /api/receipts with the following JSON body:",
+      '{"customer_id": "123", "receipt_date": "2023-10-07", "amount": 15.75}'
+    ],
+    "Expected": "A new receipt should be created and listed in the system's inventory of receipts.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Auditability of Voucher Creation",
+    "RelatedRequirement": "BRULE-60",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-vouchers",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user is logged in and has permissions to create payment vouchers."
+    ],
+    "Steps": [
+      "Send a POST request to /api/payment-vouchers with the following JSON body:",
+      '{"order_id": "123", "reference_number": "RV-456", "amount": 200}',
+      "The system should return a new payment voucher identifier."
+    ],
+    "Expected": "A new payment voucher with the correct details and amount should be added to the voucher system.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Auditability Test for Retrieving Uninvoiced Orders",
+    "RelatedRequirement": "BRULE-60",
+    "ScenarioType": "Positive",
+    "Priority": " High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      "Send a GET request to /api/reports/uninvoiced."
+    ],
+    "Expected": "The system should return a list of orders that have not been invoiced yet, including all necessary details.",
+    "ExpectedStatusCode": 200
+  }
+]

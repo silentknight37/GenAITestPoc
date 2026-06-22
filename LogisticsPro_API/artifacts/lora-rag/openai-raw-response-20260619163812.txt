@@ -1,0 +1,90 @@
+```json
+[
+    {
+        "TestName": "Verify Batch Creation Successful",
+        "RelatedRequirement": "FR-16",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/batches",
+        "HttpMethod": "POST",
+        "Preconditions": [
+            ["A user is logged in"],
+            ["An eligible service item is selected"]
+        ],
+        "Steps": [
+            "Send a POST request to /api/batches with the selected service item ID",
+            "In the request body, include the item ID"
+        ],
+        "Expected": "The server returns a 201 HTTP Status Code along with a JSON response containing details about the newly created batch including batchID, items, and total cost.",
+        "ExpectedStatusCode": 201
+    },
+    {
+        "TestName": "Verify Batch Creation Fails due to Duplicate Item",
+        "RelatedRequirement": "FR-16",
+        "ScenarioType": "Negative",
+        "Priority": "Medium",
+        "ApiEndpoint": "/api/batches",
+        "HttpMethod": "POST",
+        "Preconditions": [
+            ["A user is logged in"],
+            ["A service item is selected that is not already included in a batch"]
+        ],
+        "Steps": [
+            "Send a POST request to /api/batches with the selected service item ID",
+            "In the request body, include the item ID"
+        ],
+        "Expected": "The server returns a 400 HTTP status code with an error message indicating that the item is already included in another batch.",
+        "ExpectedStatusCode": 400
+    },
+    {
+        "TestName": "Verify Batch Creation Fails due to Invalid Service Item",
+        "RelatedRequirement": "FR-16",
+        "ScenarioType": "Negative",
+        "Priority": "Medium",
+        "ApiEndpoint": "/api/batches",
+        "HttpMethod": "POST",
+        "Preconditions": [
+            ["A user is logged in"]
+        ],
+        "Steps": [
+            "Send a POST request to /api/batches with an invalid service item ID"
+        ],
+        "Expected": "The server returns a 400 HTTP status code with an error message indicating that the service item ID is not valid.",
+        "ExpectedStatusCode": 400
+    },
+    {
+        "TestName": "Verify Batch Creation Fails due to Lack of Eligibility",
+        "RelatedRequirement": "FR-16",
+        "ScenarioType": "Negative",
+        "Priority": "Medium",
+        "ApiEndpoint": "/api/batches",
+        "HttpMethod": "POST",
+        "Preconditions": [
+            ["A user is logged in"],
+            ["An item that is ineligible for batch creation is selected"]
+        ],
+        "Steps": [
+            "Send a POST request to /api/batches with the selected service item ID"
+        ],
+        "Expected": "The server returns a 400 HTTP status code with an error message indicating that the item is not eligible for batch creation.",
+        "ExpectedStatusCode": 400
+    },
+    {
+        "TestName": "Verify Batch Creation Fails due to Multiple Valid Items",
+        "RelatedRequirement": "FR-16",
+        "ScenarioType": "Negative",
+        "Priority": "Medium",
+        "ApiEndpoint": "/api/batches",
+        "HttpMethod": "POST",
+        "Preconditions": [
+            ["A user is logged in"],
+            ["Multiple eligible service items are selected"]
+        ],
+        "Steps": [
+            "Send a POST request to /api/batches with the selected service item IDs"
+        ],
+        "Expected": "The server returns a 400 HTTP status code with an error message indicating that multiple valid items cannot be batched at once.",
+        "ExpectedStatusCode": 400
+    }
+]
+```

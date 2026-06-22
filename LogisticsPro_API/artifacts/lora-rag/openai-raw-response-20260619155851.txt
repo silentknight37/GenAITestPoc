@@ -1,0 +1,104 @@
+```json
+[
+  {
+    "TestName": "Create Receipt for Invoiced Customer",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An existing invoice with a transaction amount exists"
+    ],
+    "Steps": [
+      "Send a POST request to /api/receipts with the following JSON payload:",
+      "```json",
+      {
+        "InvoiceId": "<invoice-id>",
+        "Amount": 100,
+        "Remark": "Cash received on receipt of invoice"
+      },
+      "```",
+      "Expect the HTTP status code to be 201 Created."
+    ],
+    "Expected": "A receipt is successfully created with the specified Amount and Remarks.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Void Uninvoiced Customer Receipt",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/receipts/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An uninvoiced receipt exists and is not yet voided"
+    ],
+    "Steps": [
+      "Send a POST request to /api/receipts/{id}/void where {id} is the ID of the unpaid receipt.",
+      "Expect the HTTP status code to be 204 No Content."
+    ],
+    "Expected": "The receipt is successfully voided, and no content should be returned in the response.",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Create Receipt for Uninvoiced Customer with Invalid Amount",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An existing invoice for an uncollected service exists"
+    ],
+    "Steps": [
+      "Send a POST request to /api/receipts with the following JSON payload:",
+      "```json",
+      {
+        "InvoiceId": "<invoice-id>",
+        "Amount": -50,
+        "Remark": "Cash received on receipt of invoice"
+      },
+      "```",
+      "Expect the HTTP status code to be 400 Bad Request."
+    ],
+    "Expected": "The system should validate that the Amount is non-negative.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Void Invoiced Customer Receipt with Invalid Parameters",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/receipts/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An existing invoiced receipt exists and is not yet voided"
+    ],
+    "Steps": [
+      "Send a POST request to /api/receipts/{id}/void where {id} is the ID of the paid receipt.",
+      "Excluding any parameter or having extra parameters should result in a Bad Request response.",
+      "Expect the HTTP status code to be 400 Bad Request."
+    ],
+    "Expected": "The system should reject requests with invalid or missing parameters.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Validate Receipt Details",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/receipts/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "An existing receipt exists"
+    ],
+    "Steps": [
+      "Send a GET request to /api/receipts/{id} where {id} is the ID of the receipt.",
+      "Expect the HTTP status code to be 200 OK and receive the receipt details with all required fields present."
+    ],
+    "Expected": "Receipt detail should include necessary elements such as ReceiptId, InvoiceId, Amount, CreatedDate, UpdatedDate, etc.",
+    "ExpectedStatusCode": 200
+  }
+]
+```

@@ -1,0 +1,76 @@
+```json
+[
+  {
+    "TestName": "Create Payment Voucher for Valid Vendor and Item",
+    "RelatedRequirement": "BR-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "VendorId": 1,
+        "BatchItemId": 2
+      }
+    ],
+    "Steps": [
+      {
+        "Description": "Set the vendor ID and batch item ID in the request payload."
+      },
+      {
+        "Description": "Make a POST request to the `/api/vendors/{vendorId}/payable-items` endpoint with the payload."
+      }
+    ],
+    "Expected": "Payment voucher created successfully",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Create Payment Voucher with Invalid Batch Item ID for Vendor",
+    "RelatedRequirement": "BR-09",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "VendorId": 1,
+        "BatchItemId": 234567890
+      }
+    ],
+    "Steps": [
+      {
+        "Description": "Set the vendor ID and an invalid batch item ID in the request payload."
+      },
+      {
+        "Description": "Make a POST request to the `/api/vendors/{vendorId}/payable-items` endpoint with the payload."
+      }
+    ],
+    "Expected": "Payment voucher creation failed, the batch item does not exist",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "Create Payment Voucher for Invalid Vendor ID",
+    "RelatedRequirement": "BR-09",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "VendorId": 1234567890,
+        "BatchItemId": 2
+      }
+    ],
+    "Steps": [
+      {
+        "Description": "Set an invalid vendor ID and a valid batch item ID in the request payload."
+      },
+      {
+        "Description": "Make a POST request to the `/api/vendors/{vendorId}/payable-items` endpoint with the payload."
+      }
+    ],
+    "Expected": "Payment voucher creation failed, the vendor does not exist",
+    "ExpectedStatusCode": 401
+  }
+]
+```

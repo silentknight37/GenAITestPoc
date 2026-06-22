@@ -5,7 +5,7 @@
   },
   "projects": {
     "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.AspNetCore\\GenAITest.AspNetCore.csproj": {
-      "version": "2.30.0",
+      "version": "2.72.0",
       "restore": {
         "projectUniqueName": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.AspNetCore\\GenAITest.AspNetCore.csproj",
         "projectName": "GenAITest.AspNetCore",
@@ -79,7 +79,7 @@
       }
     },
     "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.Engine\\GenAITest.Engine.csproj": {
-      "version": "1.0.43",
+      "version": "1.0.70",
       "restore": {
         "projectUniqueName": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.Engine\\GenAITest.Engine.csproj",
         "projectName": "GenAITest.Engine",
@@ -126,6 +126,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.CodeAnalysis.CSharp": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            },
+            "Microsoft.Data.Sqlite": {
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
             "OpenAI": {
               "target": "Package",
               "version": "[2.9.0, )"

@@ -1,0 +1,118 @@
+```json
+[
+  {
+    "TestName": "FR-02 Positive",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "type": "authentication",
+        "username": "TestUser",
+        "password": "SecurePassword!"
+      }
+    ],
+    "Steps": [
+      "Send a POST request with the user's credentials to /api/auth/login"
+    ],
+    "Expected": "Successful login with token in the Authorization header "
+  },
+  {
+    "TestName": "FR-02 Boundary",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "type": "authentication",
+        "username": "TestUser",
+        "password": "SecurePassword!"
+      }
+    ],
+    "Steps": [
+      "Send a POST request with the user's credentials to /api/auth/login"
+    ],
+    "Expected": "Failed token verification error"
+  },
+  {
+    "TestName": "FR-02 Auth",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "type": "authentication",
+        "username": "TestUserEx",
+        "password": "InvalidPassword!"
+      }
+    ],
+    "Steps": [
+      "Send a POST request with the user's credentials to /api/auth/login"
+    ],
+    "Expected": "Unauthorized access error or token invalid response"
+  },
+  {
+    "TestName": "BRULE-06 Positive",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "type": "authentication",
+        "username": "TestUser",
+        "password": "SecurePassword!"
+      }
+    ],
+    "Steps": [
+      "Send a POST request with the user's credentials to /api/auth/login"
+    ],
+    "Expected": "Successful login without session management"
+  },
+  {
+    "TestName": "BRULE-06 Boundary",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "type": "authentication",
+        "username": "TestUserEx",
+        "password": "InvalidPassword!"
+      }
+    ],
+    "Steps": [
+      "Send a POST request with the user's credentials to /api/auth/login"
+    ],
+    "Expected": "Invalid token structure, expiration, or signature error"
+  },
+  {
+    "TestName": "BRULE-06 Auth",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "type": "authentication",
+        "username": "TestUserEx",
+        "password": "InvalidPassword!"
+      }
+    ],
+    "Steps": [
+      "Send a POST request with the user's credentials to /api/auth/login"
+    ],
+    "Expected": "Session management error or failed login response"
+  }
+]
+```

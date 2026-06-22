@@ -1,0 +1,118 @@
+```json
+[
+  {
+    "TestName": "Create Proforma Invoice",
+    "RelatedRequirement": "BR-11",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": ["None"],
+    "Steps": [
+      {
+        "StepName": "Send POST request to /api/invoices with valid invoice data"
+      },
+      {
+        "StepName": "Check that the response status code is 201"
+      }
+    ],
+    "Expected": "Proforma invoice created successfully",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Create Proforma Invoice with Invalid Data",
+    "RelatedRequirement": "BR-11",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": ["None"],
+    "Steps": [
+      {
+        "StepName": "Send POST request to /api/invoices with invalid invoice data"
+      },
+      {
+        "StepName": "Check that the response status code is 422"
+      }
+    ],
+    "Expected": "Invoice validation fails",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "Convert Proforma Invoice to Final Invoice",
+    "RelatedRequirement": "BRULE-48",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": ["An existing valid proforma invoice"],
+    "Steps": [
+      {
+        "StepName": "Send POST request to /api/invoices/{id}/void with no validation data"
+      },
+      {
+        "StepName": "Check that the response status code is 204"
+      }
+    ],
+    "Expected": "Proforma invoice converted to final invoice successfully",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Convert Proforma Invoice to Final Invoice with Invalid Data",
+    "RelatedRequirement": "BRULE-48",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": ["An existing valid proforma invoice"],
+    "Steps": [
+      {
+        "StepName": "Send POST request to /api/invoices/{id}/void with invalid data"
+      },
+      {
+        "StepName": "Check that the response status code is 422"
+      }
+    ],
+    "Expected": "Proforma invoice conversion fails",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "Report Uninvoiced Invoices",
+    "RelatedRequirement": "BRULE-48",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": ["No un invoiced invoices"],
+    "Steps": [
+      {
+        "StepName": "Send GET request to /api/reports/uninvoiced"
+      },
+      {
+        "StepName": "Check that the response status code is 204"
+      }
+    ],
+    "Expected": "Reported un-invoiced invoices empty",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Report Uninvoiced Invoices with Invalid Data",
+    "RelatedRequirement": "BRULE-48",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": ["No un-invoiced invoices"],
+    "Steps": [
+      {
+        "StepName": "Send GET request to /api/reports/uninvoiced"
+      },
+      {
+        "StepName": "Check that the response status code is 422"
+      }
+    ],
+    "Expected": "Reported un-invoiced invoices fail",
+    "ExpectedStatusCode": 422
+  }
+]
+```

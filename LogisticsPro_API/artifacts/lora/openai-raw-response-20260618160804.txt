@@ -1,0 +1,128 @@
+[
+  {
+    "TestName": "Ensure operational reports are accessible and generate accurate results",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": ["Business user is logged in"],
+    "Steps": [
+      "Send GET request to /api/reports/operational"
+    ],
+    "Expected": "Operational reports are retrieved and displayed accurately.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Ensure historical reports are accessible and generate accurate results",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": ["Business user is logged in"],
+    "Steps": [
+      "Send GET request to /api/reports/history"
+    ],
+    "Expected": "Historical reports are retrieved and displayed accurately.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Ensure uninvoiced reports are accessible and generate accurate results",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": ["Business user is logged in"],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced"
+    ],
+    "Expected": "Uninvoiced reports are retrieved and displayed accurately.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Ensure profit and loss reports are accessible and generate accurate results",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/profit-and-loss",
+    "HttpMethod": "GET",
+    "Preconditions": ["Business user is logged in"],
+    "Steps": [
+      "Send GET request to /api/reports/profit-and-loss"
+    ],
+    "Expected": "Profit and loss reports are retrieved and displayed accurately.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Ensure operational report generation handles invalid input gracefully",
+    "RelatedRequirement": "BRULE-56",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": ["Business user is logged in"],
+    "Steps": [
+      "Send GET request to /api/reports/operational with invalid data or parameters"
+    ],
+    "Expected": "Request fails gracefully and returns a meaningful error message.",
+    "ExpectedStatusCode": 4xx
+  },
+  {
+    "TestName": "Ensure historical report generation handles invalid input gracefully",
+    "RelatedRequirement": "BRULE-56",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": ["Business user is logged in"],
+    "Steps": [
+      "Send GET request to /api/reports/history with invalid data or parameters"
+    ],
+    "Expected": "Request fails gracefully and returns a meaningful error message.",
+    "ExpectedStatusCode": 4xx
+  },
+  {
+    "TestName": "Ensure uninvoiced report generation handles invalid input gracefully",
+    "RelatedRequirement": "BRULE-56",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": ["Business user is logged in"],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with invalid data or parameters"
+    ],
+    "Expected": "Request fails gracefully and returns a meaningful error message.",
+    "ExpectedStatusCode": 4xx
+  },
+  {
+    "TestName": "Ensure profit and loss report generation handles invalid input gracefully",
+    "RelatedRequirement": "BRULE-56",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/profit-and-loss",
+    "HttpMethod": "GET",
+    "Preconditions": ["Business user is logged in"],
+    "Steps": [
+      "Send GET request to /api/reports/profit-and-loss with invalid data or parameters"
+    ],
+    "Expected": "Request fails gracefully and returns a meaningful error message.",
+    "ExpectedStatusCode": 4xx
+  },
+  {
+    "TestName": "Ensure reports data consistency across modules",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": ["Business user is logged in"],
+    "Steps": [
+      "Send GET request to /api/reports/operational and /api/reports/history for the same period to verify consistency"
+    ],
+    "Expected": "Reports data from both endpoints match, indicating consistency across modules.",
+    "ExpectedStatusCode": 200
+  }
+]

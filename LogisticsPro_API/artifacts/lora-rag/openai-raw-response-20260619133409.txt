@@ -1,0 +1,81 @@
+```json
+[
+  {
+    "TestName": "BR-06 Add Service Item Success",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/services",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "JobId": 1
+      }
+    ],
+    "Steps": [
+      "Create a POST request to '/api/jobcards/1/services' with the following JSON payload:",
+      "{\"cost\": 50.0,\"serviceType\":\"Hotel\"}"
+    ],
+    "Expected": "A new service item for Hotel is added successfully and returned in the response body.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "BR-06 Update Service Item Success",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/services",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      {
+        "JobId": 1,
+        "ServiceId": 1
+      }
+    ],
+    "Steps": [
+      "Create a PUT request to '/api/jobcards/1/services/1' with the following JSON payload:",
+      "{\"cost\": 60.0,\"serviceType\":\"Hotel\"}"
+    ],
+    "Expected": "The service item for Hotel is successfully updated and returned in the response body.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BR-06 Remove Service Item Success",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/services",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      {
+        "JobId": 1,
+        "ServiceId": 2
+      }
+    ],
+    "Steps": [
+      "Create a DELETE request to '/api/jobcards/1/services/2'."
+    ],
+    "Expected": "The service item with ID 2 is successfully removed.",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "BR-06 Negative Add Service Item Invalid Cost",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/services",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "JobId": 1
+      }
+    ],
+    "Steps": [
+      "Create a POST request to '/api/jobcards/1/services' with the following JSON payload:",
+      "{\"cost\": -50.0,\"serviceType\":\"Hotel\"}"
+    ],
+    "Expected": "The system returns a validation error message or HTTP status code indicating invalid input.",
+    "ExpectedStatusCode": 422
+  }
+]
+```

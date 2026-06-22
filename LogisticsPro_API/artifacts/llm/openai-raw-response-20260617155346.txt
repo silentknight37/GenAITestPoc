@@ -1,0 +1,152 @@
+[
+  {
+    "TestName": "CreateInvoice_WithValidBillableData_ShouldReturnCreatedInvoice",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": ["There exist valid billable items linked to a customer"],
+    "Steps": [
+      "Prepare valid invoice creation payload referencing valid billable items",
+      "POST payload to /api/invoices"
+    ],
+    "Expected": "Invoice is created successfully with correct details and a unique invoice ID is returned",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "GetInvoice_ByValidInvoiceId_ShouldReturnInvoiceDetails",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": ["An invoice with valid ID exists"],
+    "Steps": [
+      "Send GET request to /api/invoices/{id} with existing invoice ID"
+    ],
+    "Expected": "Invoice details corresponding to the given ID are returned accurately",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "VoidInvoice_WithValidInvoiceId_ShouldMarkInvoiceAsVoided",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An active invoice with valid ID exists",
+      "Invoice is eligible to be voided"
+    ],
+    "Steps": [
+      "Send POST request to /api/invoices/{id}/void with the valid invoice ID"
+    ],
+    "Expected": "Invoice status is updated to voided and confirmation is returned",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "CreateInvoice_WithInvalidBillableData_ShouldReturnError",
+    "RelatedRequirement": "BRULE-44",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": ["No valid billable business content exists for invoice creation"],
+    "Steps": [
+      "Prepare invoice creation payload referencing invalid or non-existing billable items",
+      "POST to /api/invoices"
+    ],
+    "Expected": "Invoice creation fails with error indicating invalid or missing billable content",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "CreateInvoice_CheckAmountIntegrity_ShouldMatchChargeableContent",
+    "RelatedRequirement": "BRULE-45",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "An invoice was created from billable content with known operational and financial records"
+    ],
+    "Steps": [
+      "Retrieve the invoice by GET /api/invoices/{id}",
+      "Cross-check invoice total with chargeable amounts from underlying records"
+    ],
+    "Expected": "Invoice total accurately reflects sum of chargeable operational and financial items",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "VoidInvoice_WithNonExistentInvoiceId_ShouldReturnError",
+    "RelatedRequirement": "FR-19",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": ["Invoice ID does not exist in the system"],
+    "Steps": [
+      "Send POST request to /api/invoices/{id}/void with invalid/non-existent invoice ID"
+    ],
+    "Expected": "Response indicates failure to void invoice due to invalid invoice ID",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "VoidInvoice_AlreadyVoidedInvoice_ShouldReturnError",
+    "RelatedRequirement": "FR-19",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/invoices/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": ["Invoice ID exists and invoice is already voided"],
+    "Steps": [
+      "Send POST request to /api/invoices/{id}/void for an invoice already marked voided"
+    ],
+    "Expected": "System returns an error or informative message indicating invoice is already voided",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "CreateInvoice_WithMissingRequiredFields_ShouldReturnValidationError",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Prepare invoice creation payload with missing required fields (e.g., missing customer ID or billable items)",
+      "POST to /api/invoices"
+    ],
+    "Expected": "Validation error response indicating missing required fields and invoice is not created",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "GetInvoice_WithInvalidIdFormat_ShouldReturnError",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Validation",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/invoices/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      "Send GET request to /api/invoices/{id} with improperly formatted invoice ID (e.g., non-numeric)",
+    ],
+    "Expected": "Error response indicating invalid invoice ID format",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "CreateInvoice_BillableContentDiscrepancy_ShouldRejectInvoice",
+    "RelatedRequirement": "BRULE-44",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": ["Billable items are incomplete or missing required validations"],
+    "Steps": [
+      "Attempt to create invoice with billable items that do not pass validation or are missing",
+      "POST to /api/invoices"
+    ],
+    "Expected": "Invoice creation rejected due to invalid or incomplete billable content",
+    "ExpectedStatusCode": 200
+  }
+]

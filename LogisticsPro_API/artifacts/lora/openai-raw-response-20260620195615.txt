@@ -1,0 +1,76 @@
+```json
+[
+  {
+    "TestName": "Add Service Item to Job Card",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": [" logged in customer owns a job card with hotel services"],
+    "Steps": [
+      "Create a new service item object for transportation, hotel, visa, and miscellaneous.",
+      "Send a POST request to api/hotel-services with the service item data."
+    ],
+    "Expected": {
+      "serviceItems": [
+        {
+          "type": "transportation",
+          "description": "..."
+        },
+        {
+          "type": "hotel",
+          "description": "..."
+        },
+        {
+          "type": "visa",
+          "description": "..."
+        },
+        {
+          "type": "miscellaneous",
+          "description": "..."
+        }
+      ]
+    },
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Update Service Item in Job Card",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": null,
+    "HttpMethod": "PUT",
+    "Preconditions": ["logged in customer owns a job card with a service item to be updated"],
+    "Steps": [
+      "Create an existing service item object for transportation.",
+      "Send a PUT request to api/hotel-services/{id} with the updated service item data."
+    ],
+    "Expected": {
+      "serviceItems": [
+        {
+          "type": "transportation",
+          "description": "Updated..."
+        }
+      ]
+    },
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Remove Service Item from Job Card",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Positive",
+    "Priority": "Low",
+    "ApiEndpoint": null,
+    "HttpMethod": "DELETE",
+    "Preconditions": ["logged in customer owns a job card with a service item to be removed"],
+    "Steps": [
+      "Send a DELETE request to api/hotel-services/{id} to remove the specified service item."
+    ],
+    "Expected": {
+      "serviceItems": []
+    },
+    "ExpectedStatusCode": 204
+  }
+]
+```

@@ -1,0 +1,76 @@
+```json
+[
+  {
+    "TestName": "Vendor Management: Create Vendor",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": /api/vendors,
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Generate vendor data with full name, company name, and contact details.",
+      // Add other necessary steps such as setting up the payment items
+    ],
+    "Expected": {
+      "name": "Test Vendor",
+      "companyName": "Test Company",
+      "contactDetails": {
+        "email": "testvendor@example.com",
+        "phone": "555-1234"
+      }
+    },
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Vendor Management: Update Vendor",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": /api/vendors/{vendorId},
+    "HttpMethod": "PUT",
+    "Preconditions": ["id of a vendor"],
+    "Steps": [
+      "Generate updated vendor data.",
+      // Add other necessary steps such as setting up the payment items
+    ],
+    "Expected": {
+      "name": "Updated Test Vendor",
+      "companyName": "Updated Company",
+      "contactDetails": {
+        "email": "updatedtestvendor@example.com",
+        "phone": "555-2345"
+      }
+    },
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Vendor Management: Delete Vendor",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": /api/vendors/{vendorId},
+    "HttpMethod": "DELETE",
+    "Preconditions": ["id of a vendor"],
+    "Steps": [
+      "Test that the specified vendor is removed successfully."
+    ],
+    "Expected": null,
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Vendor Management: Vendor Info without Payable Items",
+    "RelatedRequirement": "BRULE-09",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": /api/vendors/{vendorId}/payable-items,
+    "HttpMethod": "GET",
+    "Preconditions": ["id of a vendor"],
+    "Steps":[],
+    "Expected": {
+      "code": 403,
+      "message": "Vendor does not have enough permission to access this endpoint."
+    }
+  },
+]
+```

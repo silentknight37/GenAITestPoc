@@ -1,0 +1,46 @@
+```json
+[
+  {
+    "TestName": "BRULE-03_POSITIVE_RetrieveClosedJobcard",
+    "RelatedRequirement": "BRULE-03",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": ["There exists a finalized jobcard with at least one closed, processed, or voided state record"],
+    "Steps": [
+      "Retrieve the jobcard using its ID in the request URL."
+    ],
+    "Expected": "The response status code is 200 and the jobcard details are returned, including any controlled modification rules associated with records that have reached a finalized, closed, processed, or voided state.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BRULE-03_NEGATIVE_InvalidJobcardId",
+    "RelatedRequirement": "BRULE-03",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": ["An invalid jobcard ID is used in the request URL"],
+    "Steps": [
+      "Try to retrieve the jobcard using a non-existent or non-numeric ID in the request URL."
+    ],
+    "Expected": "The response status code is not 200, likely indicating an error due to the invalid jobcard ID.",
+    "ExpectedStatusCode": 4xx
+  },
+  {
+    "TestName": "BRULE-03_NEGATIVE_NoDataRetrieved",
+    "RelatedRequirement": "BRULE-03",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": ["There exists an open jobcard with no controlled modification rules"],
+    "Steps": [
+      "Retrieve the jobcard using its ID in the request URL."
+    ],
+    "Expected": "The response status code is 200, but there are no records associated with the jobcard that meet the criteria for BRULE-03.",
+    "ExpectedStatusCode": 200
+  }
+]
+```

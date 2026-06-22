@@ -1,0 +1,122 @@
+```json
+[
+  {
+    "TestName": "RetrieveVendorPaymentItems",
+    "RelatedRequirement": "BRULE-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "Preconditions": ["vendor exists (valid vendorId)"],
+    "Steps": [
+      "Make a GET request to /api/vendors/123/payable-items"
+    ],
+    "Expected": "A list of payable items associated with vendor ID 123 is returned. Each item has required fields such as amount, description, service type.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "CreateVendor",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Send a POST request to /api/vendors with JSON payload containing vendor details {\"name\": \"VendorTest\", \"classifiable\": true, \"supportedServices\":[\"Operational\"]}"
+    ],
+    "Expected": "Vendor is successfully created and returns the newly created vendor's record including ID",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "DeleteVendor",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["vendor exists (valid vendorId)"],
+    "Steps": [
+      "Send a DELETE request to /api/vendors/123"
+    ],
+    "Expected": "Vendor with ID 123 is deleted",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "RetrieveVendorDetails",
+    "RelatedRequirement": "BRULE-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}",
+    "HttpMethod": "GET",
+    "Preconditions": ["vendor exists (valid vendorId)"],
+    "Steps": [
+      "Send a GET request to /api/vendors/123"
+    ],
+    "Expected": "Vendor details including name and classifiable status are returned."
+  },
+  {
+    "TestName": "CreateInvalidVendorWithoutDetails",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Send a POST request to /api/vendors with invalid JSON payload {\"name\": null}",
+      "ExpectedBehavior": "Response should indicate that creation failed due to missing or invalid information."
+  },
+  {
+    "TestName": "InvalidVendorCreationRequest",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Send a POST request to /api/vendors with invalid JSON payload {\"invalidField\": \"someValue\"}",
+      "ExpectedBehavior": "Response should indicate that creation failed due to missing or invalid information."
+  },
+  {
+    "TestName": "DeleteNonExistentVendor",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/124", // Nonexistent vendor ID for testing
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      "Send a DELETE request to /api/vendors/124"
+    ],
+    "ExpectedBehavior": "Response should indicate that the vendor with non-existent ID 124 was not found and deletion failed."
+  },
+  {
+    "TestName": "VendorRecordConsistencyWithVouchers",
+    "RelatedRequirement": "BRULE-42",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vouchers/{voucherId}",
+    "HttpMethod": "GET",
+    "Preconditions": ["vendor-specific voucher exists (valid voucherId)"],
+    "Steps": [
+      "Find a vendor-specific voucher through /api/reports/uninvoiced or another valid endpoint to get voucher id."
+    ],
+    "ExpectedBehavior": "The included payable items in the voucher should align with the vendor associated with the voucher and return successfully."
+  },
+  {
+    "TestName": "VendorRecordConsistencyWithVouchersInvalidVoucherID",
+    "RelatedRequirement": "BRULE-42",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vouchers/98765", // Invalid voucher ID for testing
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      "Attempt to retrieve a voucher with invalid ID 98765"
+    ],
+    "ExpectedBehavior": "Response should indicate the voucher with non-existent ID 98765 was not found and returns an error message."
+  }
+]
+```

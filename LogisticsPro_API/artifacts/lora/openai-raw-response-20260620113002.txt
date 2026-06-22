@@ -1,0 +1,36 @@
+[
+  {
+    "TestName": "Calculate Job Cost: Successful Calculation",
+    "RelatedRequirement": "FR-15",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/service-costs",
+    "HttpMethod": "POST",
+    "Preconditions": ["Valid jobcard ID"],
+    "Steps": [
+      "Create a new job card with at least one service cost."
+      "Retrieve the total cost of the created job card by POSTing to /api/jobcards/{id}/service-costs"
+      "Verify that the returned total cost matches the sum of all associated service costs"
+    ],
+    "Expected": "HTTP 200 OK response with total job cost as a string or number",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Calculate Job Cost: Negative - Invalid Request Body",
+    "RelatedRequirement": "FR-15",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/service-costs",
+    "HttpMethod": "POST",
+    "Preconditions": ["Valid jobcard ID"],
+    "Steps": [
+      "Attempt to add a service cost with invalid data (e.g., missing required fields, wrong type or range)"
+      "Expect the response to indicate validation error"
+    ],
+    "Expected": {
+      "error": "Validation error",
+      "message": "(include any specific details like 'Invalid amount' or 'Required field is missing')"
+    },
+    "ExpectedStatusCode": 400
+  }
+]

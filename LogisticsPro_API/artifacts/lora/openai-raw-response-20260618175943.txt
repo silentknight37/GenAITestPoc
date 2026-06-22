@@ -1,0 +1,170 @@
+```json
+[
+  {
+    "TestName": "FR-04.1",
+    "RelatedRequirement": "FR-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}",
+    "HttpMethod": "PUT",
+    "Steps": [
+      {
+        "Description": "Preconditions: Customer ID is valid,Updated fields are valid"
+      },
+      {
+        "Description": "Body contains updated fields in the customer object JSON format"
+      }
+    ],
+    "Expected": "Customer profile is successfully updated with new data.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "FR-04.1",
+    "RelatedRequirement": "FR-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}",
+    "HttpMethod": "PUT",
+    "Steps": [
+      {
+        "Description": "Preconditions: Customer ID is valid, Updated fields are invalid"
+      },
+      {
+        "Description": "Body includes incorrect or missing fields required for update."
+      }
+    ],
+    "Expected": "Failed to update customer profile due to validation error.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "FR-04.1",
+    "RelatedRequirement": "FR-04",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{ customerId}",
+    "HttpMethod": "PUT",
+    "Steps": [
+      {
+        "Description": "Preconditions: Customer ID is valid, Updated fields are invalid with empty or null values"
+      },
+      {
+        "Description": "Body contains updated fields with empty or null values."
+      }
+    ],
+    "Expected": "Failed to update customer profile due to validation error.",
+    "ExpectedStatusCode": 400
+  }
+],
+[
+  {
+    "TestName": "FR-10.1",
+    "RelatedRequirement": "FR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{jobId}",
+    "HttpMethod": "POST",
+    "Steps": [
+      {
+        "Description": "Preconditions: Job ID is valid, Updated fields are valid"
+      },
+      {
+        "Description": "Body contains updated fields in the jobcard object JSON format"
+      }
+    ],
+    "Expected": "Job card is successfully updated with new data.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "FR-10.1",
+    "RelatedRequirement": "FR-10",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{jobId}",
+    "HttpMethod": "POST",
+    "Steps": [
+      {
+        "Description": "Preconditions: Job ID is valid, Updated fields are invalid"
+      },
+      {
+        "Description": "Body includes incorrect or missing fields required for update."
+      }
+    ],
+    "Expected": "Failed to update job card profile due to validation error.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "FR-10.1",
+    "RelatedRequirement": "FR-10",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{jobId}",
+    "HttpMethod": "POST",
+    "Steps": [
+      {
+        "Description": "Preconditions: Job ID is valid, Updated fields are invalid with empty or null values"
+      },
+      {
+        "Description": "Body contains updated fields with empty or null values."
+      }
+    ],
+    "Expected": "Failed to update job card profile due to validation error.",
+    "ExpectedStatusCode": 400
+  }
+],
+[
+  {
+    "TestName": "FR-13.1",
+    "RelatedRequirement": "FR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs/{costId}",
+    "HttpMethod": "PUT",
+    "Steps": [
+      {
+        "Description": "Preconditions: Service cost ID is valid, Updated fields are valid"
+      },
+      {
+        "Description": "Body contains updated fields in the service cost object JSON format"
+      }
+    ],
+    "Expected": " Service cost is successfully updated with new data.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "FR-13.1",
+    "RelatedRequirement": "FR-13",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs/{costId}",
+    "HttpMethod": "PUT",
+    "Steps": [
+      {
+        "Description": "Preconditions: Service cost ID is valid, Updated fields are invalid"
+      },
+      {
+        "Description": "Body includes incorrect or missing fields required for update."
+      }
+    ],
+    "Expected": "Failed to update service cost profile due to validation error.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "FR-13.1",
+    "RelatedRequirement": "FR-13",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs/{costId}",
+    "HttpMethod": "PUT",
+    "Steps": [
+      {
+        "Description": "Preconditions: Service cost ID is valid, Updated fields are invalid with empty or null values"
+      },
+      {
+        "Description": "Body contains updated fields with empty or null values."
+      }
+    ],
+    "Expected": "Failed to update service cost profile due to validation error.",
+    "ExpectedStatusCode": 400
+  }
+]
+```

@@ -1,0 +1,179 @@
+```json
+[
+  {
+    "TestName": "Create Vendor Positive Scenario",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Vendor Name (string) provided"
+    ],
+    "Steps": [
+      {
+        "Description": "API Endpoints: GET /api/reports/uninvoiced, GET /api/vendors/{vendorId}/payable-items, GET /api/jobcards/{id}/visa-services",
+        "Detail": "Retrieve reporting data and payable items for a vendor, also check customer reference for visa services linked to job cards."
+      },
+      {
+        "Description": "Log in with valid credentials using API Endpoints: POST /api/auth/login",
+        "Detail": "Authenticate as an authorized user to perform vendor creation."
+      },
+      {
+        "Description": "Set Headers: 'Content-Type' set to 'application/json'",
+        "Detail": "Configure the request header for JSON body payload."
+      },
+      {
+        "Description": "Prepare Request Body: {\"name\":\"VendorName\", \"serviceType\":"{ServiceTypeEnum}\", \"status\":\"\{\"active\":"true"\}"}",
+        "Detail": "Construct the data to create a vendor including valid name, service type and status."
+      },
+      {
+        "Description": "Send POST Request to '/api/vendors'",
+        "Detail": "Execute the API request to create a new vendor using the prepared body."
+      }
+    ],
+    "Expected": "HTTP Response Status Code 201 Created (or equivalent) with a response body containing successful vendor creation message.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Create Vendor Negative Scenario: Null or Empty Vendor Name",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Vendor Name (string) missing or empty"
+    ],
+    "Steps": [
+      {
+        "Description": "API Endpoints: GET /api/reports/uninvoiced, GET /api/vendors/{vendorId}/payable-items, GET /api/jobcards/{id}/visa-services",
+        "Detail": "Retrieve reporting data and payable items for a vendor, also check customer reference for visa services linked to job cards."
+      },
+      {
+        "Description": "Log in with valid credentials using API Endpoints: POST /api/auth/login",
+        "Detail": "Authenticate as an authorized user to perform vendor creation."
+      },
+      {
+        "Description": "Set Headers: 'Content-Type' set to 'application/json'",
+        "Detail": "Configure the request header for JSON body payload."
+      },
+      {
+        "Description": "Prepare Request Body with null or empty Vendor name",
+        "Detail": "Construct the data omitting the vendor name field in the POST request body."
+      },
+      {
+        "Description": "Send POST Request to '/api/vendors'",
+        "Detail": "Execute the API request to create a new vendor using the prepared null or empty vendor name."
+      }
+    ],
+    "Expected": "HTTP Response Status Code 400 Bad Request (or equivalent) with a response body containing error message indicating a missing or invalid vendor name.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Create Vendor Negative Scenario: Invalid Service Type",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Service Type (string) invalid or unsupported"
+    ],
+    "Steps": [
+      {
+        "Description": "API Endpoints: GET /api/reports/uninvoiced, GET /api/vendors/{vendorId}/payable-items, GET /api/jobcards/{id}/visa-services",
+        "Detail": "Retrieve reporting data and payable items for a vendor, also check customer reference for visa services linked to job cards."
+      },
+      {
+        "Description": "Log in with valid credentials using API Endpoints: POST /api/auth/login",
+        "Detail": "Authenticate as an authorized user to perform vendor creation."
+      },
+      {
+        "Description": "Set Headers: 'Content-Type' set to 'application/json'",
+        "Detail": "Configure the request header for JSON body payload."
+      },
+      {
+        "Description": "Prepare Request Body with null or invalid Service type",
+        "Detail": "Construct the data omitting or changing the valid service type field in the POST request body. For example, using 'In-valid' instead of a known valid service type."
+      },
+      {
+        "Description": "Send POST Request to '/api/vendors'",
+        "Detail": "Execute the API request to create a new vendor using the prepared invalid service type."
+      }
+    ],
+    "Expected": "HTTP Response Status Code 400 Bad Request (or equivalent) with a response body containing error message indicating a problematic or unsupported service type.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Create Vendor Negative Scenario: Duplicate Vendor Name",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Vendor Name (string) already exists in the system"
+    ],
+    "Steps": [
+      {
+        "Description": "API Endpoints: GET /api/reports/uninvoiced, GET /api/vendors/{vendorId}/payable-items, GET /api/jobcards/{id}/visa-services",
+        "Detail": "Retrieve reporting data and payable items for a vendor, also check customer reference for visa services linked to job cards."
+      },
+      {
+        "Description": "Log in with valid credentials using API Endpoints: POST /api/auth/login",
+        "Detail": "Authenticate as an authorized user to perform vendor creation."
+      },
+      {
+        "Description": "Set Headers: 'Content-Type' set to 'application/json'",
+        "Detail": "Configure the request header for JSON body payload."
+      },
+      {
+        "Description": "Prepare Request Body with Vendor Name already in database",
+        "Detail": "Construct the data using a vendor name that is already present in the vendor management system's database."
+      },
+      {
+        "Description": "Send POST Request to '/api/vendors'",
+        "Detail": "Execute the API request to create a new vendor using the prepared vendor name already in use."
+      }
+    ],
+    "Expected": "HTTP Response Status Code 409 Conflict (or equivalent) with a response body containing error message indicating a duplicate vendor name.",
+    "ExpectedStatusCode": 409
+  },
+  {
+    "TestName": "Boundary Scenario: Creation of Vendor with Max Lengths",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Boundary",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Vendor Name (string) and Service Type (length <= 255)"
+    ],
+    "Steps": [
+      {
+        "Description": "API Endpoints: GET /api/reports/uninvoiced, GET /api/vendors/{vendorId}/payable-items, GET /api/jobcards/{id}/visa-services",
+        "Detail": "Retrieve reporting data and payable items for a vendor, also check customer reference for visa services linked to job cards."
+      },
+      {
+        "Description": "Log in with valid credentials using API Endpoints: POST /api/auth/login",
+        "Detail": "Authenticate as an authorized user to perform vendor creation."
+      },
+      {
+        "Description": "Set Headers: 'Content-Type' set to 'application/json'",
+        "Detail": "Configure the request header for JSON body payload."
+      },
+      {
+        "Description": "Prepare Request Body with Vendor Name and Service Type at their maximum length",
+        "Detail": "Construct a vendor creation request using both a name up to the maximum allowed character limit (255) and a service type also up to 255 characters."
+      },
+      {
+        "Description": "Send POST Request to '/api/vendors'",
+        "Detail": "Execute the API request to create this new vendor entry with full constraints imposed."
+      }
+    ],
+    "Expected": "HTTP Response Status Code 201 Created (or equivalent) with a response body containing successful vendor creation message.",
+    "ExpectedStatusCode": 201
+  }
+]
+```

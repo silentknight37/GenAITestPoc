@@ -1,0 +1,149 @@
+[
+{
+  "TestName": "[FR-12] Validate adding a valid service item and ensure it is added successfully",
+  "RelatedRequirement": "FR-12",
+  "ScenarioType": "Positive",
+  "Priority": "Medium",
+  "ApiEndpoint": "/api/service-costs",
+  "HttpMethod": "POST",
+  "Preconditions": [
+    {
+      "Job ID": "Valid job ID exists in the database"
+    }
+  ],
+  "Steps": [
+    "Create a payload with valid service costs, specifying JobID, ServiceType, and Cost. Payload should include required fields like cost greater than or equal to zero.",
+    "Send POST request to /api/service-costs with the created payload."
+  ],
+  "Expected": "ServiceCost object returned with new record successfully included in database",
+  "ExpectedStatusCode": 201
+},
+{
+  "TestName": "[BRULE-21] Validate service type validity on successful service item addition",
+  "RelatedRequirement": "BRULE-21",
+  "ScenarioType": "Positive",
+  "Priority": "Medium",
+  "ApiEndpoint": "/api/service-costs",
+  "HttpMethod": "POST",
+  "Preconditions": [
+    {
+      "Valid job ID exists in the database"
+    }
+  ],
+  "Steps": [
+    "Create a payload with valid service costs, specifying JobID, ServiceType, Cost, and include a valid service category like Hotel. Payload should include required fields like cost greater than or equal to zero.",
+    "Send POST request to /api/service-costs with the created payload."
+  ],
+  "Expected": "ServiceCost object returned with new record successfully included in database",
+  "ExpectedStatusCode": 201
+},
+{
+  "TestName": "[BRULE-27] Validate required visa-specific fields in addition step for successful service item addition",
+  "RelatedRequirement": "BRULE-27",
+  "ScenarioType": "Positive",
+  "Priority": "High",
+  "ApiEndpoint": "/api/service-costs",
+  "HttpMethod": "POST",
+  "Preconditions": [
+    {
+      "Valid job ID exists in the database"
+    }
+  ],
+  "Steps": [
+    "Create a payload with valid service costs, specifying JobID, ServiceType, Cost, and include required visa-specific fields like VisaDocumentNumber. Payload should include required fields like cost greater than or equal to zero.",
+    "Send POST request to /api/service-costs with the created payload."
+  ],
+  "Expected": "ServiceCost object returned with new record successfully included in database",
+  "ExpectedStatusCode": 201
+},
+{
+  "TestName": "[BRULE-22] Ensure a locked job card restricts service item editing",
+  "RelatedRequirement": "BRULE-22",
+  "ScenarioType": "Negative",
+  "Priority": "Medium",
+  "ApiEndpoint": "/api/service-costs",
+  "HttpMethod": "PUT",
+  "Preconditions": [
+    {
+      "Job ID of a locked job card exists in the database"
+    }
+  ],
+  "Steps": [
+    "Modify an existing service record for the specified JobID. Attempt to send PUT request to /api/service-costs with updated payload."
+  ],
+  "Expected": "ServiceCost object returned indicating that editing is restricted: Job remains ineligible for modification.",
+  "ExpectedStatusCode": 403
+},
+{
+  "TestName": "[BRULE-23] Prevent deletion of a service item once it has been included in a finalized financial process",
+  "RelatedRequirement": "BRULE-23",
+  "ScenarioType": "Negative",
+  "Priority": "Medium",
+  "ApiEndpoint": "/api/service-costs",
+  "HttpMethod": "DELETE",
+  "Preconditions": [
+    {
+      "Valid service cost record exists in the database related to a finalized financial process"
+    }
+  ],
+  "Steps": [
+    "Attempt DELETE request to /api/service-costs with ID of the selected service record."
+  ],
+  "Expected": "ServiceCost object returned indicating that deletion is restricted due to the item being already included in a finalized process.",
+  "ExpectedStatusCode": 403
+},
+{
+  "TestName": "[Auth] Reject operation if client provides invalid credentials during login",
+  "RelatedRequirement": null, // This does not correspond to any explicit requirement but fits within authentication context.
+  "ScenarioType": "Negative",
+  "Priority": "Medium",
+  "ApiEndpoint": "/api/auth/login",
+  "HttpMethod": "POST",
+  "Preconditions": [
+    {
+      "Client provides invalid username or password"
+    }
+  ],
+  "Steps": [
+    "Send POST request to /api/auth/login with incorrect credentials."
+  ],
+  "Expected": "{message: \"Invalid credentials\"}",
+  "ExpectedStatusCode": 401
+},
+{
+  "TestName": "[Auth] Reject operation if client provides expired token for login",
+  "RelatedRequirement": null, // This does not correspond to any explicit requirement but fits within authentication context.
+  "ScenarioType": "Negative",
+  "Priority": "Low",
+  "ApiEndpoint": "/api/auth/login",
+  "HttpMethod": "POST",
+  "Preconditions": [
+    {
+      "Client provides an expired token"
+    }
+  ],
+  "Steps": [
+    "Send POST request to /api/auth/login with expired token."
+  ],
+  "Expected": "{message: \"Token has expired\"}",
+  "ExpectedStatusCode": 401
+},
+{
+  "TestName": "[Auth] Reject operation if client provides unauthorized token for login",
+  "RelatedRequirement": null, // This does not correspond to any explicit requirement but fits within authentication context.
+  "ScenarioType": "Negative",
+  "Priority": "Low",
+  "ApiEndpoint": "/api/auth/login",
+  "HttpMethod": "POST",
+  "Preconditions": [
+    {
+      "Client provides an unauthorized token"
+    }
+  ],
+  "Steps": [
+    "Send POST request to /api/auth/login with unauthorized token."
+  ],
+  "Expected": "{message: \"Unauthorized\"}",
+  "ExpectedStatusCode": 401
+}
+]

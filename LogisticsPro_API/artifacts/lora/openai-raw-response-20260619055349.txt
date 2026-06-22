@@ -1,0 +1,71 @@
+```json
+[
+  {
+    "TestName": "BR-04: Create Event",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "User is authenticated"
+    ],
+    "Steps": [
+      "Create a new event in the system with details such as name and start date."
+    ],
+    "Expected": "Event should be created successfully, and returned data should include event ID.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "BR-04: Update Event Details",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events/{eventId}",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      "User is authenticated"
+    ],
+    "Steps": [
+      "Retrieve an existing event using /api/events/{eventId}."
+      "Update one or more fields of the event, for example, name or start date."
+      "Perform a PUT request to /api/events/{eventId} with updated fields."
+    ],
+    "Expected": "Event details should be successfully updated and returned data should reflect changes.",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "BR-04: Retrieve Event Information",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events/{eventId}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "User is authenticated"
+    ],
+    "Steps": [
+      "Retrieve an existing event using /api/events/{eventId}."
+    ],
+    "Expected": "Event details should be returned in a JSON object.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BRULE-10: End Date Before Start Date",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "User is authenticated"
+    ],
+    "Steps": [
+      "Create a new event with an end date before the start date."
+      "Perform a POST request to /api/events."
+    ],
+    "Expected": "Event should not be created, and system should reject the request or return appropriate error message.",
+    "ExpectedStatusCode": 400
+  }
+]
+```

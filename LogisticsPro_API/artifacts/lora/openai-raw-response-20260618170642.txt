@@ -1,0 +1,105 @@
+[
+  {
+    "TestName": "BRULE-58.HistoricalReportsPreservePriorBusinessEvents.Positive",
+    "RelatedRequirement": "BRULE-58",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/profit-and-loss",
+    "HttpMethod": "GET",
+    "Preconditions": ["User is logged in"],
+    "Steps": [
+      "The user queries the Profit and Loss report.",
+      "The API returns financial summaries for historical business events.",
+      "Each record includes a date, revenue, expenses, net profit, etc."
+    ],
+    "Expected": "A structured JSON response containing accurate financial details of historical transactions over time, reflecting prior business events."
+  },
+  {
+    "TestName": "BRULE-58.HistoricalReportsPreservePriorBusinessEvents.Negative",
+    "RelatedRequirement": "BRULE-58",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": null,
+    "HttpMethod": "GET",
+    "Preconditions": ["User is logged in"],
+    "Steps": [
+      "The user queries the Profit and Loss report manually by removing or altering the URL endpoint.",
+      "An HTTP error occurs indicating that the server cannot respond to the request.",
+      "A 404 status code with a response message about not finding a profit and loss report."
+    ],
+    "Expected": "HTTP error with a 404 status, indicating that the specified endpoint does not exist or is not callable."
+  },
+  {
+    "TestName": "BRULE-58.HistoricalReportsPreservePriorBusinessEvents.EmptyHistory",
+    "RelatedRequirement": "BRULE-58",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/profit-and-loss",
+    "HttpMethod": "GET",
+    "Preconditions": ["User is logged in", "There are no financial records to report on."],
+    "Steps": [
+      "The user queries the Profit and Loss report.",
+      "The API returns an empty JSON response, indicating that there is no historical data available."
+    ],
+    "Expected": "A JSON object representing an empty array or list, stating that the system has no financial data to report."
+  },
+  {
+    "TestName": "BRULE-58.HistoricalReportsPreservePriorBusinessEvents.InvalidDateFormat",
+    "RelatedRequirement": "BRULE-58",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/reports/profit-and-loss?startDate=invalid&endDate=invalid",
+    "HttpMethod": "GET",
+    "Preconditions": ["User is logged in"],
+    "Steps": [
+      "The user queries the Profit and Loss report with an invalid date format.",
+      "An HTTP error occurs due to incorrect or non-existent date parameters.",
+      "A 400 status code with a response message about invalid date formats."
+    ],
+    "Expected": "HTTP error with a 400 status, indicating that the specified date input is not valid for report generation."
+  },
+  {
+    "TestName": "BRULE-58.HistoricalReportsPreservePriorBusinessEvents.BusinessLevelFailure",
+    "RelatedRequirement": "BRULE-58",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": null,
+    "HttpMethod": "GET",
+    "Preconditions": ["User is logged in", "Financial data access issues"],
+    "Steps": [
+      "The user queries the Profit and Loss report.",
+      "The API internally encounters an error accessing financial records database.",
+      "A HTTP 200 status code, but with a system error flag or message in the response body."
+    ],
+    "Expected": "HTTP error with a 4xx to 5xx status code, indicating business-level failure during data processing."
+  },
+  {
+    "TestName": "BRULE-58.HistoricalReportsPreservePriorBusinessEvents.LimitExceeds",
+    "RelatedRequirement": "BRULE-58",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/operational?limit=100",
+    "HttpMethod": "GET",
+    "Preconditions": ["User is logged in", "Historical operational data available"],
+    "Steps": [
+      "The user queries the Operational report with a limit of 100 records.",
+      "Only up to 100 records from the historical data are returned.",
+      "The API does not return any more records beyond the limit."
+    ],
+    "Expected": "HTTP status 200 with a JSON response containing the first 100 operational events, up to the specified limit."
+  },
+  {
+    "TestName": "BRULE-58.HistoricalReportsPreservePriorBusinessEvents.NoAccessToHistoricalData",
+    "RelatedRequirement": "BRULE-58",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": ["User does not have access to historical data"],
+    "Steps": [
+      "The user try to query the Historical Data report.",
+      The API returns an HTTP 403 status code with a response message about insufficient permissions."
+    ],
+    "Expected": "HTTP error with a 403 status, stating that the user does not have access to the specified report or its data."
+  }
+]

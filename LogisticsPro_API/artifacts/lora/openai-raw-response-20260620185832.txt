@@ -1,0 +1,120 @@
+```json
+[
+  {
+    "TestName": "[BR-13] Operational Reports Generated",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "GET /api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      - Verify that the request returns a 200 status code
+      - Confirm that the response contains operational reports, such as sales figures or inventory levels
+    ],
+    "Expected": "Operational reports are generated successfully",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "[BR-13] Historical Reports Generated",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "GET /api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      - Verify that the request returns a 200 status code
+      - Confirm that the response contains historical reports, such as quarterly sales figures or financial data
+    ],
+    "Expected": "Historical reports are generated successfully",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "[BR-13] Uninvoiced Reports Generated",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "GET /api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      - Verify that the request returns a 200 status code
+      - Confirm that the response contains uninvoiced reports, such as unpaid invoices or credit notes
+    ],
+    "Expected": "Uninvoiced reports are generated successfully",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "[BR-13] Profit and Loss Reports Generated",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "GET /api/reports/profit-and-loss",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      - Verify that the request returns a 200 status code
+      - Confirm that the response contains profit and loss reports, such as revenues and expenses
+    ],
+    "Expected": "Profit and loss reports are generated successfully",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "[BRULE-56] Reporting Accuracy Operational Reports Generated Correctly",
+    "RelatedRequirement": "BRULE-56",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "GET /api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      - Verify that the response's data accurately reflects current status of operational reports
+    ],
+    "Expected": "Operational reports generated are accurate and consistent with the underlying business data",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "[BRULE-56] Reporting Accuracy Historical Reports Generated Correctly",
+    "RelatedRequirement": "BRULE-56",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "GET /api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      - Verify that the response's data accurately reflects current status of historical reports
+    ],
+    "Expected": "Historical reports generated are accurate and consistent with the underlying business data",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "[BRULE-56] Reporting Accuracy Uninvoiced Reports Generated Correctly",
+    "RelatedRequirement": "BRULE-56",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "GET /api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      - Verify that the response's data accurately reflects current status of uninvoiced reports
+    ],
+    "Expected": "Uninvoiced reports generated are accurate and consistent with the underlying business data",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "[BRULE-56] Reporting Accuracy Profit and Loss Reports Generated Correctly",
+    "RelatedRequirement": "BRULE-56",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "GET /api/reports/profit-and-loss",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      - Verify that the response's data accurately reflects current status of profit and loss reports
+    ],
+    "Expected": "Profit and loss reports generated are accurate and consistent with the underlying business data",
+    "ExpectedStatusCode": 200
+  }
+]
+```

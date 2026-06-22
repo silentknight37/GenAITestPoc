@@ -1,0 +1,60 @@
+```json
+[
+  {
+    "TestName": "Invalid Entity Reference A",
+    "RelatedRequirement": "BRULE-02",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid vendor", "Invalid customer"],
+    "Steps": [
+      {
+        "Action": "Create a purchase order referencing the invalid customer.",
+        "Expected": { "message": "Entity not found" }
+      },
+      {
+        "Action": "Create a payment voucher referencing an invalid batch item.",
+        "Expected": { "message": " Entity not found" }
+      }
+    ],
+    "Expected": null,
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Invalid Batch Requirement Voucher Creation A",
+    "RelatedRequirement": "BRULE-39",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": ["Valid vendor", "Non-existent batch item"],
+    "Steps": [
+      {
+        "Action": "Create a payment voucher referencing an invalid batch.",
+        "Expected": { "message": "Batch not found" }
+      }
+    ],
+    "Expected": null,
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Invalid Invoice Requirement Receipt A",
+    "RelatedRequirement": "BRULE-51",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": ["Valid vendor", "Non-existent invoice"],
+    "Steps": [
+      {
+        "Action": "Create a receipt referencing an invalid invoiced item.",
+        "Expected": { "message": "Invoice not found" }
+      }
+    ],
+    "Expected": null,
+    "ExpectedStatusCode": 400
+  },
+  // Add more test cases for other requirements as well
+]
+```

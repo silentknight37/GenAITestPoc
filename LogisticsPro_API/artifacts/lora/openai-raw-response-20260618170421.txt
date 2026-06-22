@@ -1,0 +1,65 @@
+```json
+[
+  {
+    "TestName": "Validate Voided Invoice Preservation",
+    "RelatedRequirement": "BRULE-47",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}",
+    "HttpMethod": "POST",
+    "Preconditions": ["An invoice exists with the specified ID"],
+    "Steps": [
+      "Log in with administrator credentials to access the 'invoicing' section.",
+      "Navigate to the 'invoicing' dashboard.",
+      "Click on the link or button to trigger the void process for the invoice with the given ID."
+    ],
+    "Expected": "The system will mark the invoice status as 'Voided' without deleting the record.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Verify Voided Invoice Persistence",
+    "RelatedRequirement": "BRULE-47",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": ["An invoice exists with the specified ID and has been voided"],
+    "Steps": [
+      "Log in with administrator credentials to access the 'reports' section.",
+      "Navigate to the 'uninvoiced' report."
+    ],
+    "Expected": "The report should show the voided invoice.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Verify Voided Invoice cannot be Reissued",
+    "RelatedRequirement": "BRULE-47",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/invoices/{id}",
+    "HttpMethod": "POST",
+    "Preconditions": ["An invoice exists with the specified ID and has been voided"],
+    "Steps": [
+      "Log in with administrator credentials to access the 'invoicing' section.",
+      "Navigate or click on a link/button to reissue the invoice with the given ID."
+    ],
+    "Expected": "The system should return an error indicating that a voided invoice cannot be reissued.",
+    "ExpectedStatusCode": 403
+  },
+  {
+    "TestName": "Verify Voided Invoice Cannot Be Edited or Closed",
+    "RelatedRequirement": "BRULE-47",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/invoices/{id}",
+    "HttpMethod": ["PUT", "DELETE"],
+    "Preconditions": ["An invoice exists with the specified ID and has been voided"],
+    "Steps": [
+      "Log in with admin credentials to access the 'invoicing' section.",
+      "Navigate or click on a link/button to edit or close the invoice with the given ID."
+    ],
+    "Expected": "Both PUT and DELETE requests should return an error or 403 Forbidden status indicating that a voided invoice cannot be edited or closed.",
+    "ExpectedStatusCode": [403, 403]
+  }
+]
+```

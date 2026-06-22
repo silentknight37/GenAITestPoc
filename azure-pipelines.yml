@@ -1,0 +1,41 @@
+# Azure DevOps pipeline for the GenAI Test Framework.
+# Builds the framework and runs available tests with line/branch coverage (Coverlet → Cobertura),
+# then publishes the coverage result so it shows on the build summary.
+trigger:
+  branches:
+    include: [ main ]
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET 8 SDK'
+    inputs:
+      packageType: 'sdk'
+      version: '8.0.x'
+
+  - script: |
+      dotnet build src/GenAITest.Engine/GenAITest.Engine.csproj         -c $(buildConfiguration)
+      dotnet build src/GenAITest.AspNetCore/GenAITest.AspNetCore.csproj -c $(buildConfiguration)
+      dotnet build src/GenAITest.CLI/GenAITest.CLI.csproj               -c $(buildConfiguration)
+    workingDirectory: GenAITestPoC
+    displayName: 'Build framework'
+
+  - script: >
+      dotnet test
+      --collect:"XPlat Code Coverage"
+      --results-directory $(Agent.TempDirectory)/TestResults
+      --logger trx
+    workingDirectory: GenAITestPoC
+    displayName: 'Test with coverage'
+    continueOnError: true
+
+  - task: PublishCodeCoverageResults@2
+    displayName: 'Publish coverage'
+    condition: always()
+    inputs:
+      summaryFileLocation: '$(Agent.TempDirectory)/TestResults/**/coverage.cobertura.xml'

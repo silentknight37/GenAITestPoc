@@ -1,0 +1,46 @@
+# Continuous integration for the GenAI Test Framework.
+# Builds the framework projects and runs available tests with line/branch coverage (Coverlet).
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build framework
+        working-directory: GenAITestPoC
+        run: |
+          dotnet build src/GenAITest.Engine/GenAITest.Engine.csproj         -c Release
+          dotnet build src/GenAITest.AspNetCore/GenAITest.AspNetCore.csproj -c Release
+          dotnet build src/GenAITest.CLI/GenAITest.CLI.csproj               -c Release
+
+      - name: Test with coverage
+        working-directory: GenAITestPoC
+        # Runs any *Tests* projects found; coverlet emits Cobertura via the collector.
+        run: >
+          dotnet test
+          --collect:"XPlat Code Coverage"
+          --results-directory ./TestResults
+          --logger "trx;LogFileName=ci.trx"
+        continue-on-error: true
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-cobertura
+          path: GenAITestPoC/**/coverage.cobertura.xml
+          if-no-files-found: ignore

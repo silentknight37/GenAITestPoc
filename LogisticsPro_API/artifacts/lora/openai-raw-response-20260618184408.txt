@@ -1,0 +1,79 @@
+```json
+[
+  {
+    "TestName": "Close job card successfully",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/123456",
+    "HttpMethod": "PUT",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepDescription": "Generate a service cost for the job card."
+      },
+      {
+        "StepDescription": "Set the status of the job card to 'Open' or another valid status."
+      }
+    ],
+    "Expected": "The job card's status is set to 'Closed'.",
+    "ExpectedStatusCode": 200,
+    "Preconditions": ["A service cost exists for the job card with id 123456."]
+  },
+  {
+    "TestName": "Close job card failing due to invalid input",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/123456",
+    "HttpMethod": "PUT",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepDescription": "Generate a service cost for the job card."
+      },
+      {
+        "StepDescription": "Set the status of the job card to 'Open' or another valid status."
+      }
+    ],
+    "Expected": "The response body should contain an error message indicating an invalid input.",
+    "ExpectedStatusCode": 400,
+    "Preconditions": ["A service cost exists for the job card with id 123456."]
+  },
+  {
+    "TestName": "Close job card failing due to insufficient permissions",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/123456",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Set a user's permission to 'Invalid' for the task.",
+      {
+        "StepDescription": "Generate a service cost for the job card."
+      }
+    ],
+    "Steps": [],
+    "Expected": "The response body should contain an error message indicating insufficient permissions.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "Close job card failing due to invalid token",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/123456",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      {
+        "StepDescription": "Generate a service cost for the job card."
+      },
+      {
+        "StepDescription": "Log out of the user before sending the PUT request."
+      }
+    ],
+    "Steps": [],
+    "Expected": "The response body should contain an error message indicating invalid token.",
+    "ExpectedStatusCode": 401
+  }
+]
+```

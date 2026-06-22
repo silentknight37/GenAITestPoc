@@ -1,0 +1,64 @@
+```json
+[
+  {
+    "TestName": "Add Service Item",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      {
+        "Description": "The job must exist",
+        "Validations": [
+          "Get /api/jobcards/{jobId} should return a 200 status with the job details if it exists"
+        ]
+      }
+    ],
+    "Steps": [
+      {
+        "Action": "Send PUT request to /api/service-costs with valid request body containing the service details",
+        "Description": "The request body should include the necessary service type, cost processing, and a description."
+      },
+      "Verify response status code",
+      "Get /api/job-line-items should return the newly added service record with an ID that can be used to update the service item"
+    ],
+    "Expected": "A 201 Created or 409 Conflict response",
+    "ExpectedStatusCode": 201,
+    "ResponseAssertions": [
+      {
+        "Path": "/data/attributes/serviceCosts",
+        "Type": "Object"
+      },
+      {
+        "Path": "/data/links/serviceCosts",
+        "Type": "Array"
+      }
+    ]
+  },
+  {
+    "TestName": "Add Service Item with Invalid Cost",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      {
+        "Description": "The job must exist",
+        "Validations": [
+          "Get /api/jobcards/{jobId} should return a 200 status with the job details if it exists"
+        ]
+      }
+    ],
+    "Steps": [
+      {
+        "Action": "Send PUT request to /api/service-costs with a negative cost",
+        "Description": "The request body should include a negative cost."
+      },
+      "Verify response status code",
+      "Get /api/job-line-items should not return the newly added service record"
+    ],
+    "Expected": "A 400 Bad Request or 422 Unprocessable Entity response",
+    "ExpectedStatusCode": 400
+  }
+]
+```

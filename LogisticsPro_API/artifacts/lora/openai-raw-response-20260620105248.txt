@@ -1,0 +1,106 @@
+[
+  {
+    "TestName": "Create Event",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": ["An authenticated user must be logged in"],
+    "Steps": [
+      "POST /api/events with a JSON body containing event details such as name, start_date, end_date"
+    ],
+    "Expected": "The newly created event is stored in the system and available for retrieval.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Update Event Details",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events/{id}",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      "An authenticated user must be logged in",
+      "A valid event ID is available"
+    ],
+    "Steps": [
+      "PUT /api/events/{id} with a JSON body containing updated event details"
+    ],
+    "Expected": "The specified event's details are successfully updated.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Retrieve Event Information",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "An authenticated user must be logged in",
+      "A valid event ID is available"
+    ],
+    "Steps": [
+      "GET /api/events/{id}"
+    ],
+    "Expected": "The retrieved event information matches the specified details.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Negative: Invalid Event Start Date",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": ["An authenticated user must be logged in"],
+    "Steps": [
+      "POST /api/events with a JSON body containing event details where end_date is before start_date"
+    ],
+    "Expected": "The system rejects the request and returns an error indicating invalid date range.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Negative: Invalid Event End Date",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": ["An authenticated user must be logged in"],
+    "Steps": [
+      "POST /api/events with a JSON body containing event details where start_date is before end_date"
+    ],
+    "Expected": "The system rejects the request and returns an error indicating invalid date range.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Unauthorized User Access",
+    "RelatedRequirement": null,
+    "ScenarioType": "Auth|Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/events"
+    "HttpMethod": "POST",
+    "Preconditions": ["An unauthorized user attempts to log in"],
+    "Steps": [
+      "LOG IN AS AN UNAUTHORIZED USER and POST /api/events with event details"
+    ],
+    "Expected": "The system returns a 401 status code and an authentication error.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "Expired Token Access",
+    "RelatedRequirement": null,
+    "ScenarioType": "Auth|Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/events"
+    "HttpMethod": "POST",
+    "Preconditions": ["An expired access token is used to log in"],
+    "Steps": [
+      "LOG IN AS A USER WITH AN EXPIRED ACCESS TOKEN and POST /api/events with event details"
+    ],
+    "Expected": "The system returns a 401 status code and an authentication error.",
+    "ExpectedStatusCode": 401
+  }
+]

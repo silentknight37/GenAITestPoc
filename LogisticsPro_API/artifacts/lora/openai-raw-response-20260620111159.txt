@@ -1,0 +1,332 @@
+```json
+[
+  {
+    "TestName": "Token Validation - Login",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Auth|Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "user": {
+          "username": "test_user", 
+          "password": "password123" 
+        }
+      },
+      "token_expiry_seconds": 30
+    ],
+    "Steps": [
+      "Invoke API with Valid Username and Password"
+    ],
+    "Expected": "Return HTTP 200 status code and token",
+    "ExpectedStatusCode": 200,
+    "ResponseAssertions": {
+      "body": {
+        "token": "mocked_token"
+      }
+    },
+    "FailureScenario": {
+      "Steps": [
+        "Invoke API with Invalid Username or Password, set token_expiry_seconds to 5 seconds"
+      ],
+      "Expected": "Return HTTP 401 Unauthorized status code",
+      "ExpectedStatusCode": 401,
+      "ResponseAssertions": {
+        "body": {
+          "error": "Unauthorized"
+        }
+      }
+    },
+    "FailureScenario": {
+      "Steps": [
+        "Invoke API with Valid Username but expired Password, set token_expiry_seconds to 5 seconds"
+      ],
+      "Expected": "Return HTTP 401 Unauthorized status code",
+      "ExpectedStatusCode": 401,
+      "ResponseAssertions": {
+        "body": {
+          "error": "Unauthorized"
+        }
+      }
+    }
+  },
+  {
+    "TestName": "Token Validation - Users Creation",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Auth|Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/users",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "user": {
+          "username": "test_user", 
+          "password": "password123"
+        }
+      },
+      "token_expiry_seconds": 30
+    ],
+    "Steps": [
+      "Invoke API with Valid Username and Password to create user account"
+    ],
+    "Expected": "Return HTTP 200 status code",
+    "ExpectedStatusCode": 200,
+    "ResponseAssertions": {
+      "body": {
+        "message": "User created successfully"
+      }
+    },
+    "FailureScenario": {
+      "Steps": [
+        "Invoke API with same Username to create user account"
+      ],
+      "Expected": "Return HTTP 409 Conflict status code",
+      "ExpectedStatusCode": 409,
+      "ResponseAssertions": {
+        "body": {
+          "error": "Username already exists"
+        }
+      }
+    },
+    "FailureScenario": {
+      "Steps": [
+        "Invoke API with Invalid Username and Password"
+      ],
+      "Expected": "Return HTTP 401 Unauthorized status code",
+      "ExpectedStatusCode": 401,
+      "ResponseAssertions": {
+        "body": {
+          "error": "Unauthorized"
+        }
+      }
+    }
+  },
+  {
+    "TestName": "Token Validity - Finance Report No Token",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Validation|Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {},
+      {
+        "token_expiry_seconds": 30
+      }
+    ],
+    "Steps": [
+      "Invoke API without token"
+    ],
+    "Expected": "Return HTTP 401 Unauthorized status code",
+    "ExpectedStatusCode": 401,
+    "ResponseAssertions": {
+      "body": {
+        "error": "Unauthorized"
+      }
+    }
+  },
+  {
+    "TestName": "Token Validity - No Token, Invoice Report",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Validation|Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}", // Assuming {id} is provided in the requirements but not validated here
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {},
+      {
+        "token_expiry_seconds": 30
+      }
+    ],
+    "Steps": [
+      "Invoke API without token"
+    ],
+    "Expected": "Return HTTP 401 Unauthorized status code",
+    "ExpectedStatusCode": 401,
+    "ResponseAssertions": {
+      "body": {
+        "error": "Unauthorized"
+      }
+    }
+  },
+  {
+    "TestName": "Token Validity - Invalid Token, Get Jobcard by ID No ID",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Validation|Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}", // Assuming {id} is provided in the requirements but not validated here
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "token_expiry_seconds": 30
+      },
+      {
+        "invalid_token_expiry_seconds": 5
+      }
+    ],
+    "Steps": [
+      "Invoke API with valid token and invalid token"
+    ],
+    "Expected": "Return HTTP 401 Unauthorized status code",
+    "ExpectedStatusCode": 401,
+    "ResponseAssertions": {
+      "body": {
+        "error": "Unauthorized"
+      }
+    }
+  },
+  {
+    "TestName": "Token Validity - Expired Token, Get Jobcard by ID Invalid ID",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Validation|Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}", // Assuming {id} is provided in the requirements but not validated here
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "token_expiry_seconds": 15,
+        "invalid_token_expiry_seconds": 5
+      },
+    ],
+    "Steps": [
+      "Invoke API with valid token and invalid token"
+    ],
+    "Expected": "Return HTTP 401 Unauthorized status code",
+    "ExpectedStatusCode": 401,
+    "ResponseAssertions": {
+      "body": {
+        "error": "Unauthorized"
+      }
+    }
+  },
+  {
+    "TestName": "Token Validity - Tampered Token, Finance Report Invalid ID",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Validation|Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}", // Assuming {id} is provided in the requirements but not validated here
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "token_expiry_seconds": 30
+      },
+      {
+        "tampered_token_expiry_seconds": 5
+      }
+    ],
+    "Steps": [
+      "Invoke API with valid token and tampered or malformed token"
+    ],
+    "Expected": "Return HTTP 401 Unauthorized status code",
+    "ExpectedStatusCode": 401,
+    "ResponseAssertions": {
+      "body": {
+        "error": "Unauthorized"
+      }
+    }
+  },
+  {
+    "TestName": "Token Validity - Invalid Token, Finance Report No ID",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Validation|Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}", // Assuming {id} is provided in the requirements but not validated here
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "token_expiry_seconds": 30
+      },
+      {
+        "invalid_token_expiry_seconds": 5
+      }
+    ],
+    "Steps": [
+      "Invoke API with valid token and invalid token"
+    ],
+    "Expected": "Return HTTP 401 Unauthorized status code",
+    "ExpectedStatusCode": 401,
+    "ResponseAssertions": {
+      "body": {
+        "error": "Unauthorized"
+      }
+    }
+  },
+  {
+    "TestName": "Token Validity - No Token, Finance Report",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Validation|Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}", // Assuming {id} is provided in the requirements but not validated here
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "token_expiry_seconds": 30
+      },
+      {
+        "invalid_token_expiry_seconds": 5
+      }
+    ],
+    "Steps": [
+      "Invoke API without token"
+    ],
+    "Expected": "Return HTTP 401 Unauthorized status code",
+    "ExpectedStatusCode": 401,
+    "ResponseAssertions": {
+      "body": {
+        "error": "Unauthorized"
+      }
+    }
+  },
+  {
+    "TestName": "Token Validity - Expired Token, Finance Report No ID",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Validation|Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}", // Assuming {id} is provided in the requirements but not validated here
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "token_expiry_seconds": 15,
+        "invalid_token_expiry_seconds": 5
+      },
+    ],
+    "Steps": [
+      "Invoke API with valid token and expired token"
+    ],
+    "Expected": "Return HTTP 401 Unauthorized status code",
+    "ExpectedStatusCode": 401,
+    "ResponseAssertions": {
+      "body": {
+        "error": "Unauthorized"
+      }
+    }
+  },
+  {
+    "TestName": "Token Validity - Tampered Token, Finance Report Invalid ID",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Validation|Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}", // Assuming {id} is provided in the requirements but not validated here
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "token_expiry_seconds": 30
+      },
+      {
+        "tampered_token_expiry_seconds": 5
+      }
+    ],
+    "Steps": [
+      "Invoke API with valid token and tampered or malformed token"
+    ],
+    "Expected": "Return HTTP 401 Unauthorized status code",
+    "ExpectedStatusCode": 401,
+    "ResponseAssertions": {
+      "body": {
+        "error": "Unauthorized"
+      }
+    }
+  }
+]
+```

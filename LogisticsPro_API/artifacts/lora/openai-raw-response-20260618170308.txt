@@ -1,0 +1,60 @@
+```json
+[
+    {
+        "TestName": "BRULE-46_FinalizedInvoiceRestriction_EnsureUninvoicedCheck",
+        "RelatedRequirement": "BRULE-46",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/reports/uninvoiced",
+        "HttpMethod": "GET",
+        "Preconditions": ["No active or open invoices"],
+        "Steps": [
+            "Retrieve the list of uninvoiced job cards using GET /api/reports/uninvoiced"
+        ],
+        "Expected": "A collection of uninvoced job cards should be returned.",
+        "ExpectedStatusCode": 200
+    },
+    {
+        "TestName": "BRULE-46_FinalizedInvoiceRestriction_CannotCreateNewInvoiceAfterFinalization",
+        "RelatedRequirement": "BRULE-46",
+        "ScenarioType": "Negative",
+        "Priority": "High",
+        "ApiEndpoint": "/api/invoices",
+        "HttpMethod": "POST",
+        "Preconditions": ["Last invoice created is finalized"],
+        "Steps": [
+            "Attempt to create a new invoice using POST /api/invoices"
+        ],
+        "Expected": "An error message indicating that final invoices cannot be modified should be returned.",
+        "ExpectedStatusCode": 403
+    },
+    {
+        "TestName": "BRULE-46_FinalizedInvoiceRestriction_CannotRetrieveUpdatedInvoiceAfterFinalization",
+        "RelatedRequirement": "BRULE-46",
+        "ScenarioType": "Negative",
+        "Priority": "High",
+        "ApiEndpoint": "/api/invoices/{id}",
+        "HttpMethod": "GET",
+        "Preconditions": ["Last invoice created is finalized"],
+        "Steps": [
+            "Attempt to retrieve the updated invoice information using GET /api/invoices/123" (replace 123 with a real ID)
+        ],
+        "Expected": "An error message indicating that final invoices cannot be modified should be returned.",
+        "ExpectedStatusCode": 403
+    },
+    {
+        "TestName": "BRULE-46_FinalizedInvoiceRestriction_CannotVoidFinalizedInvoices",
+        "RelatedRequirement": "BRULE-46",
+        "ScenarioType": "Negative",
+        "Priority": "High",
+        "ApiEndpoint": "/api/invoices/{id}/void",
+        "HttpMethod": "POST",
+        "Preconditions": ["Last invoice created is finalized"],
+        "Steps": [
+            "Attempt to void the finalized invoice using POST /api/invoices/123/void" (replace 123 with a real ID)
+        ],
+        "Expected": "An error message indicating that final invoices cannot be modified should be returned.",
+        "ExpectedStatusCode": 403
+    }
+]
+```

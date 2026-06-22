@@ -150,6 +150,9 @@
     </div>
   </div>
 
+  <!-- Rule validation report -->
+  <div id="rulePanel" class="mb-3"></div>
+
   <div class="card shadow-sm mb-3">
     <div class="card-body py-2">
       <div class="row g-2 align-items-center">
@@ -204,7 +207,11 @@
 
   <div class="d-flex align-items-center justify-content-between mb-4">
     <h1 class="h5 fw-semibold mb-0">Generated Test Files</h1>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 align-items-center">
+      <div class="form-check form-switch me-2" title="Run Stryker.NET mutation testing automatically after the tests (slow)">
+        <input class="form-check-input" type="checkbox" id="chkMutation" checked/>
+        <label class="form-check-label small text-muted" for="chkMutation">Mutation testing</label>
+      </div>
       <button class="btn btn-outline-secondary btn-sm" onclick="showTab('testcases')">Back</button>
       <button id="btnRun" class="btn btn-primary btn-sm" onclick="runTests()"><i class="fa-solid fa-play me-1"></i>Run Selected</button>
       <button class="btn btn-outline-secondary btn-sm" onclick="downloadZip()"><i class="fa-solid fa-download me-1"></i>Download .zip</button>
@@ -263,7 +270,11 @@ async function startGeneration() {
     const data = await resp.json().catch(()=>({}));
     err.textContent = data.error || 'Failed to start generation.';
     err.style.display='';
+    // The request was rejected — clear the "Generating…" card so the spinner doesn't hang,
+    // and bring the error into view.
+    document.getElementById('logCard').style.display='none';
     document.getElementById('btnGenerate').disabled=false;
+    err.scrollIntoView({behavior:'smooth', block:'center'});
     return;
   }
 
@@ -284,6 +295,7 @@ async function pollStatus() {
       } else {
         document.getElementById('logTitle').textContent='Done — '+d.testCaseCount+' test cases generated';
         document.getElementById('logFooter').style.cssText='';
+        document.getElementById('btnGenerate').disabled=false;
         document.getElementById('btnTestCases').disabled=false;
         await loadTestCases();
         document.getElementById('statMode').textContent=
@@ -313,6 +325,55 @@ async function loadTestCases() {
   selected=new Set(allCases.map(c=>c.testName));
   applyFilters();
   updateStats();
+  loadRules();
+}
+
+// ── Rule validation report ──────────────────────────────────────────────────
+async function loadRules() {
+  const box=document.getElementById('rulePanel');
+  if(!box) return;
+  let d;
+  try { d=await (await fetch(`${API}/api/rules`)).json(); } catch(e){ box.innerHTML=''; return; }
+  if(!d || !d.rules || d.rules.length===0){ box.innerHTML=''; return; }
+
+  const ok = d.violated===0;
+  const rows = d.rules.map((r,i)=>{
+    const sev = r.severity==='error' ? 'danger' : 'warning';
+    const icon = r.passed
+      ? '<i class="fa-solid fa-circle-check text-success"></i>'
+      : `<i class="fa-solid fa-triangle-exclamation text-${sev}"></i>`;
+    const hasDetail = !r.passed && r.violations && r.violations.length;
+    const detail = hasDetail
+      ? `<ul class="small text-muted mb-0 mt-1 ps-3" id="rv${i}" style="display:none">
+           ${r.violations.map(v=>`<li class="font-monospace">${esc(v)}</li>`).join('')}
+           ${r.violationCount>r.violations.length?`<li>… and ${r.violationCount-r.violations.length} more</li>`:''}
+         </ul>` : '';
+    const badge = r.passed
+      ? `<span class="badge text-bg-success">pass</span>`
+      : hasDetail
+        ? `<span class="badge text-bg-${sev}" style="cursor:pointer" onclick="toggleEl('rv${i}')">${r.violationCount} issue(s)</span>`
+        : `<span class="badge text-bg-${sev}">fail</span>`;
+    return `<div class="list-group-item py-2">
+      <div class="d-flex align-items-center gap-2">
+        ${icon}<span class="flex-grow-1 small">${esc(r.description)}</span>${badge}
+      </div>${detail}
+    </div>`;
+  }).join('');
+
+  box.innerHTML=`<div class="card">
+    <div class="card-header d-flex align-items-center justify-content-between" style="cursor:pointer"
+         onclick="toggleEl('ruleBody')">
+      <span class="fw-semibold">Rule Validation
+        <span class="badge ${ok?'text-bg-success':'text-bg-warning'} ms-1">${d.passed}/${d.totalRules} passed</span></span>
+      <span class="toggle">${ok?'+':'−'}</span>
+    </div>
+    <div id="ruleBody" class="list-group list-group-flush" style="display:${ok?'none':''}">${rows}</div>
+  </div>`;
+}
+
+function toggleEl(id){
+  const el=document.getElementById(id);
+  if(el) el.style.display = el.style.display==='none' ? '' : 'none';
 }
 
 function applyFilters() {
@@ -582,6 +643,51 @@ async function downloadZip() {
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 
+// ── Mutation testing (Stryker.NET) ──────────────────────────────────────────
+// Runs automatically right after the tests, rendering into the combined results card
+// (the #mutationBlock placeholder inside the run summary). No prompt — scoped server-side
+// to the generated mode.
+async function runMutationAuto() {
+  const block = document.getElementById('mutationBlock');
+  if (!block) return;
+
+  block.innerHTML = `<div class="d-flex align-items-center gap-2 mt-2">
+    <span class="spinner-border spinner-border-sm"></span>
+    <span class="small text-muted">Running mutation testing… this can take several minutes.</span></div>`;
+
+  let d;
+  try {
+    const r=await fetch(`${API}/api/mutation`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ mutate: null })
+    });
+    d=await r.json();
+  } catch(e) {
+    block.innerHTML=`<div class="alert alert-warning mb-0 mt-2">Failed to run mutation testing: ${esc(e.message)}</div>`;
+    return;
+  }
+
+  if(!d.ran){
+    block.innerHTML=`<div class="alert alert-warning mb-0 mt-2">${esc(d.error||'Mutation run failed')}
+      ${d.output?`<pre class="mb-0 mt-2 small text-light p-2" style="background:var(--bs-dark);border-radius:6px;max-height:240px;overflow:auto">${esc(d.output)}</pre>`:''}</div>`;
+    return;
+  }
+
+  const pill=(n,t,c)=>`<span class="badge ${c} me-2">${n} ${t}</span>`;
+  const card=(m)=>`<div class="border rounded p-2 mb-2">
+    <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+      <span class="fw-semibold">${esc(m.mode)} mutation score
+        <span class="badge text-bg-primary ms-1">${m.score}%</span>
+        <span class="text-muted small ms-2">${m.scoreCovered}% of covered</span></span>
+    </div>
+    <div>${pill(m.killed,'killed','text-bg-success')}${pill(m.survived,'survived','text-bg-danger')}${pill(m.timeout,'timeout','text-bg-secondary')}${pill(m.noCoverage,'no-coverage','text-bg-warning')}<span class="text-muted small">of ${m.total} mutants</span></div>
+  </div>`;
+
+  const modes = d.modes || [];
+  block.innerHTML = `<hr class="my-2"><div class="fw-semibold mb-2">Mutation score by mode</div>` + modes.map(card).join('');
+  lastMutationHtml = block.innerHTML;   // preserve across explorer re-renders
+}
+
 // ── Run tests ──────────────────────────────────────────────────────────────
 async function runTests() {
   const filters = genSelectedFilters();
@@ -619,14 +725,18 @@ async function runTests() {
 
   lastResults = d.results||[];
   lastRunMeta = d;
+  lastMutationHtml = '';
   explorerOpen = new Set();
   // expand classes containing failures on the first render
   lastResults.forEach(r=>{ if((r.outcome||'').toLowerCase()==='failed') explorerOpen.add(r.cls); });
   renderTestExplorer(d);
+  // Mutation testing runs automatically once the tests are in (rendering into the same card),
+  // unless the user turned it off to keep iteration fast.
+  if (document.getElementById('chkMutation')?.checked) runMutationAuto();
 }
 
 // Test Explorer: classes → methods, with pass/fail/skip status.
-let lastResults=[], lastRunMeta={}, explorerOpen=new Set();
+let lastResults=[], lastRunMeta={}, explorerOpen=new Set(), lastMutationHtml='';
 
 function outcomeMeta(o){
   o=(o||'').toLowerCase();
@@ -645,15 +755,31 @@ function renderTestExplorer(d){
   (lastResults||[]).forEach(r=>{ (groups[r.cls]=groups[r.cls]||[]).push(r); });
   const classNames=Object.keys(groups).sort();
 
+  // Per-mode summary table (Line/Branch coverage compared side by side).
+  const pct = (v,cls)=> v!=null ? `<span class="badge ${cls}">${v}%</span>` : '<span class="text-muted">—</span>';
+  const modeRows = (d.modes||[]).filter(m=>m.ran).map(m=>`
+    <tr>
+      <td class="fw-semibold">${esc(m.mode)}</td>
+      <td><span class="badge text-bg-success">${m.passed}</span>
+          ${m.failed?`<span class="badge text-bg-danger ms-1">${m.failed}</span>`:''}
+          <span class="text-muted small">/ ${m.total}</span></td>
+      <td>${pct(m.lineCoverage,'text-bg-info')}</td>
+      <td>${pct(m.branchCoverage,'text-bg-info')}</td>
+      <td>${pct(m.endpointCoverage,'text-bg-info')}</td>
+      <td>${pct(m.executionValidity,'text-bg-primary')}</td>
+      <td class="text-muted small">${esc(m.durationText||'')}</td>
+    </tr>`).join('');
+
   const header=`
     <div class="card mb-3"><div class="card-body py-2">
-      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-        <div class="fw-semibold">
-          ${allPass?'<span class="text-success">All tests passed</span>':'<span class="text-danger">Tests failed</span>'}
-          ${d.durationText?`<span class="text-muted small fw-normal ms-2"><i class="fa-regular fa-clock me-1"></i>${esc(d.durationText)}</span>`:''}
-        </div>
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+        <div class="fw-semibold">${allPass?'<span class="text-success">All tests passed</span>':'<span class="text-danger">Tests failed</span>'}</div>
         <div>${pill(d.passed,'passed','text-bg-success')}${pill(d.failed,'failed',d.failed?'text-bg-danger':'text-bg-secondary')}${pill(d.skipped,'skipped','text-bg-secondary')}<span class="text-muted small">of ${d.total}</span></div>
       </div>
+      ${modeRows?`<table class="table table-sm table-borderless align-middle mb-0">
+        <thead><tr class="text-muted small"><th>Mode</th><th>Passed</th><th>Line</th><th>Branch</th><th>Endpoint</th><th>Validity</th><th>Time</th></tr></thead>
+        <tbody>${modeRows}</tbody></table>`:''}
+      <div id="mutationBlock"></div>
     </div></div>`;
 
   const tree=classNames.map(c=>{
@@ -689,6 +815,10 @@ function renderTestExplorer(d){
   }).join('');
 
   box.innerHTML=header+tree;
+  // Re-renders (e.g. expanding a class) rebuild the card — restore the mutation results that
+  // were rendered into #mutationBlock so they aren't lost.
+  const mb=document.getElementById('mutationBlock');
+  if(mb && lastMutationHtml) mb.innerHTML=lastMutationHtml;
 }
 
 function toggleClass(name){

@@ -1,0 +1,350 @@
+```json
+[
+  {
+    "TestName": "TestEventCreation",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A authenticated user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"2023-10-01\", \"endDate\": \"2023-10-05\"}" }
+    ],
+    "Expected": "The request should return a status code of 201 and the response body should contain details about the created event.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "EventCreationWithDuplicateName",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A authenticated user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"2023-10-01\", \"endDate\": \"2023-10-05\"}" }
+    ],
+    "Expected": "The request should return an error code of 409 with a message indicating duplicate event name.",
+    "ExpectedStatusCode": 409
+  },
+  {
+    "TestName": "EventCreationWithFutureStartDate",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A authenticated user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"2023-11-01\", \"endDate\": \"2023-10-05\"}" }
+    ],
+    "Expected": "The request should return an error code of 409 with a message indicating future start date.",
+    "ExpectedStatusCode": 409
+  },
+  {
+    "TestName": "EventCreationWithFutureEndDate",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A authenticated user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"2023-10-01\", \"endDate\": \"2024-10-05\"}" }
+    ],
+    "Expected": "The request should return an error code of 409 with a message indicating future end date.",
+    "ExpectedStatusCode": 409
+  },
+  {
+    "TestName": "EventCreationWithEmptyStartDate",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A authenticated user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"\", \"endDate\": \"2023-10-05\"}" }
+    ],
+    "Expected": "The request should return an error code of 422 with a message indicating missing or invalid start date.",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "EventCreationWithEmptyEndDate",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A authenticated user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"2023-10-01\", \"endDate\": \"\"}" }
+    ],
+    "Expected": "The request should return an error code of 422 with a message indicating missing or invalid end date.",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "EventCreationWithInvalidStartDateInValidFormat",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A authenticated user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"2023/10/05\", \"endDate\": \"2024-09/10\"}" }
+    ],
+    "Expected": "The request should return an error code of 422 with a message indicating invalid start date format.",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "EventCreationWithInvalidEndDateInValidFormat",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A authenticated user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"2023-10-01\", \"endDate\": \"2024-09/10\"}" }
+    ],
+    "Expected": "The request should return an error code of 422 with a message indicating invalid end date format.",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "EventCreationWithInvalidEndDateBeforeStartDate",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A authenticated user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"2023-10-05\", \"endDate\": \"2023-09/10\"}" }
+    ],
+    "Expected": "The request should return an error code of 422 with a message indicating invalid end date before start date.",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "EventCreationWithMissingRequiredFields",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A authenticated user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"2023-10-05\"}" }
+    ],
+    "Expected": "The request should return an error code of 422 with a message indicating missing mandatory fields.",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "EventCreationWithDisabledUser",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "POST",
+    "Preconditions": ["A disabled user with appropriate permissions"],
+    "Steps": [
+      ` POST /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event A\", \"startDate\": \"2023-10-05\", \"endDate\": \"2024-09/10\"}" }
+    ],
+    "Expected": "The request should return an error code of 401.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "EventUpdate",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["A non-administrator user with appropriate permissions for the event"],
+    "Steps": [
+      ` PUT /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event B\", \"startDate\": \"2023-10-05\", \"endDate\": \"2024-10/15\"}" }
+    ],
+    "Expected": "The request should return a status code of 200 and the response body should contain details about the updated event.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "EventUpdateWithNonAdminUser",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["A non-administrator user with appropriate permissions for the event"],
+    "Steps": [
+      ` PUT /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event B\", \"startDate\": \"2023-10-05\", \"endDate\": \"2024-10/15\"}" }
+    ],
+    "Expected": "The request should return an error code of 401.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "EventUpdateWithInvalidJson",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["A non-administrator user with appropriate permissions for the event"],
+    "Steps": [
+      ` PUT /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"badRequest\": \"invalidJSON\"}" }
+    ],
+    "Expected": "The request should return an error code of 422 with a message indicating invalid JSON payload.",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "EventUpdateWithUnknownField",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["A non-administrator user with appropriate permissions for the event"],
+    "Steps": [
+      ` PUT /api/jobcards/{id}/finance`,
+      { "Header": "Authorization", "Value": "Bearer {token}" },
+      { "Body": "{\"name\": \"Event B\", \"startDate\": \"2023-10-05\", \"endDate\": \"2024-10/15\", \"unknownField\": \"test\"}" }
+    ],
+    "Expected": "The request should return an error code of 422 with a message indicating unknown field in the JSON payload.",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "EventRetrieve",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": ["A non-administrator user with appropriate permissions for the event"],
+    "Steps": [
+      ` GET /api/jobcards/{id}/finance`
+    ],
+    "Expected": "The request should return a status code of 200 and the response body should contain details about the retrieved event.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "EventRetrieveWithNoPermissions",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": ["A non-administrator user without appropriate permissions for the event"],
+    "Steps": [
+      ` GET /api/jobcards/{id}/finance`
+    ],
+    "Expected": "The request should return an error code of 401.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "EventDelete",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["A non-administrator user with appropriate permissions for the event"],
+    "Steps": [
+      ` DELETE /api/jobcards/{id}/finance`
+    ],
+    "Expected": "The request should return a status code of 200 and the response body should indicate that the event has been deleted.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "EventDeleteWithNoPermissions",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["A non-administrator user without appropriate permissions for the event"],
+    "Steps": [
+      ` DELETE /api/jobcards/{id}/finance`
+    ],
+    "Expected": "The request should return an error code of 401.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "EventDeleteByAdmin",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["A non-administrator user with appropriate permissions for the event"],
+    "Steps": [
+      ` DELETE /api/jobcards/{id}/finance`
+    ],
+    "Expected": "The request should return a status code of 200 and the response body should indicate that the event has been deleted.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "EventList",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": ["An admin user with appropriate permissions"],
+    "Steps": [
+      ` GET /api/jobcards/{id}/finance`
+    ],
+    "Expected": "The request should return a status code of 200 and the response body should contain a list of all events.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "EventListWithNoPermissions",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": ["A non-administrator user without appropriate permissions"],
+    "Steps": [
+      ` GET /api/jobcards/{id}/finance`
+    ],
+    "Expected": "The request should return an error code of 401.",
+    "ExpectedStatusCode": 401
+  }
+];
+```
+
+**Explanation**:
+- **Positive Scenarios**: These tests cover the expected behavior of creating, updating, and retrieving events. They use positive JSON payloads to simulate various scenarios and ensure that everything works as intended.
+- **Negative Scenarios**: These tests check what happens when incorrect or unexpected data is sent in the request body, such as invalid JSON, missing required fields, or sending an unauthenticated request. They also test edge cases like events not existing or being deleted improperly by unauthorized users.
+
+**Auth Scenarios**: These tests verify that only authorized users can access and manipulate the event data, including deleting them if they have appropriate permissions. This confirms that the authorization logic works as expected.
+
+**List Scenarios**: These tests demonstrate how to view all available events, which is a common requirement for many applications. They check that listing events returns the correct set of information.

@@ -1,0 +1,78 @@
+[
+  {
+    "TestName": "Validate Total Job Cost Accuracy",
+    "RelatedRequirement": "BRULE-31",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      "A jobcard exists with at least one valid included service item costing 10 and 20"
+    ],
+    "Steps": [
+      "Retrieve the service costs for all items in the jobcard"
+      "Sum up the total cost of these items"
+      "Update the total cost on the jobcard to be equal to the sum obtained in step 3"
+      "Make another API call to fetch the updated job to verify the total has changed"
+    ],
+    "Expected": "The total job cost should reflect the sum of service costs of all valid included items within the same job",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Validate Total Job Cost Accuracy Negative Case",
+    "RelatedRequirement": "BRULE-31",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      "A jobcard exists but has invalid or non-included service items costing 10 and 20"
+    ],
+    "Steps": [
+      "Retrieve the service costs for all items in the jobcard"
+      "Sum up the total cost of these items (excluding invalid/non-included items)"
+      "Update the total cost on the jobcard to be equal to this sum"
+      "Make another API call to fetch the updated job to verify the total has changed"
+    ],
+    "Expected": "The total job cost should not exceed the sum of valid included service item costs",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Validate Total Job Cost Accuracy Case with Zero Costs",
+    "RelatedRequirement": "BRULE-31",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      "A jobcard exists but has no valid included service items costing anything"
+    ],
+    "Steps": [
+      "Retrieve the service costs for all items in the jobcard"
+      "Verify that the total cost is 0"
+      "Update the total cost on the jobcard to be equal to this sum"
+      "Make another API call to fetch the updated job to verify the total has changed"
+    ],
+    "Expected": "The total job cost should accurately reflect the absence of service item costs",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Validate Total Job Cost Accuracy Negative Case with Extra Items",
+    "RelatedRequirement": "BRULE-31",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      "A jobcard exists but has valid and non-included service items costing 10, 20, and 30"
+    ],
+    "Steps": [
+      "Retrieve the service costs for all items in the jobcard without invalid/non-included items"
+      "Sum up the total cost of these items (not including item costing 30)"
+      "Update the total cost on the jobcard to be equal to this sum"
+      "Make another API call to fetch the updated job to verify the total has changed"
+    ],
+    "Expected": "The total job cost should not exceed the sum of valid included service item costs",
+    "ExpectedStatusCode": 204
+  }
+]

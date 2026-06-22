@@ -1,0 +1,93 @@
+[
+  {
+    "TestName": "FR-09 Positive Scenario Creation: Normal Job Card",
+    "RelatedRequirement": "FR-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Valid customer ID exists in system."
+    ],
+    "Steps": [
+      "Send a POST request to",
+      "\/api/jobcards",
+      "\nwith JSON body:",
+      "\n{\n  \"customerId\": \"valid-customer-id\"\n}",
+      "\nThe POST request should be successful without any error messages."
+    ],
+    "Expected": {
+      "Job ID generated and job record created.",
+      "\"created\" field is set to true in response."
+    },
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "FR-09 Negative Scenario Creation: Missing Customer Reference",
+    "RelatedRequirement": "FR-09",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Send a POST request to",
+      "\/api/jobcards",
+      "\nwith an empty JSON body.",
+      "\nThe POST request should fail."
+    ],
+    "Expected": {
+      "\"created\" field is set to false in response.",
+      "\"error.\" contains \"Customer reference missing or invalid\"",
+      "\"success\" field is set to false"
+    },
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "FR-09 Boundary Scenario Creation: No Event ID Provided",
+    "RelatedRequirement": "FR-09",
+    "ScenarioType": "Validation",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Valid customer ID exists in system."
+    ],
+    "Steps": [
+      "Send a POST request to",
+      "\/api/jobcards",
+      "\nwith JSON body:",
+      "\n{\n  \"customerId\": \"valid-customer-id\",\n  \"event_id\" null\n}",
+      "\nThe POST request should fail."
+    ],
+    "Expected": {
+      "\"created\" field is set to false in response.",
+      "\"error.\" contains \"Event ID not provided\"",
+      "\"success\" field is set to false"
+    },
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "FR-09 Boundary Scenario Creation: Invalid Date",
+    "RelatedRequirement": "FR-09",
+    "ScenarioType": "Validation",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Valid customer ID exists in system."
+    ],
+    "Steps": [
+      "Send a POST request to",
+      "\/api/jobcards",
+      "\nwith JSON body:",
+      "\n{\n  \"customerId\": \"valid-customer-id\",\n  \"event_id\" null\n}",
+      "\nThe POST request should fail."
+    ],
+    "Expected": {
+      "\"error.\" contains \"Invalid date format\"",
+      "\"success\" field is set to false"
+    },
+    "ExpectedStatusCode": 200
+  }
+]

@@ -1,0 +1,24 @@
+```json
+[
+  {
+    "TestName": "Valid Payment Voucher Creation",
+    "RelatedRequirement": "BR-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Create a new vendor with the ID '{vendorId}' and set up payable items.",
+      "Authenticate with the system using valid credentials to access the payment voucher endpoint."
+    ],
+    "Expected": {
+      "success": true,
+      "error": null,
+      "paymentVoucherId": "{paymentVoucherId}"
+    },
+    "ExpectedStatusCode": 201
+  },
+  // other test cases for invalid input validation, boundary input checks, and more ...
+]
+```

@@ -1,0 +1,55 @@
+```json
+[
+  {
+    "TestName": "BRULE-34_1 Positive Add Batch with Valid Item",
+    "RelatedRequirement": "BRULE-34",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "POST",
+    "Preconditions":
+      ["A valid operational item exists in /api/batch-eligible-items"],
+    "Steps":
+      [
+        "Create a service cost associated with the item using POST/api/service-costs",
+        "Post the service cost to /api/batch-items/{id}"
+      ],
+    "Expected": "No error is returned and the new batch contains the operational item.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "BRULE-34_2 Negative Add Batch with Invalid Item",
+    "RelatedRequirement": "BRULE-34",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "POST",
+    "Preconditions":
+      [
+        "An operational item that does not exist in the system,
+        or one already associated with another batch."
+      ],
+    "Steps":
+      ["Post a service cost to /api/batch-items/{id}"],
+    "Expected": "The server responds with an error indicating invalid eligibility.",
+    "ExpectedStatusCode": 403
+  },
+  {
+    "TestName": "BRULE-34_3 Add Batch with Existing Item In Other Workflow",
+    "RelatedRequirement": "BRULE-34",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "POST",
+    "Preconditions":
+      [
+        "An operational item that is already in transit through another
+        financial workflow (e.g., an open transportation service)."
+      ],
+    "Steps":
+      ["Post a service cost to /api/batch-items/{id}"],
+    "Expected": "The server responds with an error indicating invalid eligibility.",
+    "ExpectedStatusCode": 403
+  }
+]
+```

@@ -1,0 +1,49 @@
+```json
+[
+    {
+        "TestName": "TC-FR05-CR1-RetrieveCustomer_Success",
+        "RelatedRequirement": "FR-05",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/jobscards/{customer_id}/hotel-services",
+        "HttpMethod": "GET",
+        "Preconditions": [
+            "A customer with ID {customer_id} exists, and the request includes a valid JWT token for authentication."
+        ],
+        "Steps": [
+            "Make a GET request to /api/jobcards/{customer_id}/hotel-services using the authenticated user's token in the Authorization header."
+        ],
+        "Expected": "The system will return a status code of 200 indicating success, along with the customer details retrieved from the hotel services endpoint.",
+        "ExpectedStatusCode": 200
+    },
+    {
+        "TestName": "TC-FR05-CR2-RetrieveCustomer_CustomerIdNotFound",
+        "RelatedRequirement": "FR-05",
+        "ScenarioType": "Negative",
+        "Priority": "Medium",
+        "ApiEndpoint": "/api/jobscards/{customer_id}/hotel-services",
+        "HttpMethod": "GET",
+        "Preconditions": [
+            "An invalid customer ID {invalid_customer_id} exists, and the request includes a valid JWT token for authentication."
+        ],
+        "Steps": [
+            "Make a GET request to /api/jobcards/{invalid_customer_id}/hotel-services using the authenticated user's token in the Authorization header."
+        ],
+        "Expected": "The system will return a status code of 404 indicating that no customer was found with the provided ID.",
+        "ExpectedStatusCode": 404
+    },
+    {
+        "TestName": "TC-FR05-CR3-RetrieveCustomer_InvalidJwtToken",
+        "RelatedRequirement": "FR-05",
+        "ScenarioType": "Negative",
+        "Priority": "Medium",
+        "ApiEndpoint": "/api/jobscards/{customer_id}/hotel-services",
+        "HttpMethod": "GET",
+        "Preconditions": [
+            "A valid customer ID exists, but the request uses an invalid JWT token for authentication."
+        ],
+        "Steps": [
+            "Make a GET request to /api/jobcards/{customer_id}/hotel-services using an invalid token in the Authorization header."
+        ],
+        
+```

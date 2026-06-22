@@ -1,0 +1,110 @@
+```json
+[
+  {
+    "TestName": "BR-01_Login_Success",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "UsernameOrEmail": "user@example.com",
+        "Password": "password123"
+      }
+    ],
+    "Steps": [
+      "Given a valid user with the username 'user@example.com' and password 'password123'",
+      "When I send a POST request to /api/auth/login with the required credentials",
+      "Then I expect a successful response status code of 200",
+      "And the JSON body contains an 'access_token'"
+    ],
+    "Expected": "Success: User logged in and received access token."
+  },
+  {
+    "TestName": "BR-01_Login_InvalidEmailFormat",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "UsernameOrEmail": "invalid-email-format",
+        "Password": "password123"
+      }
+    ],
+    "Steps": [
+      "Given an invalid email format with 'invalid-email-format' as the username or password",
+      "When I send a POST request to /api/auth/login with these credentials",
+      "Then I expect an error response status code in the range 400-499"
+    ],
+    "Expected": "Failure: Invalid input - email format is invalid."
+  },
+  {
+    "TestName": "BR-01_Login_InvalidUsernamePassword",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "UsernameOrEmail": "user@example.com",
+        "Password": "invalidpassword"
+      }
+    ],
+    "Steps": [
+      "Given a valid email but invalid password 'invalidpassword'",
+      "When I send a POST request to /api/auth/login with these credentials",
+      "Then I expect an error response status code in the range 400-499"
+    ],
+    "Expected": "Failure: Invalid input - incorrect password."
+  },
+  {
+    "TestName": "BR-01_Login_RetryExhausted",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "UsernameOrEmail": "user@example.com",
+        "Password": "invalidpassword123"
+      }
+    ],
+    "Steps": [
+      "Given a valid email but invalid password 'invalidpassword123' and user account lockout is enabled",
+      "When I send multiple POST requests to /api/auth/login with these credentials consecutively",
+      "Then I expect an error response status code in the range 400-499"
+    ],
+    "Expected": "Failure: Account locked out after multiple invalid attempt(s)."
+  },
+  {
+    "TestName": "BR_01_Login_UseExistingToken",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Auth",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "UsernameOrEmail": "user@example.com",
+        "Password": "password123"
+      }
+    ],
+    "Steps": [
+      "Given a valid user with the username 'user@example.com' and password 'password123'",
+      "When I send a POST request to /api/auth/login with the correct credentials",
+      "Then I receive an access token",
+      "And I store this access token",
+      "When I use the stored access token to send a GET request to '/api/jobcards/123/finance' with authentication",
+      "Then I expect a successful response status code of 200"
+    ],
+    "Expected": "Success: Successfully authenticated and retrieved jobcard finance details."
+  },
+  
+  // Add similar tests for other scenarios mentioned (Negative, Validation, Boundary, Auth) 
+]
+```

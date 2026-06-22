@@ -1,0 +1,112 @@
+```json
+[
+  {
+    "TestName": "FR14-Positive-RemoveServiceItemViaBatchItemsEndpoint",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "There exists a batch-item in the system"
+    ],
+    "Steps": [
+      {
+        "Action": "Send DELETE request to the /api/batch-items endpoint with an id query parameter matching the id of the existing batch-item.",
+        "Expectation": "The server should successfully delete the batch-item and return HTTP status 204 (No Content)"
+      }
+    ],
+    "Expected": "The batch-item should be deleted successfully from the system."
+  },
+  {
+    "TestName": "FR14-Negative-RemoveBatchItemThatIsAlreadyInvoiced",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "There exists a batch-item in the system that is already invoiced."
+    ],
+    "Steps": [
+      {
+        "Action": "Delete the pre-invoiced batch-item via the /api/batch-items endpoint.",
+        "Expectation": "The delete operation should fail and the server should return HTTP status 403 (Forbidden)"
+      }
+    ],
+    "Expected": "An error message indicating that the batch-item cannot be deleted because it is already invoiced."
+  },
+  {
+    "TestName": "FR14-Positive-RemoveServiceItemViaPaymentVoucherItemsEndpoint",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "There exists a payment-voucher-item in the system"
+    ],
+    "Steps": [
+      {
+        "Action": "Send DELETE request to the /api/payment-voucher-items endpoint with an id query parameter matching the id of the existing payment-voucher-item.",
+        "Expectation": "The server should successfully delete the payment-voucher-item and return HTTP status 204 (No Content)"
+      }
+    ],
+    "Expected": "The payment-voucher-item should be deleted successfully from the system."
+  },
+  {
+    "TestName": "FR14-Negative-RemovePaymentVoucherItemThatIsAlreadyInvoiced",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "There exists a payment-voucher-item in the system that is already invoiced."
+    ],
+    "Steps": [
+      {
+        "Action": "Delete the pre-invoiced payment-voucher-item via the /api/payment-voucher-items endpoint.",
+        "Expectation": "The delete operation should fail and the server should return HTTP status 403 (Forbidden)"
+      }
+    ],
+    "Expected": "An error message indicating that the payment-voucher-item cannot be deleted because it is already invoiced."
+  },
+  {
+    "TestName": "FR14-Positive-RemoveServiceItemViaJobCardsEndpoint",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "There exists a job-card in the system"
+    ],
+    "Steps": [
+      {
+        "Action": "Send DELETE request to the /api/jobcards endpoint with an id query parameter matching the id of the existing job-card.",
+        "Expectation": "The server should successfully delete the job-card and return HTTP status 204 (No Content)"
+      }
+    ],
+    "Expected": "The job-card should be deleted successfully from the system."
+  },
+  {
+    "TestName": "FR14-Negative-RemoveJobCardThatIsAlreadyInvoiced",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "There exists a job-card in the system that is already invoiced."
+    ],
+    "Steps": [
+      {
+        "Action": "Delete the pre-invoiced job-card via the /api/jobcards endpoint.",
+        "Expectation": "The delete operation should fail and the server should return HTTP status 403 (Forbidden)"
+      }
+    ],
+    "Expected": "An error message indicating that the job-card cannot be deleted because it is already invoiced."
+  }
+]
+```

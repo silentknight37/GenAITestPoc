@@ -1,0 +1,65 @@
+# Demonstrates the full GenAI pipeline in CI: generate tests from a BA document with the CLI,
+# then build and run them with coverage. Manual trigger because it calls the OpenAI API.
+#
+# Requires repository secret: OPENAI_API_KEY
+name: Generate and Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Generation mode (llm | rag | hybrid | lora | lora-rag)'
+        default: 'rag'
+        required: true
+      docs:
+        description: 'Path to the BA requirements PDF (relative to repo root)'
+        default: 'LogisticsPro_API/TestCase/requirements.pdf'
+        required: true
+      target:
+        description: 'API project root to generate tests for (relative to repo root)'
+        default: 'LogisticsPro_API/LogisticsPro_API'
+        required: true
+
+jobs:
+  generate-and-test:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build CLI
+        run: dotnet build GenAITestPoC/src/GenAITest.CLI/GenAITest.CLI.csproj -c Release
+
+      - name: Generate tests
+        run: >
+          dotnet run --project GenAITestPoC/src/GenAITest.CLI/GenAITest.CLI.csproj -c Release --
+          generate
+          --mode "${{ github.event.inputs.mode }}"
+          --docs "${{ github.event.inputs.docs }}"
+          --target "${{ github.event.inputs.target }}"
+          --out "${{ github.workspace }}/LogisticsPro_API"
+
+      - name: Run generated tests with coverage
+        run: >
+          dotnet test "${{ github.workspace }}/LogisticsPro_API/LogisticsPro_API.GenAI.Tests.Integration"
+          --collect:"XPlat Code Coverage"
+          --results-directory ./TestResults
+          --logger "trx;LogFileName=generated.trx"
+        continue-on-error: true
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-tests-and-coverage
+          path: |
+            LogisticsPro_API/LogisticsPro_API.GenAI.Tests.Integration/Generated/**
+            ./TestResults/**/coverage.cobertura.xml
+            ./TestResults/**/*.trx
+          if-no-files-found: ignore

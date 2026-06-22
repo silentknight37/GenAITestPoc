@@ -1,0 +1,76 @@
+```json
+[
+  {
+    "TestName": "Successfully delete hotel services from a job card",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["There exists a job card with ID 'X'", "The job card has at least one hotel service"],
+    "Steps": [
+      "Make a DELETE request to {0} with the appropriate HTTP headers.",
+      "Verify that the response status code is 204"
+    ],
+    "Expected": "All hotel services associated with the specified job card are deleted.",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Successfully delete visa services from a job card",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/visa-services",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["There exists a job card with ID 'X'", "The job card has at least one visa service"],
+    "Steps": [
+      "Make a DELETE request to {0} with the appropriate HTTP headers.",
+      "Verify that the response status code is 204"
+    ],
+    "Expected": "All visa services associated with the specified job card are deleted.",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Unsuccessfully delete hotel services from a non-existing job card",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["The specified job card ID 'Y' does not exist"],
+    "Steps": [
+      "Make a DELETE request to {0} with the appropriate HTTP headers."
+    ],
+    "Expected": [{"error":{"message":"Job card not found"}}],
+    "ExpectedStatusCode": 500
+  },
+  {
+    "TestName": "Unsuccessfully delete hotel services without authentication",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Auth",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["There exists a job card with ID 'X'"],
+    "Steps": [
+      "Make a DELETE request to {0} without including an authentication token in the headers."
+    ],
+    "Expected": [{"error":{"message":"Unauthorized"}}],
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "Boundary successfully delete hotel services when there is only one associated service",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Boundary",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["There exists a job card with ID 'X' that has only one hotel service"],
+    "Steps": [
+      "Make a DELETE request to {0} with the appropriate HTTP headers."
+    ],
+    "Expected": [{"error":{"message":"No content"}}, {"created":false}],
+    "ExpectedStatusCode": 200
+  }
+]
+```

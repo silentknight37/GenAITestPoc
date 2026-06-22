@@ -1,0 +1,71 @@
+```json
+[
+  {
+    "TestName": "[BR-05] Post Job Card Creation",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Navigate to /api/jobcards endpoint on POST method.",
+      "Provide a valid JSON with attributes such as title, start date, and customer ID.",
+      "Verify if the response status code is 201 Created."
+    ],
+    "Expected": null,
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "[BR-05] Get Job Card Details",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "GET",
+    "Preconditions": ["jobCardId"],
+    "Steps": [
+      "Navigate to /api/jobcards/{jobCardId} endpoint on GET method.",
+      "Verify if the response status code is 200 OK."
+    ],
+    "Expected": {
+      "id": "string",
+      "title": "string",
+      "startDate": "date-time",
+      "customerId": "number"
+    },
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "[BR-05] Update Job Card Details",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "PUT",
+    "Preconditions": ["jobCardId"],
+    "Steps": [
+      "Navigate to /api/jobcards/{jobCardId} endpoint on PUT method.",
+      "Provide a valid JSON with attributes such as title, start date, and customer ID.",
+      "Verify if the response status code is 204 No Content."
+    ],
+    "Expected": null,
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "[BR-05] Delete Job Card",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "DELETE",
+    "Preconditions": ["jobCardId"],
+    "Steps": [
+      "Navigate to /api/jobcards/{jobCardId} endpoint on DELETE method.",
+      "Verify if the response status code is 204 No Content."
+    ],
+    "Expected": null,
+    "ExpectedStatusCode": 204
+  }
+]
+```

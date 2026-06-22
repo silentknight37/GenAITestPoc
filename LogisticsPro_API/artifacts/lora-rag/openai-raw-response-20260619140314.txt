@@ -1,0 +1,69 @@
+```json
+[
+  {
+    "TestName": "Create Event ValidData",
+    "RelatedRequirement": "FR-08",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Valid event name (e.g., 'JobCompletion Party')"
+    ],
+    "Steps": [
+      "Send a POST request to /api/events with the following JSON body:",
+      '{"eventName": "JobCompletion Party", "startDate": "2023-10-05T12:00:00", "endDate": "2023-10-10T12:00:00"}'
+    ],
+    "Expected": "The response status code is 201",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Create Event InvalidDateStart",
+    "RelatedRequirement": "FR-08",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events"
+  },
+  {
+    "TestName": "Create Event NegativeDateEndBeforeStartDate",
+    "RelatedRequirement": "FR-08",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Valid event name (e.g., 'EventFest')"
+    ],
+    "Steps": [
+      "Send a POST request to /api/events with the following JSON body:",
+      '{"eventName": "EventFest", "startDate": "2023-10-15T14:30:00", "endDate": "2023-10-10T18:00:00"}'
+    ],
+    "Expected": "The response status code is 400, and the error message indicates that end date must be greater than or equal to start date",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Create Event InvalidDateOverlap",
+    "RelatedRequirement": "FR-08",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Valid event name (e.g., 'ConfusionFest')"
+    ],
+    "Steps": [
+      "Send a POST request to /api/events with the following JSON body:",
+      '{"eventName": "ConfusionFest", "startDate": "2023-10-15T14:30:00", "endDate": "2023-10-16T18:00:00"}'
+    ],
+    "Expected": "The response status code is 400, and the error message indicates that end date must be greater than or equal to start date",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Create Event WithExistingCustomerID",
+    "RelatedRequirement": "FR-08",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events"
+  }
+]
+```

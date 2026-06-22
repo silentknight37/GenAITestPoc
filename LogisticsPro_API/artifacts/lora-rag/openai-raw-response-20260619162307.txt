@@ -1,0 +1,75 @@
+[
+  {
+    "TestName": "Update Job Card with valid data - Positive Scenario",
+    "RelatedRequirement": "FR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      "Valid job ID"
+    ],
+    "Steps": [
+      "Create a new job card using POST /api/jobcards and get its ID."
+      "Update the job card's description using PUT /api/jobcards/{id} with valid data (e.g., updatedDescription = 'New Job Card Description')."
+      "Verify that the updated job card's description matches the new description in GET /api/jobcards/{id}."
+    ],
+    "Expected": "The job card's description is successfully updated to the specified value.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Update Job Card with valid data - Negative Scenario",
+    "RelatedRequirement": "FR-10",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      "Valid job ID"
+    ],
+    "Steps": [
+      "Create a new job card using POST /api/jobcards and get its ID."
+      "Prepare an invalid data payload for the update (e.g., description is null)."
+      "Attempt to update the job card's description using PUT /api/jobcards/{id} with this invalid data."
+      "Verify that the updated response status code indicates a failure, typically returning 400 Bad Request or similar."
+    ],
+    "Expected": "The request fails and returns a 4xx error indicating invalid input.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Update Job Card in closed state - Negative Scenario",
+    "RelatedRequirement": "FR-10",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      "Create a new job card and close it."
+      "Get the id of the closed job card."
+    ],
+    "Steps": [
+      "Attempt to update the closed job card's description using PUT /api/jobcards/{id} with any valid data."
+      "Verify that this results in an API error indicating the job cannot be updated because it is closed."
+    ],
+    "Expected": "The request fails and returns a 4xx error, providing details about the failure.",
+    "ExpectedStatusCode": 403
+  },
+  {
+    "TestName": "Updating hotel service when job card is closed - Negative Scenario",
+    "RelatedRequirement": "FR-10",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "Create a new job card, add a hotel service to it, and close the job card."
+      "Get the id of the hotel service."
+    ],
+    "Steps": [
+      "Attempt to delete the hotel service using DELETE /api/hotel-services/{id}."
+      "Verify that this results in an API error indicating the service cannot be deleted because the job is closed."
+    ],
+    "Expected": "The request fails and returns a 4xx error, providing details about the failure.",
+    "ExpectedStatusCode": 403
+  }
+]

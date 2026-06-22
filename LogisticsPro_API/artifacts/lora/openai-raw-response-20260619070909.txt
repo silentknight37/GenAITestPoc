@@ -1,0 +1,114 @@
+[
+  {
+    "TestName": "BRULE-64_Operate-to-Financial_Step1",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": ["A jobcard with the ID exists in the database"],
+    "Steps": [
+      "As a user, I attempt to perform GET /api/jobcards/334/finance",
+      "The system returns HTTP status code 200",
+      "I observe that the response contains financial-related data for jobcard ID 334"
+    ],
+    "Expected": "Financial and operational records are correctly linked in the system. Financial data should be presented in a relevant format.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BRULE-64_Operate-to-Financial_Step2",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": ["A jobcard that has been closed exists in the database"],
+    "Steps": [
+      "As a user, I attempt to perform GET /api/jobcards/410/finance",
+      "The system returns HTTP status code 200",
+      "I observe that the response contains financial-related data for jobcard ID 410"
+    ],
+    "Expected": "When handling closed jobcards, financial and operational records are correctly linked in the system. Financial data should be presented in a relevant format.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BRULE-64_Operate-to-Financial_Step3",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": ["Operational data exists in the system"],
+    "Steps": [
+      "As a user, I attempt to perform GET /api/reports/operational",
+      "The system returns HTTP status code 200",
+      "I observe that the response contains operational data"
+    ],
+    "Expected": "Operational records are correctly retrieved and displayed.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BRULE-64_Operate-to-Financial_Step4",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": ["No operational data exists in the system"],
+    "Steps": [
+      "As a user, I attempt to perform GET /api/reports/operational",
+      "The system returns HTTP status code 404",  <!-- Assuming 404 for no data as per RESTful conventions -->
+      "I observe that the response contains a message indicating 'No operational reports found'"
+    ],
+    "Expected": "When there is no operational data, the system returns an appropriate error message.",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "BRULE-64_Operate-to-Financial_Step5",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/payment-vouchers",
+    "HttpMethod": "POST",
+    "Preconditions": ["Operational records and financial records are correctly linked"],
+    "Steps": [
+      "As a user, I attempt to perform POST /api/payment-vouchers with valid payment voucher data",
+      "The system returns HTTP status code 201",
+      "I observe that a new transaction is created in the database"
+    ],
+    "Expected": "A new payment voucher record is successfully added, linked to operational and financial records.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "BRULE-64_Operate-to-Financial_Step6",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/payment-vouchers",
+    "HttpMethod": "POST",
+    "Preconditions": ["Operational records and financial records are correctly linked"],
+    "Steps": [
+      "As a user, I attempt to perform POST /api/payment-vouchers without providing required fields",
+      "The system returns HTTP status code 400",
+      "I observe that the response contains validation errors related to missing required fields"
+    ],
+    "Expected": "When payment voucher creation fails due to missing or invalid fields, the system returns a validation error message.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "BRULE-64_Operate-to-Financial_Step7",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/payment-vouchers",
+    "HttpMethod": "POST",
+    "Preconditions": ["Operational records and financial records are correctly linked"],
+    "Steps": [
+      "As a user, I attempt to perform POST /api/payment-vouchers with an invalid operation type",
+      "The system returns HTTP status code 400",
+      "I observe that the response contains validation errors related to an invalid operation type"
+    ],
+    "Expected": "When payment voucher creation fails due to an invalid operation type, the system returns a validation error message.",
+    "ExpectedStatusCode": 400
+  }
+]

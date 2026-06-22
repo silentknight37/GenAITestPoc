@@ -1,0 +1,70 @@
+[
+  {
+    "TestName": "Scenario 1: Validate Operational-to-Financial Continuity for a Jobcard with Finance Record",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "A jobcard exists with an associated finance record."
+    ],
+    "Steps": [
+      "1. Set the 'id' in the URL to a valid jobcard ID (e.g., 12345)."
+      "2. Execute a GET request to /api/jobcards/{id}/finance."
+    ],
+    "Expected": "The response should include details of the finance record associated with the jobcard, such as total expenses and financial summary."
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Scenario 2: Validate Operational-to-Financial Continuity for a Closed Jobcard",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "A jobcard exists and is closed."
+    ],
+    "Steps": [
+      "1. Set the 'id' in the URL to a valid jobcard ID (e.g., 12345)."
+      "2. Execute a GET request to /api/jobcards/{id}."
+    ],
+    "Expected": "The response should include operational data for the closed jobcard."
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Scenario 3: Validate Financial Records when Closing a Jobcard",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A jobcard exists and is open."
+    ],
+    "Steps": [
+      "1. Set the 'id' in the URL to a valid jobcard ID (e.g., 12345)."
+      "2. Execute a POST request to /api/jobcards/{id}/close."
+    ],
+    "Expected": "The response must include transaction records and confirm that the jobcard has transitioned to a closed state."
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Scenario 4: Validate Financial Continuity after Deleting a Jobcard",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "A jobcard exists."
+    ],
+    "Steps": [
+      "1. Set the 'id' in the URL to a valid jobcard ID (e.g., 12345)."
+      "2. Execute a DELETE request to /api/jobcards/{id}."
+    ],
+    "Expected": "The response should indicate that the jobcard has been deleted."
+    "ExpectedStatusCode": 200
+  }
+]

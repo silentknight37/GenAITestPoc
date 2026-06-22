@@ -1,0 +1,4168 @@
+[
+  {
+    "TestName": "BRULE-62_Negative_GetUninvoicedReport_UnauthorizedAccess",
+    "RelatedRequirement": "BRULE-62",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid token",
+      "User does NOT have access rights to uninvoiced report"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid authentication token but insufficient permissions"
+    ],
+    "Expected": "403 Forbidden error response indicating unauthorized access",
+    "ExpectedStatusCode": 403,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-62_Positive_GetUninvoicedReport_ValidRequest",
+    "RelatedRequirement": "BRULE-62",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid token",
+      "User has access rights to uninvoiced report"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid authentication token"
+    ],
+    "Expected": "200 OK response with uninvoiced report data",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_UninvoicedReport_WithUnauthorizedAccess_BRULE56",
+    "RelatedRequirement": "BRULE-56",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "No authentication token provided"
+    ],
+    "Steps": [
+      "Invoke GET /api/reports/uninvoiced without authentication",
+      "Observe response status and body"
+    ],
+    "Expected": "The system rejects the request due to missing credentials with an unauthorized access error message",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_UninvoicedReport_ReturnsCurrentValidData_BRULE56",
+    "RelatedRequirement": "BRULE-56",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Valid auth token",
+      "There exist uninvoiced business records in the system"
+    ],
+    "Steps": [
+      "Authenticate with valid credentials and obtain token",
+      "Invoke GET /api/reports/uninvoiced with valid auth token",
+      "Parse response for uninvoiced items"
+    ],
+    "Expected": "The response contains a list of uninvoiced items reflecting the current valid state of business data with correct billing rules applied",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GetUninvoicedItems_UnauthenticatedRequest_ReturnsUnauthorized_BRULE_57",
+    "RelatedRequirement": "BRULE-57",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "No authentication token provided"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced without authentication"
+    ],
+    "Expected": "Response indicates unauthorized access due to missing authentication",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GetUninvoicedItems_WithValidRequest_ReturnsAccurateData_BRULE_57",
+    "RelatedRequirement": "BRULE-57",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid permissions",
+      "System has valid business records including uninvoiced items"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid authentication token"
+    ],
+    "Expected": "Response returns a list of uninvoiced items accurately reflecting valid business records",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "RejectReceiptTraceabilityForNonexistentInvoice_Negative",
+    "RelatedRequirement": "BRULE-54",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "A receipt recorded with an invoice ID that does not exist"
+    ],
+    "Steps": [
+      "Call GET /api/vendors/123/payable-items where vendorId=123 is valid",
+      "Inspect payable items for any receipt referencing a non-existing invoice"
+    ],
+    "Expected": "The system must not return any payable items or receipt trace that references the invalid invoice ID",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "VerifyReceiptIsTraceableToInvoice_Positive",
+    "RelatedRequirement": "BRULE-54",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "A valid receipt has been recorded linked to an existing valid invoice"
+    ],
+    "Steps": [
+      "Call GET /api/reports/uninvoiced with valid query parameters for the invoice",
+      "Verify the response includes the invoice and linked receipt details"
+    ],
+    "Expected": "The system returns data showing the receipt linked accurately to the invoice with matching invoice ID",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_Load_Payable_Items_With_Nonexistent_VendorId",
+    "RelatedRequirement": "BRULE-51",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetBatchItemsByVendorId",
+    "Preconditions": [
+      "No vendor exists with ID 9999"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/9999/payable-items"
+    ],
+    "Expected": "Response indicates error that vendor with ID 9999 does not exist or has no payable items",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_Load_Payable_Items_For_Valid_Vendor_Id",
+    "RelatedRequirement": "BRULE-51",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetBatchItemsByVendorId",
+    "Preconditions": [
+      "Vendor with ID 123 exists",
+      "Vendor has valid payable invoices"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/123/payable-items"
+    ],
+    "Expected": "Response contains list of payable items linked to valid invoices for vendor 123",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "VoidInvoice_NonExistentInvoiceId_ReturnsError_Negative",
+    "RelatedRequirement": "BRULE-47",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Invoice ID 9999 does not exist in the system"
+    ],
+    "Steps": [
+      "Send POST request to /api/invoices/9999/void to void a non-existent invoice"
+    ],
+    "Expected": "The system returns a failure response indicating invoice not found, and no records are modified or erased",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "VoidInvoice_PreservesInvoiceRecord_AndHistoricalRelations_Positive",
+    "RelatedRequirement": "BRULE-47",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "An existing issued invoice with ID 100 exists in the system"
+    ],
+    "Steps": [
+      "Send POST request to /api/invoices/100/void to void the invoice"
+    ],
+    "Expected": "The invoice record with ID 100 remains in the database with status set to \u0027Void\u0027 and its historical relationships intact and queryable",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-52_Negative_ReceiptAmountExceedsReceivableAmountRejected",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Payment voucher item with ID 456 linked to invoice with receivable amount 1000",
+      "Cumulative receipts including this one would exceed receivable amount"
+    ],
+    "Steps": [
+      "Attempt to delete payment voucher item with ID 456 that causes receipt amount to exceed invoice receivable amount"
+    ],
+    "Expected": "System rejects deletion or update that would allow overpayment; returns an error message indicating receipt amount limit violation",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-52_Positive_ValidReceiptBelowReceivableAmount",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Vendor with ID 123 exists",
+      "Invoice associated to payable items has receivable amount of 1000",
+      "Existing receipts total 700"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/123/payable-items",
+      "Verify response items include the invoice with receivable amount 1000"
+    ],
+    "Expected": "Response contains payable items for Vendor ID 123 and invoice receivable amount is 1000 allowing receipts up to this limit without error",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_GetPayableItemsByVendorId_NonExistentVendor_ReturnsEmptyList",
+    "RelatedRequirement": "BRULE-49",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetBatchItemsByVendorId",
+    "Preconditions": [
+      "Vendor with ID 999 does not exist"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/999/payable-items"
+    ],
+    "Expected": "System returns an empty list indicating no payable items found",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_GetPayableItemsByVendorId_ValidVendorId_ReturnsPayableItems",
+    "RelatedRequirement": "BRULE-49",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetBatchItemsByVendorId",
+    "Preconditions": [
+      "Vendor with ID 123 exists and has payable items"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/123/payable-items"
+    ],
+    "Expected": "System returns a list of payable items for vendor ID 123 with no duplication",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GetUninvoicedReport_NoAuth_Unauthorized",
+    "RelatedRequirement": "BRULE-63",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "No authentication token provided"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced without authentication token"
+    ],
+    "Expected": "System rejects request with unauthorized error indicating missing authentication",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GetUninvoicedReport_ValidRequest_Success",
+    "RelatedRequirement": "BRULE-63",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid token",
+      "System contains completed downstream records"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid authentication"
+    ],
+    "Expected": "System returns uninvoiced report data without errors, reflecting only valid records that do not breach downstream dependency protection",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-50_Negative_GetUninvoiced_DuplicateBillingDetected",
+    "RelatedRequirement": "BRULE-50",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "The system has billable content mistakenly flagged as uninvoiced but already invoiced once",
+      "Duplicate billing prevention logic is active"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced",
+      "Review the list of uninvoiced billable items"
+    ],
+    "Expected": "The system excludes any already invoiced billable content to prevent duplicate billing",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-50_Positive_GetUninvoiced_NoDuplicateBilling",
+    "RelatedRequirement": "BRULE-50",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "At least one billable item exists that has not been invoiced",
+      "No previous invoice exists for the same billable item"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced",
+      "Inspect list of uninvoiced items returned"
+    ],
+    "Expected": "The system returns uninvoiced billable items with no duplicates and no previously invoiced items listed",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_VendorMismatch_On_PostVisaServices_VoucherAssociationFails",
+    "RelatedRequirement": "BRULE-42",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Existing voucher is vendor-specific for VendorA"
+    ],
+    "Steps": [
+      "Send POST request to /api/visa-services with payload containing Visa entry associated with VendorB (different from voucher\u0027s vendor)",
+      "Attempt to associate the payable item with the voucher vendor"
+    ],
+    "Expected": "API rejects the save operation with an error indicating vendor inconsistency between voucher and visa service payable item",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_VendorConsistent_Voucher_ItemsAlignedWithVoucherVendor",
+    "RelatedRequirement": "BRULE-42",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "A payment voucher exists linked to a specific vendor with related payable items"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with query parameters filtering for the voucher\u0027s vendor",
+      "Verify the returned payable items in response are all associated with the same vendor as the voucher"
+    ],
+    "Expected": "Response contains only payable items aligned with the vendor associated with the voucher as per BRULE-42",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreatePaymentVoucherWithDuplicatePayableItems_ErrorReturned",
+    "RelatedRequirement": "BRULE-41",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Vendor exists with payable items linked to an existing active payment voucher"
+    ],
+    "Steps": [
+      "Retrieve payable items for vendor using GET /api/vendors/{vendorId}/payable-items",
+      "Build payment voucher request including payable items already linked to a payment voucher",
+      "Attempt to create payment voucher with PUT /api/service-costs"
+    ],
+    "Expected": "API returns an error message indicating duplicate voucher creation is not allowed",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreatePaymentVoucherWithUniquePayableItems_Success",
+    "RelatedRequirement": "BRULE-41",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Vendor exists with payable items not linked to existing payment voucher"
+    ],
+    "Steps": [
+      "Retrieve payable items for vendor using GET /api/vendors/{vendorId}/payable-items",
+      "Build payment voucher request with unique payable items IDs",
+      "Attempt to create payment voucher with PUT /api/service-costs with the unique payable items"
+    ],
+    "Expected": "Payment voucher is successfully created without duplication errors",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Reject_PaymentVoucher_AmountMismatch_Negative",
+    "RelatedRequirement": "BRULE-40",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Valid vendor with payable operational items exist",
+      "Operational items total amount is known"
+    ],
+    "Steps": [
+      "Submit a POST request to /api/payment-vouchers with TransportationIds, HotelIds, VisaIds, MiscellaneousIds linked to the vendor",
+      "Provide PaymentVoucherAmount different from sum of included operational items\u0027 payable amount",
+      "Provide all other mandatory fields with valid data"
+    ],
+    "Expected": "System rejects the creation and returns an error stating voucher amount mismatch with payable operational items",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Verify_PaymentVoucherAmount_Matches_PayableAmount_Positive",
+    "RelatedRequirement": "BRULE-40",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Valid vendor with payable operational items exist",
+      "Batch items or payable services correctly linked to vendor",
+      "Calculated payable amount matches included operational items\u0027 sum"
+    ],
+    "Steps": [
+      "Submit a POST request to /api/payment-vouchers with TransportationIds, HotelIds, VisaIds, MiscellaneousIds linked to the vendor",
+      "Include PaymentVoucherAmount equal to calculated payable amount from operational items",
+      "Provide all mandatory fields with valid data"
+    ],
+    "Expected": "Payment voucher is successfully created with amount matching sum of included items",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE59_Negative_UninvoicedReportReturnsEmptyWhenNoUninvoicedContent",
+    "RelatedRequirement": "BRULE-59",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "All business content has been invoiced according to billing rules"
+    ],
+    "Steps": [
+      "Call GET /api/reports/uninvoiced with valid authentication",
+      "Receive response payload"
+    ],
+    "Expected": "Response contains empty uninvoiced content list; status 200 indicating no uninvoiced content present",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE59_Positive_UninvoicedReportReturnsValidContent",
+    "RelatedRequirement": "BRULE-59",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "System contains valid business content that has not yet been invoiced"
+    ],
+    "Steps": [
+      "Call GET /api/reports/uninvoiced with valid authentication and authorization",
+      "Receive response payload with uninvoiced business content"
+    ],
+    "Expected": "Response includes valid business content not yet invoiced according to billing rules; response status is 200",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Reject_Item_Assignment_To_Conflicting_Batches_NEG",
+    "RelatedRequirement": "BRULE-35",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Vendor with ID 456 exists",
+      "There exists at least one item assigned to multiple conflicting active batches"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/456/payable-items",
+      "Check returned items for exclusivity in batches"
+    ],
+    "Expected": "System identifies and flags item(s) belonging to multiple active conflicting batches, error or empty inclusion for that item is shown",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Verify_Items_Not_In_Multiple_Active_Batches_POS",
+    "RelatedRequirement": "BRULE-35",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Customer with ID 123 exists",
+      "Billable items belong exclusively to one active batch per item"
+    ],
+    "Steps": [
+      "Send GET request to /api/customers/123/billable-items",
+      "Retrieve billable items for customer 123"
+    ],
+    "Expected": "Response contains only items that belong to single active batch each, no item appears in multiple active or conflicting batches",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateHotelService_WithMissingJobCardId_ShouldFailValidation",
+    "RelatedRequirement": "BRULE-20",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "Authentication token with sufficient privileges"
+    ],
+    "Steps": [
+      "Send POST request to /api/hotel-services with payload missing the JobCardId field"
+    ],
+    "Expected": "Response indicates failure with validation error stating JobCardId is required",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateHotelService_WithValidJobCardId_ShouldSucceed",
+    "RelatedRequirement": "BRULE-20",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "Valid job card exists with Id=1001",
+      "Authentication token with sufficient privileges"
+    ],
+    "Steps": [
+      "Send POST request to /api/hotel-services with payload including JobCardId=1001 and all required fields"
+    ],
+    "Expected": "Hotel service is created successfully with association to the valid job card",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE29_Negative_SaveHotelServices_NegativeCostBaseAmount_Rejected",
+    "RelatedRequirement": "BRULE-29",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "User is authenticated with valid credentials"
+    ],
+    "Steps": [
+      "Send a POST request to /api/hotel-services with CostBaseAmount=-50.00 and valid other fields",
+      "Submit the request and observe the response"
+    ],
+    "Expected": "Request is rejected with validation error indicating cost amounts must be non-negative and hotel service is not saved",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE29_Positive_SaveHotelServices_NonNegativeCosts",
+    "RelatedRequirement": "BRULE-29",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "User is authenticated with valid credentials"
+    ],
+    "Steps": [
+      "Send a POST request to /api/hotel-services with all required fields including CostBaseAmount=100.00 and CostTaxAmount=20.00",
+      "Ensure other hotel service details are valid and complete"
+    ],
+    "Expected": "Hotel service is saved successfully with returned created id and no error",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE26_Positive_ValidHotelStayDurationWithEqualCheckInAndCheckOut",
+    "RelatedRequirement": "BRULE-26",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "User is authenticated and authorized to create hotel service entries"
+    ],
+    "Steps": [
+      "Prepare a SaveJobCardHotelRequest with CheckIn = 2024-09-10, CheckOut = 2024-09-10 (same date)",
+      "Set Adults=1, Children=0, Infants=0 (all positive)",
+      "Send POST request to /api/hotel-services with the payload"
+    ],
+    "Expected": "Hotel service is created successfully with zero-duration stay (same day check-in and check-out allowed)",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE26_Positive_ValidHotelStayDurationAndPositiveRoomQuantities",
+    "RelatedRequirement": "BRULE-26",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "User is authenticated and authorized to create hotel service entries"
+    ],
+    "Steps": [
+      "Prepare a SaveJobCardHotelRequest with CheckIn = 2024-07-01, CheckOut = 2024-07-05",
+      "Set Adults=2, Children=1, Infants=0 (all positive)",
+      "Send POST request to /api/hotel-services with the payload"
+    ],
+    "Expected": "Hotel service is created successfully with the provided check-in/check-out dates and room quantities",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateHotelService_NegativeCost_Rejected_BRULE32",
+    "RelatedRequirement": "BRULE-32",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "Valid JobCardId exists",
+      "User authenticated"
+    ],
+    "Steps": [
+      "Send POST to /api/hotel-services with CostBaseAmount as negative value",
+      "Provide valid other required fields"
+    ],
+    "Expected": "Response with error indicating cost amounts must be non-negative, service not created",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateHotelService_ValidCosts_ConsistentFinancialTotals_BRULE32",
+    "RelatedRequirement": "BRULE-32",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "Valid JobCardId exists",
+      "User authenticated with proper permissions"
+    ],
+    "Steps": [
+      "Send POST to /api/hotel-services with valid CostBaseAmount, CostTaxAmount, SellBaseAmount, SellTaxAmount",
+      "Ensure all cost fields are numeric and non-negative",
+      "Confirm the JobCardId is valid and modifiable"
+    ],
+    "Expected": "Service is created successfully and operational totals match the financial values used downstream",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-31_Negative_SaveHotelServiceWithNegativeCostRejected",
+    "RelatedRequirement": "BRULE-31",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "A job exists",
+      "Hotel service cost fields are required to be non-negative"
+    ],
+    "Steps": [
+      "Send POST request to /api/hotel-services with negative CostBaseAmount",
+      "Observe validation rejection response"
+    ],
+    "Expected": "The hotel service is rejected with an error indicating cost values must not be negative; saved=false",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-31_Positive_SaveHotelServiceAndValidateTotalCost",
+    "RelatedRequirement": "BRULE-31",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "A job with no existing hotel services exists",
+      "Job has valid previously recorded cost items"
+    ],
+    "Steps": [
+      "Send POST request to /api/hotel-services with valid hotel service data including positive CostBaseAmount and CostTaxAmount for the job",
+      "Verify response status is 200 and hotel service is saved successfully",
+      "Retrieve updated job total cost via relevant query",
+      "Calculate total cost sum including the new hotel service cost",
+      "Compare the job\u0027s total cost to the sum of all valid service item costs"
+    ],
+    "Expected": "The total job cost equals the sum of all valid included service item costs including the newly added hotel service cost",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE27_Negative_MissingMandatoryVisaTypeId",
+    "RelatedRequirement": "BRULE-27",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "Valid JobCardId exists",
+      "User is authenticated and authorized"
+    ],
+    "Steps": [
+      "Construct SaveJobCardVisaRequest missing the VisaTypeId field",
+      "Call POST /api/visa-services with the incomplete request body",
+      "Verify the response validation error for missing VisaTypeId"
+    ],
+    "Expected": "The system rejects the request with an error message indicating VisaTypeId is mandatory",
+    "ExpectedStatusCode": 400,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE27_Positive_ValidVisaServiceSave",
+    "RelatedRequirement": "BRULE-27",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "Valid JobCardId exists",
+      "User is authenticated and authorized to save visa services"
+    ],
+    "Steps": [
+      "Construct SaveJobCardVisaRequest with all mandatory fields: JobCardId, VendorId, PaxName, PassportNo, VisaTypeId, CostBaseAmount \u003E= 0, SellBaseAmount \u003E= 0",
+      "Call POST /api/visa-services with the request body",
+      "Verify the response indicates successful creation"
+    ],
+    "Expected": "The visa service is saved successfully with all required visa-specific fields present and validated",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-25_Negative_BothPickupAndDropoffBlank_ShouldReject",
+    "RelatedRequirement": "BRULE-25",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "User is authenticated",
+      "JobCardId is valid"
+    ],
+    "Steps": [
+      "Construct POST request to /api/transportation-services with PickupLocation=\u0027\u0027 (empty), DropoffLocation=\u0027\u0027 (empty), and valid other required fields",
+      "Send request"
+    ],
+    "Expected": "API responds with validation error message indicating pickup and drop-off must not both be blank",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-25_Positive_ValidPickupAndDropoffProvided",
+    "RelatedRequirement": "BRULE-25",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "User is authenticated",
+      "JobCardId is valid and open for modification"
+    ],
+    "Steps": [
+      "Construct POST request to /api/transportation-services with PickupLocation=\u0027Airport\u0027, DropoffLocation=\u0027Hotel\u0027, and valid other required fields",
+      "Send request"
+    ],
+    "Expected": "Transportation entry is successfully saved with the given pickup and dropoff locations",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteMiscellaneousService_WithEmptyDescription_FailsValidation",
+    "RelatedRequirement": "BRULE-28",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "A miscellaneous service item exists with empty Description",
+      "The item is not invoiced or batch processed"
+    ],
+    "Steps": [
+      "Attempt to DELETE the miscellaneous service item with empty Description by Id"
+    ],
+    "Expected": "Deletion is rejected because the item fails the Description validation; response contains validation error message about missing Description",
+    "ExpectedStatusCode": 400,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteMiscellaneousService_WithValidId_Succeeds",
+    "RelatedRequirement": "BRULE-28",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "A miscellaneous service item exists with valid Id and valid Description and Cost",
+      "The item is not included in finalized financial processing (not invoiced or batch processed)"
+    ],
+    "Steps": [
+      "Call DELETE on /api/miscellaneous-services/{id} with a valid miscellaneous service Id"
+    ],
+    "Expected": "The miscellaneous service item is successfully deleted; response indicates success",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteVisaService_OnClosedJob_ReturnsOperationRejected",
+    "RelatedRequirement": "BRULE-17",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Job card associated with the visa service is marked as Closed",
+      "Visa service item with the given id exists and is linked to the closed job card"
+    ],
+    "Steps": [
+      "Call DELETE /api/visa-services/{id} with valid visa service id linked to closed job card"
+    ],
+    "Expected": "Operation is rejected with a message indicating modifications are forbidden on closed job cards",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteHotelService_OnClosedJob_ReturnsOperationRejected",
+    "RelatedRequirement": "BRULE-17",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Job card associated with the hotel service is marked as Closed",
+      "Hotel service item with the given id exists and is linked to the closed job card"
+    ],
+    "Steps": [
+      "Call DELETE /api/hotel-services/{id} with valid hotel service id linked to closed job card"
+    ],
+    "Expected": "Operation is rejected with response indicating that modifications are not permitted on closed job cards",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "AllowDeletionOfJobCardWithNoFinancialLinks_BRULE19",
+    "RelatedRequirement": "BRULE-19",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "A job card exists with id 102",
+      "The job card 102 has no linked invoices, batches, vouchers, receipts or other financial downstream records"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/jobcards/102"
+    ],
+    "Expected": "Job card is deleted successfully",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "PreventDeletionOfJobCardWithLinkedInvoices_BRULE19",
+    "RelatedRequirement": "BRULE-19",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "A job card exists with id 101",
+      "The job card 101 is linked to existing invoice records"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/jobcards/101"
+    ],
+    "Expected": "Deletion should be blocked with error indicating job card is linked to financial records and cannot be deleted",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GET_UninvoicedReports_WithInactiveCustomer_ReturnsNoRecordsForInactive",
+    "RelatedRequirement": "BRULE-12",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "At least one customer marked inactive exists with billable uninvoiced items.",
+      "User is authenticated with valid token."
+    ],
+    "Steps": [
+      "Authenticate with valid credentials to obtain token.",
+      "Send GET request to /api/reports/uninvoiced with valid authorization header."
+    ],
+    "Expected": "Response does not include uninvoiced records linked to any inactive customer; inactive entities excluded from new business use.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GET_UninvoicedReports_WithActiveCustomer_ReturnsActiveRecords",
+    "RelatedRequirement": "BRULE-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "At least one active customer exists with billable uninvoiced items.",
+      "User is authenticated with valid token."
+    ],
+    "Steps": [
+      "Authenticate with valid credentials to obtain token.",
+      "Send GET request to /api/reports/uninvoiced with valid authorization header."
+    ],
+    "Expected": "Response contains only uninvoiced records linked to active or valid master data customers; inactive customers\u0027 data is excluded from new transactions.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateHotelServiceWithUnsupportedServiceType_BRULE-21",
+    "RelatedRequirement": "BRULE-21",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated",
+      "Prepare request with an invalid service type not in (Transportation, Hotel, Visa, Miscellaneous)"
+    ],
+    "Steps": [
+      "Send POST request to /api/hotel-services with a payload where service type is invalid or not specified",
+      "Include invalid or missing service category in request fields"
+    ],
+    "Expected": "System rejects the request with error indicating invalid service type classification; response contains error message referencing supported service types",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateHotelServiceWithValidServiceType_BRULE-21",
+    "RelatedRequirement": "BRULE-21",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated and authorized to create hotel services",
+      "Provide valid JobCardId and all required fields"
+    ],
+    "Steps": [
+      "Send POST request to /api/hotel-services with valid SaveJobCardHotelRequest",
+      "Include supported service type fields (Hotel)",
+      "Ensure HotelName, CheckIn, CheckOut dates are valid"
+    ],
+    "Expected": "The hotel service item is accepted and created successfully with status code 200 and response confirms creation",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CloseJobCard_FailsWhenOperationalDataIncomplete",
+    "RelatedRequirement": "BRULE-18",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Job card exists with Id = {id}",
+      "Job card has incomplete operational data"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards/{id}/close with job card id having incomplete operational data"
+    ],
+    "Expected": "Closure rejected with validation error indicating operational data requirements not met",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CloseJobCard_Success_WhenPreconditionsMet",
+    "RelatedRequirement": "BRULE-18",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Job card exists with Id = {id}",
+      "Job card operational data is complete",
+      "Financial dependencies are reviewed and cleared",
+      "No invalid or incomplete service lines exist"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards/{id}/close with valid job card id"
+    ],
+    "Expected": "Job card status updated to Closed and success response received indicating closure allowed",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_CloseJobCardSuccess",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "A job card exists with a valid ID and currently in Open state",
+      "All closure preconditions (operational data completion, financial reviews, no invalid service lines) are met"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards/{id}/close for the job card in Open state"
+    ],
+    "Expected": "The job card transitions to Closed state successfully and API confirms the closure",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_OpenJobCardSuccess",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "A job card exists with a valid ID and currently in Closed state"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards/{id}/open with existing job card ID in Closed state"
+    ],
+    "Expected": "The job card state transitions to Open successfully and response confirms the state change",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "ExpiredTokenRejectedOnPutServiceCostsUpdate",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "Expired authentication token generated"
+    ],
+    "Steps": [
+      "Prepare a PUT request to /api/service-costs with the expired token in Authorization header",
+      "Send request to update service costs"
+    ],
+    "Expected": "Request is rejected with authentication error indicating expired token",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "ValidTokenAllowsPostServiceCostsUpdate",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "Valid and unexpired authentication token available"
+    ],
+    "Steps": [
+      "Prepare a valid PUT request to /api/service-costs with a correct token in the Authorization header",
+      "Include a valid CostUpdateRequest payload with updated records",
+      "Send request to update service costs"
+    ],
+    "Expected": "Request is processed successfully and service costs get updated",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE03_Negative_GetUninvoiced_ModifyFinalizedRecord",
+    "RelatedRequirement": "BRULE-03",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "A report record exists in a finalized/closed/voided state"
+    ],
+    "Steps": [
+      "Invoke GET /api/reports/uninvoiced endpoint requesting the finalized record",
+      "Attempt to modify the returned record (e.g., update or delete via any client capability)"
+    ],
+    "Expected": "System disallows any modification of records in finalized or voided states and returns an error or disallow message",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE03_Positive_GetUninvoiced_AccessFinalizedRecord",
+    "RelatedRequirement": "BRULE-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "At least one uninvoiced report record exists with a finalized state"
+    ],
+    "Steps": [
+      "Invoke GET /api/reports/uninvoiced endpoint with valid authentication",
+      "Verify retrieved records include finalized states",
+      "Attempt to retrieve record details without modification"
+    ],
+    "Expected": "System returns uninvoiced report records including finalized-state records as read-only data without modification options",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_GetUninvoicedReport_UnauthorizedRequest",
+    "RelatedRequirement": "FR-21",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "No authentication token provided"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced without authentication token"
+    ],
+    "Expected": "Returns HTTP 401 Unauthorized with error message indicating authentication is required",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_GetUninvoicedReport_SuccessfulResponse",
+    "RelatedRequirement": "FR-21",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User with valid authentication token",
+      "System has uninvoiced report data available"
+    ],
+    "Steps": [
+      "Authenticate with valid user credentials",
+      "Send GET request to /api/reports/uninvoiced endpoint"
+    ],
+    "Expected": "Returns HTTP 200 with correctly structured uninvoiced report data containing expected fields and data entries",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "VoidInvoice_Negative_VoidNonExistentInvoice",
+    "RelatedRequirement": "FR-19",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/{id}/receipts",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetProformaInvoiceReceipts",
+    "Preconditions": [
+      "User authenticated with valid token"
+    ],
+    "Steps": [
+      "Send POST request to /api/invoices/999999/void where invoice id=999999 does not exist"
+    ],
+    "Expected": "Response indicates failure with error message that invoice does not exist or cannot be voided",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "VoidInvoice_Positive_SuccessfulVoid",
+    "RelatedRequirement": "FR-19",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/{id}/receipts",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetProformaInvoiceReceipts",
+    "Preconditions": [
+      "An existing invoice with id=123 exists and is not already voided",
+      "User is authenticated with valid token"
+    ],
+    "Steps": [
+      "Send GET request to /api/invoices/123 to verify invoice details",
+      "Send POST request to /api/invoices/123/void to void the invoice",
+      "Receive and validate the response payload indicating success"
+    ],
+    "Expected": "Invoice is marked as voided while retaining its record; response indicates success",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateInvoice_InvalidJobId_Failure",
+    "RelatedRequirement": "FR-18",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Logistics",
+    "ActionMethod": "RemovePaymentVoucherItemFromList",
+    "Preconditions": [
+      "Job ID does not exist or is invalid"
+    ],
+    "Steps": [
+      "Send PUT request to /api/service-costs with UpdatedRecords containing job cost data with an invalid job ID"
+    ],
+    "Expected": "Invoice creation fails with error indicating invalid job reference",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateInvoice_ValidJob_Success",
+    "RelatedRequirement": "FR-18",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Logistics",
+    "ActionMethod": "RemovePaymentVoucherItemFromList",
+    "Preconditions": [
+      "Job exists and is valid",
+      "Cost details finalized for job"
+    ],
+    "Steps": [
+      "Send PUT request to /api/service-costs with UpdatedRecords containing valid job cost data linked to an existing job"
+    ],
+    "Expected": "Invoice is generated and linked to the valid job successfully",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateBatchWithDuplicateItems_FailsWithError",
+    "RelatedRequirement": "FR-16",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Logistics",
+    "ActionMethod": "RemovePaymentVoucherItemFromList",
+    "Preconditions": [
+      "User is authenticated",
+      "Service items exist where at least one item is duplicated in selection"
+    ],
+    "Steps": [
+      "Select service items including duplicates (same item selected twice)",
+      "Attempt to create batch with duplicated items",
+      "Inspect response for duplication error"
+    ],
+    "Expected": "Batch creation is rejected with error indicating duplicated items are not allowed",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateBatchWithValidUniqueItems_Succeeds",
+    "RelatedRequirement": "FR-16",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Logistics",
+    "ActionMethod": "RemovePaymentVoucherItemFromList",
+    "Preconditions": [
+      "User is authenticated",
+      "At least two eligible service items exist",
+      "Items are not already in another batch"
+    ],
+    "Steps": [
+      "Select two eligible service items not present in any batch",
+      "Invoke batch creation process to group selected items",
+      "Verify the batch is created successfully with supplied items"
+    ],
+    "Expected": "Batch is created with the selected unique items without duplication",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "RemoveHotelService_Failure_WhenServiceAlreadyInvoiced",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Hotel service with ID {id} exists",
+      "Hotel service with ID {id} has been invoiced already"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/hotel-services/{id} with valid {id}"
+    ],
+    "Expected": "API responds with failure indicating service cannot be removed because it is invoiced",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "RemoveHotelService_SuccessfulRemoval_WhenNotInvoiced",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Hotel service with ID {id} exists",
+      "Hotel service with ID {id} is not linked to any invoice"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/hotel-services/{id} with valid {id}"
+    ],
+    "Expected": "Hotel service is removed successfully and response indicates success",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_SaveVisaService_MissingMandatoryField_PaxName_ShouldFailWithValidationError",
+    "RelatedRequirement": "BRULE-61",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/visa-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveVisa",
+    "Preconditions": [
+      "User is authenticated with valid token"
+    ],
+    "Steps": [
+      "Send POST request to /api/visa-services with JSON body missing mandatory field PaxName"
+    ],
+    "Expected": "Response indicates validation failure with clear error message specifying \u0027PaxName\u0027 is required",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_SaveVisaService_WithAllValidFields_ShouldSucceed",
+    "RelatedRequirement": "BRULE-61",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/visa-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveVisa",
+    "Preconditions": [
+      "User is authenticated with valid token"
+    ],
+    "Steps": [
+      "Send POST request to /api/visa-services with valid JSON body including all mandatory fields: Id, JobCardId, VendorId, PaxName, PassportNo, VisaTypeId, IsVatIncludedCost, IsVatIncludedSell, CostBaseAmount, CostTaxAmount, SellBaseAmount, SellTaxAmount, Remarks, Nationality"
+    ],
+    "Expected": "Response indicates success with created visa service resource and no validation errors",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE60_Negative_GetUninvoicedReportWithoutAuthenticationFails",
+    "RelatedRequirement": "BRULE-60",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is not authenticated or has expired/invalid token"
+    ],
+    "Steps": [
+      "Send a GET request to /api/reports/uninvoiced without valid authentication token"
+    ],
+    "Expected": "Request is rejected with an authorization error indicating authentication is required",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE60_Positive_GetUninvoicedReportReturnsValidNonEmptyData",
+    "RelatedRequirement": "BRULE-60",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with read access to uninvoiced reports",
+      "There exist uninvoiced financial records in the system"
+    ],
+    "Steps": [
+      "Send a GET request to /api/reports/uninvoiced endpoint",
+      "Receive the response payload"
+    ],
+    "Expected": "Response contains a list of uninvoiced items reflecting current valid business content with audit information intact",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "PreventDeletionOfPaymentVoucherItemIfReferencedByFinancialTransaction_BRULE64",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Payment voucher item exists and is referenced by completed financial transaction"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/payment-voucher-items/{id} for an item linked to downstream financial transaction"
+    ],
+    "Expected": "System rejects deletion with an error indicating item is part of financial history and cannot be removed",
+    "ExpectedStatusCode": 400,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "VerifyUninvoicedReportReturnsOnlyValidOperationalRecords_BRULE64",
+    "RelatedRequirement": "BRULE-64",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "At least one operational record exists without a linked financial invoice",
+      "User has valid authentication and authorization"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced"
+    ],
+    "Expected": "Response contains uninvoiced operational records and each record is linked to existing valid operational data",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "VoidReceipt_InvalidReceiptId_Negative",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated and authorized to void a receipt"
+    ],
+    "Steps": [
+      "Send POST request to /api/receipts/{id}/void with a non-existent receipt ID",
+      "Verify response contains failure indication and appropriate error message"
+    ],
+    "Expected": "The system responds with an error indicating receipt not found and does not alter any records",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "VoidReceipt_PreservesTransactionHistory_Positive",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "A valid receipt exists that is linked to a valid invoice",
+      "User is authenticated and authorized to void a receipt"
+    ],
+    "Steps": [
+      "Send POST request to /api/receipts/{id}/void with a valid receipt ID",
+      "Verify response for success indication"
+    ],
+    "Expected": "The receipt is voided but the transaction history and audit trail for that receipt remain intact and queryable",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "PreventReceiptApplicationToVoidedInvoice_Fails",
+    "RelatedRequirement": "BRULE-53",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "An invoice is voided in the system"
+    ],
+    "Steps": [
+      "Attempt to retrieve uninvoiced items related to the voided invoice via GET /api/reports/uninvoiced",
+      "Attempt to apply a receipt on the voided invoice"
+    ],
+    "Expected": "System prevents receipt application and returns an error indicating receipt application to voided invoice is not permitted",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "ApplyReceiptToValidInvoice_Succeeds",
+    "RelatedRequirement": "BRULE-53",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "A valid, non-voided invoice exists with receivable amount"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid query parameters",
+      "Ensure the invoice retrieved is valid and not voided"
+    ],
+    "Expected": "Response includes valid uninvoiced items with receivable invoices",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-58_Positive_PostHotelService_RecordCreationPreservesHistoricalIntegrity",
+    "RelatedRequirement": "BRULE-58",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Valid job card and vendor exist",
+      "User is authorized"
+    ],
+    "Steps": [
+      "Send POST request to /api/hotel-services with valid SaveJobCardHotelRequest body",
+      "Confirm hotel service record is created",
+      "Verify that the new record is auditable and linked in historical reports"
+    ],
+    "Expected": "Hotel service is saved successfully with data persisted for historical reporting and financial audit",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-58_Positive_GetHistoricalReport_UninvoicedDataPreserved",
+    "RelatedRequirement": "BRULE-58",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Uninvoiced business events exist in the system",
+      "Historical data has not been deleted"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced endpoint",
+      "Receive the uninvoiced report data"
+    ],
+    "Expected": "Response contains uninvoiced business events reflecting all historical uninvoiced data without loss or distortion",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GetUninvoicedReport_UnauthenticatedAccess_ReturnsUnauthorizedError",
+    "RelatedRequirement": "BRULE-48",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "No authentication token provided"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced endpoint without valid auth."
+    ],
+    "Expected": "Access denied error indicating unauthorized access.",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GetUninvoicedReport_ValidRequest_ReturnsPreliminaryBillingData",
+    "RelatedRequirement": "BRULE-48",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with appropriate permissions"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced endpoint."
+    ],
+    "Expected": "System returns a list of proforma invoices and uninvoiced billable items treated as preliminary billing data, not finalized invoices.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE45_Negative_CreateVisaServiceWithMismatchedInvoiceTotal",
+    "RelatedRequirement": "BRULE-45",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Job card has an existing invoice with calculated totals",
+      "User authenticated"
+    ],
+    "Steps": [
+      "Attempt to create a visa service with cost values that would cause invoice totals to mismatch underlying operational records",
+      "Observe system handling of invoice total integrity"
+    ],
+    "Expected": "System rejects the create request or adjusts invoice totals to prevent mismatch, providing an error or validation message indicating invoice total integrity violation",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE45_Positive_VerifyInvoiceTotalsReflectChargeableVisaServices",
+    "RelatedRequirement": "BRULE-45",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Existing job card with valid billable visa-related operational records",
+      "User authenticated with permissions to create visa services"
+    ],
+    "Steps": [
+      "Send POST request to /api/visa-services with valid SaveJobCardVisaRequest including all mandatory fields and valid costs",
+      "Retrieve related invoice totals after visa services inclusion",
+      "Assert the invoice totals accurately sum the chargeable content recorded in visa services"
+    ],
+    "Expected": "The invoice total must accurately reflect the sum of all chargeable visa service costs on the job card",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-46_Negative_Modify_Finalized_Invoice_Payment_Voucher_Item",
+    "RelatedRequirement": "BRULE-46",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetBatchItemsByVendorId",
+    "Preconditions": [
+      "Invoice is finalized",
+      "Payment voucher item linked to the finalized invoice exists"
+    ],
+    "Steps": [
+      "Attempt to delete payment voucher item unrelated to a void or controlled action",
+      "Send DELETE request to /api/payment-voucher-items/{id}"
+    ],
+    "Expected": "System rejects modification with message indicating invoice is finalized and cannot be modified freely",
+    "ExpectedStatusCode": 400,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-46_Positive_Void_Finalized_Invoice",
+    "RelatedRequirement": "BRULE-46",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetBatchItemsByVendorId",
+    "Preconditions": [
+      "An invoice has been finalized",
+      "Payment voucher item linked to finalized invoice exists"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/payment-voucher-items/{id} to remove payment voucher item related to the finalized invoice"
+    ],
+    "Expected": "System allows removal only as part of controlled actions such as voiding; operation succeeds preserving invoice integrity",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_VoucherTraceability_GetPayableItemsForInvalidVendor",
+    "RelatedRequirement": "BRULE-43",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetBatchItemsByVendorId",
+    "Preconditions": [
+      "Authentication token with valid permissions is provided"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/999999/payable-items with a non-existent vendorId=999999",
+      "Check the response for error or empty list"
+    ],
+    "Expected": "Response indicates no payable items found or returns appropriate error message without any traceability info",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_VoucherTraceability_GetPayableItemsForVendor",
+    "RelatedRequirement": "BRULE-43",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetBatchItemsByVendorId",
+    "Preconditions": [
+      "A vendor exists with valid payable items linked to batches and services",
+      "Authentication token with valid permissions is provided"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/123/payable-items with a valid vendorId=123 and valid auth token",
+      "Verify the response contains payable items that link to batch IDs, item IDs or service entries"
+    ],
+    "Expected": "Response includes list of payable items traceable to batches, services or items with correct vendor linking and no missing references",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE44_Negative_GetUninvoiced_ReturnsInvalidItemsFiltered",
+    "RelatedRequirement": "BRULE-44",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "The database contains some billable items flagged as invalid or non-billable."
+    ],
+    "Steps": [
+      "Send a GET request to /api/reports/uninvoiced authorized with a valid token."
+    ],
+    "Expected": "Response status is 200 with an empty list or list excluding invalid/non-billable content; system filters out non-valid invoice sources.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE44_Positive_GetUninvoiced_ReturnsValidBillableItems",
+    "RelatedRequirement": "BRULE-44",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "There are valid billable business content items pending invoicing."
+    ],
+    "Steps": [
+      "Send a GET request to /api/reports/uninvoiced authorized with a valid token."
+    ],
+    "Expected": "Response status is 200 with a list of uninvoiced billable items all validated as valid business content eligible for invoicing.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "RejectPaymentVoucherCreationWhenNoValidBatchData",
+    "RelatedRequirement": "BRULE-39",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Existing vendor with ID",
+      "Vendor has no payable items linked to valid batches"
+    ],
+    "Steps": [
+      "Call GET /api/vendors/{vendorId}/payable-items with valid vendorId",
+      "Verify returned payable items list is empty or contains invalid batch links",
+      "Attempt to create payment voucher using these payable items"
+    ],
+    "Expected": "The system should reject payment voucher creation due to missing valid batch data with an appropriate error message",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreatePaymentVoucherWithValidBatchData",
+    "RelatedRequirement": "BRULE-39",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Existing vendor with ID",
+      "Vendor has valid batch-linked payable items"
+    ],
+    "Steps": [
+      "Call GET /api/vendors/{vendorId}/payable-items with valid vendorId",
+      "Verify returned payable items are linked to valid batches",
+      "Attempt to create payment voucher using these payable items"
+    ],
+    "Expected": "The system should allow creation of payment voucher linked to valid batch data",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "AddHotelService_NonNegativeCostValidation_NegativeCostRejected",
+    "RelatedRequirement": "BRULE-30",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "Existing job card with ID validJobId"
+    ],
+    "Steps": [
+      "POST /api/hotel-services with SaveJobCardHotelRequest containing negative CostBaseAmount",
+      "Verify response indicates validation failure and cost recalculation is not performed"
+    ],
+    "Expected": "The service addition is rejected due to negative cost values with appropriate validation error; job card total cost remains unchanged.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "AddHotelService_CostRecalculation_ValidInput",
+    "RelatedRequirement": "BRULE-30",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "Existing job card with ID validJobId"
+    ],
+    "Steps": [
+      "POST /api/hotel-services with body containing a valid SaveJobCardHotelRequest with non-negative cost values and associated with validJobId",
+      "Verify response status and internal job card cost recalculation triggered"
+    ],
+    "Expected": "The hotel service is added successfully and the total cost of the associated job card is recalculated to include the new service costs.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CalculateTotalJobCost_Negative_InvalidServiceCost_NegativeAmountRejected",
+    "RelatedRequirement": "FR-15",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/visa-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveVisa",
+    "Preconditions": [
+      "Job with ID 124 exists"
+    ],
+    "Steps": [
+      "Send PUT request to /api/service-costs with UpdatedRecords including a service cost with negative CostBaseAmount"
+    ],
+    "Expected": "System rejects the update request, responds with error indicating cost must be non-negative, total cost not updated",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CalculateTotalJobCost_Positive_MultipleValidServiceCosts",
+    "RelatedRequirement": "FR-15",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/visa-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveVisa",
+    "Preconditions": [
+      "Job with ID 123 exists",
+      "Multiple valid service cost records linked to job 123"
+    ],
+    "Steps": [
+      "Send PUT request to /api/service-costs with UpdatedRecords containing multiple valid cost service items for job 123"
+    ],
+    "Expected": "System calculates total job cost as the sum of all valid service costs and returns success with updated total cost",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CloseJobCard_Failure_JobAlreadyClosed",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "A job card exists with status \u0027Closed\u0027"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards/{id}/close with a job card ID of a job already closed"
+    ],
+    "Expected": "Response indicates failure or no action taken as job is already closed. Status remains \u0027Closed\u0027.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CloseJobCard_SuccessfulClosure_ValidJobId",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "A job card exists with status \u0027Open\u0027 and valid ID"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards/{id}/close with a valid open job card ID"
+    ],
+    "Expected": "Response indicates success and job card status is updated to \u0027Closed\u0027. Closed job card cannot be modified.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "AddServiceItem_NonExistentJob_Failure",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "User is authenticated and authorized"
+    ],
+    "Steps": [
+      "Prepare CostUpdateRequest with invalid/non-existent Job ID and valid Service Type and Cost = 50",
+      "Invoke PUT /api/service-costs with the request payload",
+      "Check the response for error indicating job does not exist"
+    ],
+    "Expected": "Response indicates failure with error message that job does not exist, service item is not added",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "AddServiceItem_ValidJob_ValidCost_Success",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Job with given Job ID exists and is in Open state",
+      "User is authenticated and authorized"
+    ],
+    "Steps": [
+      "Prepare CostUpdateRequest with valid Job ID, Service Type, and Cost = 100",
+      "Invoke PUT /api/service-costs with the request payload",
+      "Verify the service item is added to the job",
+      "Verify the job cost is recalculated"
+    ],
+    "Expected": "Service item is successfully added to the job, total job cost is updated, and response indicates success",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateProformaInvoice_MissingCustomerId_FailsValidation",
+    "RelatedRequirement": "BR-11",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Valid authenticated user"
+    ],
+    "Steps": [
+      "Prepare a SaveProformaInvoiceRequest without CustomerId but with valid other fields",
+      "Send POST request to /api/proforma-invoices with the request body"
+    ],
+    "Expected": "Request is rejected with validation error indicating missing CustomerId",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateProformaInvoice_ValidRequest_Succeeds",
+    "RelatedRequirement": "BR-11",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Valid authenticated user",
+      "Valid customer exists",
+      "Valid job card exists"
+    ],
+    "Steps": [
+      "Prepare a valid SaveProformaInvoiceRequest with CustomerId, InvoiceDate, InvoiceDueDate, InvoiceAmount, JobCardId, and Description",
+      "Send POST request to /api/proforma-invoices with the request body"
+    ],
+    "Expected": "Proforma invoice is created successfully and response contains created = true and new invoice details",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_DeleteVisaService_InvalidId_ReturnsErrorAndPreservesCosts",
+    "RelatedRequirement": "BR-07",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "No visa service exists with the specified invalid ID"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/visa-services/{id} with an invalid or non-existent visa service ID",
+      "Check response for error indicating the service item could not be found or deleted",
+      "Retrieve job card cost aggregates for related job (if any) to confirm no change"
+    ],
+    "Expected": "The system responds with a descriptive error message and the job\u0027s total cost remains unchanged",
+    "ExpectedStatusCode": 404,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_DeleteHotelService_ValidId_UpdatesCostAggregation",
+    "RelatedRequirement": "BR-07",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "A hotel service item exists with a valid ID linked to a job card",
+      "Job card associated with the service item has multiple service items with costs"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/hotel-services/{id} with the valid existing hotel service ID",
+      "Verify service item is successfully removed",
+      "Retrieve the job card and validate that the total aggregated cost updates accordingly"
+    ],
+    "Expected": "The hotel service is deleted, cost values for the job card are recalculated correctly, and the total job cost reflects the removal",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_Batch_Hotel_Service_Item_Already_Processed",
+    "RelatedRequirement": "BRULE-34",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "Hotel service item exists",
+      "Hotel service item is valid",
+      "Hotel service item is already processed in another financial workflow"
+    ],
+    "Steps": [
+      "Prepare a SaveJobCardHotelRequest with a hotel service item ID already linked to a processed batch",
+      "Send POST request to /api/hotel-services with the request body",
+      "Validate response indicates rejection due to item already processed"
+    ],
+    "Expected": "Response indicates failure with error.message stating item cannot be re-batched as it is already processed in conflicting financial workflow",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_Batch_Includes_Only_Eligible_Hotel_Service_Items",
+    "RelatedRequirement": "BRULE-34",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services",
+    "HttpMethod": "POST",
+    "ControllerName": "Job",
+    "ActionMethod": "SaveHotel",
+    "Preconditions": [
+      "Hotel service item exists",
+      "Hotel service item is valid",
+      "Hotel service item is not already processed in another batch"
+    ],
+    "Steps": [
+      "Prepare a valid SaveJobCardHotelRequest with all required fields and a valid JobCardId",
+      "Send POST request to /api/hotel-services with the request body",
+      "Verify hotel service item is added successfully and eligible for batching"
+    ],
+    "Expected": "Hotel service item is persisted and available for inclusion in batch; response indicates success with created hotel service item ID",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_GetUninvoicedReport_WhenBatchProcessed_DisallowsEditing",
+    "RelatedRequirement": "BRULE-38",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "A batch has been processed into downstream financial transactions"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced for the processed batch"
+    ],
+    "Expected": "API returns a response indicating that editing or item replacement is disallowed for processed batches, with an error message or relevant flag",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_GetUninvoicedReport_WhenBatchNotProcessed_AllowsEditing",
+    "RelatedRequirement": "BRULE-38",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "A batch exists with items that have not been processed into downstream financial transactions"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced to retrieve uninvoiced report items"
+    ],
+    "Expected": "The response returns the uninvoiced report data for the batch items allowing further editing or item replacement",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "RejectDeletionOfPaymentVoucherItemThatBreaksBatchIntegrity_BRULE37",
+    "RelatedRequirement": "BRULE-37",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Payment voucher item {id} is part of an active batch",
+      "User has delete permissions"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/payment-voucher-items/{id} endpoint where deleting would leave batch items invalid or untraceable"
+    ],
+    "Expected": "System rejects deletion with error indicating batch integrity violation",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "VerifyGetUninvoicedReportReturnsValidBatchItems_BRULE37",
+    "RelatedRequirement": "BRULE-37",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Valid authenticated user with permissions to view uninvoiced reports",
+      "At least one batch with valid items exists"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced endpoint with valid auth token"
+    ],
+    "Expected": "Response contains uninvoiced batch items all valid and traceable to their source records with correct references",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE33_Negative_NonNumericCostInServiceCostUpdateRejected",
+    "RelatedRequirement": "BRULE-33",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "User authenticated with permissions to update service costs"
+    ],
+    "Steps": [
+      "Prepare a CostUpdateRequest payload with a cost field containing alphabetic characters instead of numeric values",
+      "Send PUT request to /api/service-costs with the invalid payload"
+    ],
+    "Expected": "System rejects the request with error indicating invalid numeric cost, no update performed",
+    "ExpectedStatusCode": 400,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE33_Positive_ValidCostUpdateRequest",
+    "RelatedRequirement": "BRULE-33",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "User authenticated with permissions to update service costs"
+    ],
+    "Steps": [
+      "Prepare a valid CostUpdateRequest payload with numeric Cost values within allowed precision and limits",
+      "Send PUT request to /api/service-costs with the payload"
+    ],
+    "Expected": "System accepts numeric cost values and updates service costs successfully",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-36_Negative_CreateBatchWithNoItems_Fails",
+    "RelatedRequirement": "BRULE-36",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetBatchItemsByVendorId",
+    "Preconditions": [
+      "Vendor has zero payable items available for batching"
+    ],
+    "Steps": [
+      "Call GET /api/vendors/{vendorId}/payable-items with valid vendorId that has no payable items",
+      "Attempt to create and persist a batch without any items"
+    ],
+    "Expected": "The system rejects creation or persistence of a batch with zero items and returns an error or failure indication",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-36_Positive_CreateBatchWithValidItem_Succeeds",
+    "RelatedRequirement": "BRULE-36",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetBatchItemsByVendorId",
+    "Preconditions": [
+      "Vendor has at least one valid payable item eligible for batching"
+    ],
+    "Steps": [
+      "Call GET /api/vendors/{vendorId}/payable-items with valid vendorId",
+      "Verify at least one valid payable item is returned",
+      "Use the returned item ID to create a new batch (outside scope but assumed next step)",
+      "Persist the batch with at least one item"
+    ],
+    "Expected": "The system returns valid payable items and allows creation and persistence of batch with at least one valid item",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteHotelService_NegativeCostValue_FailedDeletionValidationError",
+    "RelatedRequirement": "BRULE-24",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Hotel service item exists with negative cost value due to data inconsistency",
+      "User authenticated"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/hotel-services/{id} where id corresponds to hotel service item with negative cost"
+    ],
+    "Expected": "System rejects deletion request due to invalid cost with error indicating cost must not be negative",
+    "ExpectedStatusCode": 400,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteHotelService_ValidCostValue_SuccessfulDeletion",
+    "RelatedRequirement": "BRULE-24",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Existing hotel service item with positive numeric cost value",
+      "User authenticated with delete permission"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/hotel-services/{id} where id corresponds to hotel service item with valid positive cost"
+    ],
+    "Expected": "The hotel service item is successfully deleted and confirmation response returned",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteHotelService_WhenJobCardClosed_ShouldFailWithBusinessError",
+    "RelatedRequirement": "BRULE-22",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Hotel service with ID {id} exists",
+      "Parent job card of service {id} is closed or not eligible for modification"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/hotel-services/{id} with service ID {id}"
+    ],
+    "Expected": "Service deletion rejected with error message indicating parent job card is not modifiable",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteHotelService_WhenJobCardEditableAndServiceUnlocked_ShouldSucceed",
+    "RelatedRequirement": "BRULE-22",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Hotel service with ID {id} exists",
+      "Parent job card of service {id} is eligible for modification",
+      "Service {id} is not locked by downstream financial processing"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/hotel-services/{id} with valid service ID {id}"
+    ],
+    "Expected": "Service {id} is deleted successfully; response indicates deletion success",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateJobCard_MissingCustomerReference_ShouldFailValidation",
+    "RelatedRequirement": "BRULE-13",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "User is authenticated"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards with payload missing the CustomerId field"
+    ],
+    "Expected": "Job card creation is rejected with error indicating missing customer reference; response body contains validation error",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateJobCard_WithValidCustomerReference_ShouldSucceed",
+    "RelatedRequirement": "BRULE-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "User is authenticated",
+      "Valid customer exists with ID 123"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards with payload including CustomerId=123 and other valid fields"
+    ],
+    "Expected": "Job card is created successfully linked to the valid customer; response indicates created=true with generated job card ID and status \u0027Open\u0027",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateHotelServiceWithMissingJobCardId_ShouldFailWithValidationError",
+    "RelatedRequirement": "BRULE-14",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [],
+    "Steps": [
+      "Prepare a POST request to /api/hotel-services without the JobCardId field",
+      "Send the request"
+    ],
+    "Expected": "Service creation fails with validation error indicating JobCardId is required and must be unique",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateHotelServiceWithUniqueExistingJobCardId_ShouldSucceed",
+    "RelatedRequirement": "BRULE-14",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "A valid and existing job card ID is available"
+    ],
+    "Steps": [
+      "Prepare a POST request to /api/hotel-services with a valid JobCardId that exists uniquely in the system and all required hotel service fields filled correctly",
+      "Send the request"
+    ],
+    "Expected": "Hotel service is created successfully and linked uniquely to the job card with a unique identifier of the job card validated by the system",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "EnsureNoDestructiveDeletionInUninvoicedReport",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid session",
+      "System has prior deleted or soft-voided uninvoiced records"
+    ],
+    "Steps": [
+      "Call GET /api/reports/uninvoiced",
+      "Inspect returned data for any missing audit trails or deletion of historical transactions"
+    ],
+    "Expected": "No uninvoiced records with audit history are missing; all records maintain traceability despite voided or inactive status",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "VerifyAuditPreservationInUninvoicedReportDataIntegrity",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid session",
+      "There exist uninvoiced financial records in the system"
+    ],
+    "Steps": [
+      "Perform GET request to /api/reports/uninvoiced endpoint",
+      "Retrieve report data for uninvoiced items"
+    ],
+    "Expected": "Response contains all uninvoiced items with historical financial data preserved without any deletion; response body confirms consistent audit trail exists for each item",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GetUninvoicedReport_WithIncompleteCustomerName_ShouldExcludeCustomerRecords",
+    "RelatedRequirement": "BRULE-08",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid token",
+      "Database contains customer records missing customer name"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid authentication"
+    ],
+    "Expected": "Response excludes records associated with customers missing the mandatory customer name or marks them invalid with clear validation message",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GetUninvoicedReport_WithCompleteCustomerRecords_ShouldReturnRecords",
+    "RelatedRequirement": "BRULE-08",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid token",
+      "Database contains customers with all mandatory customer fields completed"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid authentication"
+    ],
+    "Expected": "Response contains uninvoiced report data related only to customer records with all mandatory attributes completed",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Reject_ServiceCostUpdate_With_EndDate_Before_StartDate",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "Existing service cost record setup"
+    ],
+    "Steps": [
+      "Prepare a PUT request to /api/service-costs with UpdatedRecords containing an item where EndDate is before StartDate",
+      "Send the PUT request"
+    ],
+    "Expected": "System responds with a validation error clearly indicating that EndDate must not be before StartDate and does not update the record",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Validate_ServiceCostUpdate_With_EndDate_After_StartDate_Succeeds",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "Valid existing service-cost record with defined start and end dates"
+    ],
+    "Steps": [
+      "Prepare a PUT request to /api/service-costs with UpdatedRecords containing service cost items where EndDate is \u003E= StartDate",
+      "Send the PUT request"
+    ],
+    "Expected": "System accepts the update and persists the service cost records without validation error",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-05_LoginWithInvalidCredentials_ReturnsUnauthorized",
+    "RelatedRequirement": "BRULE-05",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "ControllerName": "Master",
+    "ActionMethod": "LoginUser",
+    "Preconditions": [],
+    "Steps": [
+      "Send POST request to /api/auth/login with invalid UserName or Password in request body"
+    ],
+    "Expected": "Response indicates authentication failure with no token issued, status code 401 Unauthorized or similar, and error message in response body",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-05_ValidLogin_ReturnsAuthToken",
+    "RelatedRequirement": "BRULE-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "ControllerName": "Master",
+    "ActionMethod": "LoginUser",
+    "Preconditions": [],
+    "Steps": [
+      "Send POST request to /api/auth/login with valid UserName and Password in request body"
+    ],
+    "Expected": "Response contains valid authentication token and status code 200",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Fetch_Uninvoiced_Report_With_Nonexistent_Entity_Reference_BRULE-02",
+    "RelatedRequirement": "BRULE-02",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "The uninvoiced report data references a non-existing job card or customer entity"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced"
+    ],
+    "Expected": "Response contains a clear error indicating referenced entity not found; no partial data persisted",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Fetch_Uninvoiced_Report_With_Valid_Entity_References_BRULE-02",
+    "RelatedRequirement": "BRULE-02",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Entities such as customers, job cards, and invoices referenced in uninvoiced report exist and are valid"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced",
+      "Verify response contains uninvoiced report data referencing existing entities"
+    ],
+    "Expected": "System returns uninvoiced report data with valid entity references without error",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-01_Negative_GetUninvoicedData_OrphanReferencesRejected",
+    "RelatedRequirement": "BRULE-01",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Database contains corrupted data with orphaned references in uninvoiced reports"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced authenticated with valid token"
+    ],
+    "Expected": "Response excludes orphaned records and/or returns error/warning indicating data integrity violation preventing invalid records",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE-01_Positive_GetUninvoicedData_IntegrityPreserved",
+    "RelatedRequirement": "BRULE-01",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid token",
+      "There are un-invoiced job line items linked to valid customers and jobs"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid authentication"
+    ],
+    "Expected": "Response contains only un-invoiced data with valid references to existing customers and jobs, no orphaned records",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreatePaymentVoucherWithInvalidBatchId_Failure",
+    "RelatedRequirement": "FR-17",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Logistics",
+    "ActionMethod": "RemovePaymentVoucherItemFromList",
+    "Preconditions": [
+      "No batch exists with the provided batch ID"
+    ],
+    "Steps": [
+      "Attempt to create payment voucher with a non-existent batch ID",
+      "Submit POST request to /api/payment-vouchers with invalid batch ID",
+      "System attempts validation of batch"
+    ],
+    "Expected": "API returns failure response indicating invalid batch ID; voucher creation is rejected",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreatePaymentVoucherWithValidBatch_Success",
+    "RelatedRequirement": "FR-17",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Logistics",
+    "ActionMethod": "RemovePaymentVoucherItemFromList",
+    "Preconditions": [
+      "A batch exists with valid, eligible items",
+      "Vendor information associated with batch is available"
+    ],
+    "Steps": [
+      "Select an existing valid batch ID",
+      "Calculate payable amount for batch items",
+      "Submit POST request to /api/payment-vouchers with batch ID and correct payable details",
+      "System validates batch and vendor consistency",
+      "Observe voucher creation response"
+    ],
+    "Expected": "Payment voucher is successfully created and linked to the batch, with payable amount matching underlying batch item amounts",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "UpdateServiceCosts_Fail_JobClosed",
+    "RelatedRequirement": "FR-10",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Job card with ID 101 is closed",
+      "Valid UpdatedRecords payload"
+    ],
+    "Steps": [
+      "Send PUT request to /api/service-costs with UpdatedRecords payload targeting service items linked to closed job card 101"
+    ],
+    "Expected": "System rejects the update with an error message indicating that job card is closed and cannot be modified",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "UpdateServiceCosts_Success_JobOpen",
+    "RelatedRequirement": "FR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Job card with ID 100 is open",
+      "Valid UpdatedRecords payload with positive cost values"
+    ],
+    "Steps": [
+      "Send PUT request to /api/service-costs with UpdatedRecords containing cost updates for service items linked to job card 100"
+    ],
+    "Expected": "System updates service costs successfully and returns updated job card cost summary indicating costs are adjusted",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateJobCard_WithNonExistentCustomerId_ShouldReturnError",
+    "RelatedRequirement": "FR-09",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "User is authenticated",
+      "CustomerId does not exist in system"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards with non-existent CustomerId",
+      "Receive response"
+    ],
+    "Expected": "Response indicates failure with error message \u0027Customer does not exist\u0027 and job card is not created",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateJobCard_WithValidCustomerId_ShouldReturnJobId",
+    "RelatedRequirement": "FR-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "User is authenticated",
+      "Valid existing customer with ID provided"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards with body containing valid CustomerId and optional EventId",
+      "Receive response"
+    ],
+    "Expected": "The response includes a newly generated unique Job ID with status \u0027Open\u0027 and HTTP status code 200",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateVendor_MissingVendorName_ReturnsValidationError",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid permissions to create vendors"
+    ],
+    "Steps": [
+      "Send POST request to create vendor endpoint with missing VendorName and valid ServiceType"
+    ],
+    "Expected": "Response returns validation error indicating VendorName must be provided",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateVendor_WithValidNameAndServiceType_Succeeds",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid permissions to create vendors"
+    ],
+    "Steps": [
+      "Send POST request to create vendor endpoint with valid VendorName and valid ServiceType"
+    ],
+    "Expected": "Vendor is created successfully and response indicates success",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "FR-04_Negative_UpdateNonExistingCustomer_FailureNotFound",
+    "RelatedRequirement": "FR-04",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "User is authenticated and authorized"
+    ],
+    "Steps": [
+      "Send POST request to /api/customers with non-existent Customer ID and updated fields."
+    ],
+    "Expected": "Response indicates failure with not found error message; Customer record is not updated.",
+    "ExpectedStatusCode": 404,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "FR-04_Positive_UpdateExistingCustomerDetails_Success",
+    "RelatedRequirement": "FR-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "Customer with valid Customer ID exists",
+      "User is authenticated and authorized"
+    ],
+    "Steps": [
+      "Send POST request to /api/customers with valid existing Customer ID and all required updated fields.",
+      "Ensure request body contains updated CustomerName, ContactPersonName, Email, ContactNumber, and other fields."
+    ],
+    "Expected": "Response indicates success with updated customer details returned; Customer record updated in system.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "MissingTokenCausesUnauthorizedOnLogin",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "ControllerName": "Master",
+    "ActionMethod": "LoginUser",
+    "Preconditions": [],
+    "Steps": [
+      "Send POST request to /api/auth/login with valid UserName and Password in the body",
+      "Do not include any Authorization header or token"
+    ],
+    "Expected": "Request is rejected with Unauthorized response indicating missing token",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "ValidTokenAllowsLoginRequest",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "ControllerName": "Master",
+    "ActionMethod": "LoginUser",
+    "Preconditions": [
+      "Valid JWT token generated from successful login"
+    ],
+    "Steps": [
+      "Send POST request to /api/auth/login with valid UserName and Password in the body",
+      "Include a valid unexpired JWT Authentication token in the Authorization header"
+    ],
+    "Expected": "Authentication request succeeds, returns a new valid JWT token",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateCustomer_WithDuplicateCustomerName_ShouldReturnValidationError",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}/billable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetJobCardItemsByCustomerId",
+    "Preconditions": [
+      "User is authenticated",
+      "Customer with same CustomerName already exists"
+    ],
+    "Steps": [
+      "Send POST request to /api/customers with CustomerName identical to an existing customer",
+      "Verify response status and error message"
+    ],
+    "Expected": "Response status is 200 with created=false and error message indicating duplicate customer entry",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateCustomer_WithValidNameAndContactDetails_ShouldSucceed",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}/billable-items",
+    "HttpMethod": "GET",
+    "ControllerName": "Logistics",
+    "ActionMethod": "GetJobCardItemsByCustomerId",
+    "Preconditions": [
+      "User is authenticated"
+    ],
+    "Steps": [
+      "Send POST request to /api/customers with valid CustomerName, ContactPersonName, Email, ContactNumber, and other required contact details",
+      "Verify response status and body"
+    ],
+    "Expected": "Response status is 200 and contains a success flag with the new Customer ID",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateJobCard_MissingCustomerId_FailsValidation",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [],
+    "Steps": [
+      "Send POST request to /api/jobcards with body missing CustomerId"
+    ],
+    "Expected": "System rejects the request with an error message indicating missing CustomerId field",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateJobCard_WithValidCustomer_Succeeds",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "Valid customer exists with CustomerId=1001"
+    ],
+    "Steps": [
+      "Send POST request to /api/jobcards with body containing valid JobDescription, CustomerId=1001, CustomerRef, EffectiveDate, and Remarks"
+    ],
+    "Expected": "Job card is created successfully with a unique Id and linked to customer 1001",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteCustomer_WhenCustomerIsReferenced_ShouldPreventDeletion",
+    "RelatedRequirement": "BRULE-11",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Customer with ID 101 exists",
+      "Customer 101 is actively referenced by a job card or invoice"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/customers/101"
+    ],
+    "Expected": "Deletion rejected with error indicating active references exist; customer record remains intact",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteCustomer_WhenCustomerNotReferenced_ShouldAllowDeletion",
+    "RelatedRequirement": "BRULE-11",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "Customer with ID 100 exists",
+      "Customer 100 is not referenced by any downstream business transactions"
+    ],
+    "Steps": [
+      "Send DELETE request to /api/customers/100"
+    ],
+    "Expected": "Customer record deleted successfully; no broken references occur",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE09_GetJobCardHotelServices_InvalidJobCardIdReturnsEmptyOrNotFound",
+    "RelatedRequirement": "BRULE-09",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [],
+    "Steps": [
+      "Send GET request to /api/jobcards/{nonexistentJobCardId}/hotel-services",
+      "Observe system behavior and response"
+    ],
+    "Expected": "System returns 404 Not Found or empty hotel services list indicating no associated vendor data",
+    "ExpectedStatusCode": 404,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BRULE09_GetJobCardHotelServices_ValidJobCardIdReturnsVendorInfo",
+    "RelatedRequirement": "BRULE-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "Valid vendor records exist with complete information",
+      "Job card with hotel services assigned exists"
+    ],
+    "Steps": [
+      "Send GET request to /api/jobcards/{validJobCardId}/hotel-services",
+      "Validate response contains hotel services with associated vendor information",
+      "Verify vendor name and vendor classification related to each hotel service"
+    ],
+    "Expected": "Response includes hotel services linked to vendors with mandatory vendor name and classification fields present",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "AccessUninvoicedReportWithoutTokenFails",
+    "RelatedRequirement": "BRULE-07",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "No authentication token is provided"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced without Authorization header"
+    ],
+    "Expected": "Request is rejected with unauthorized error indicating missing credentials",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "AccessUninvoicedReportWithValidToken",
+    "RelatedRequirement": "BRULE-07",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with a valid and non-expired token"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid Authorization header containing token"
+    ],
+    "Expected": "The system responds with uninvoiced report data associated with the authenticated user\u0027s context",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateReceipt_AmountExceedsInvoiceBalance_FailsValidation",
+    "RelatedRequirement": "FR-20",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "A valid invoice with InvoiceId 1002 exists and has outstanding balance 300"
+    ],
+    "Steps": [
+      "Send POST request to /api/receipts with ReceiptRequest containing InvoiceId=1002, Amount=500, ReceiptDate=today, PaymentMethod=\u0027Cash\u0027"
+    ],
+    "Expected": "Receipt creation is rejected with validation error indicating amount exceeds invoice balance; no receipt recorded",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateReceipt_ValidAmountWithinInvoiceLimit_Succeeds",
+    "RelatedRequirement": "FR-20",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "A valid invoice with InvoiceId 1001 exists",
+      "The invoice balance allows a receipt amount of 500"
+    ],
+    "Steps": [
+      "Send POST request to /api/receipts with ReceiptRequest containing InvoiceId=1001, Amount=500, ReceiptDate=today, PaymentMethod=\u0027CreditCard\u0027"
+    ],
+    "Expected": "Receipt is created successfully with recorded amount 500 linked to invoice 1001; invoice balance is reduced accordingly",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "RetrieveVendorDetails_InvalidVendorId_ReturnsNotFound",
+    "RelatedRequirement": "FR-07",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "No vendor exists with ID 999999"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/999999/payable-items"
+    ],
+    "Expected": "Returns HTTP 200 with error flag indicating vendor not found or empty vendor data",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "RetrieveVendorDetails_ValidVendorId_ReturnsVendorInfo",
+    "RelatedRequirement": "FR-07",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Vendor with ID 1001 exists in the system"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/1001/payable-items"
+    ],
+    "Expected": "Returns HTTP 200 with vendor details and associated payable items in response body",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateReceiptWithNonExistentInvoiceShouldFail",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "InvoiceId provided does not exist in system"
+    ],
+    "Steps": [
+      "Send POST request to /api/receipts with ReceiptRequest body referencing a non-existent InvoiceId"
+    ],
+    "Expected": "Receipt creation fails with error message indicating invalid InvoiceId; response contains created=false and error details",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateReceiptWithValidInvoiceAndAmount",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Valid customer exists",
+      "Valid invoice exists linked to customer"
+    ],
+    "Steps": [
+      "Send POST request to /api/receipts with valid ReceiptRequest body containing an existing InvoiceId and positive Amount",
+      "Ensure the linked invoice exists and is active"
+    ],
+    "Expected": "Receipt is created successfully and linked to the invoice; response indicates success with created=true and receipt details",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Negative_CreateBatchWithDuplicateItems",
+    "RelatedRequirement": "BR-08",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated",
+      "Items already assigned to an active batch"
+    ],
+    "Steps": [
+      "Select items including at least one item already present in a batch",
+      "Send POST request to /api/batches with these item Ids"
+    ],
+    "Expected": "Batch creation is rejected with an error message indicating duplicate item selection is not allowed",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "Positive_CreateBatchWithValidEligibleItems",
+    "RelatedRequirement": "BR-08",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated",
+      "There exist eligible operational service items for batching"
+    ],
+    "Steps": [
+      "Select multiple eligible operational service items",
+      "Send POST request to /api/batches with valid Ids, VendorId, and BatchDate"
+    ],
+    "Expected": "A new batch is created successfully including selected items; confirm batch details reflect all selected items without duplication",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "GetPaymentVoucherInformation_ByValidVendorId_ReturnsCorrectData",
+    "RelatedRequirement": "BR-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Vendor with vendorId exists",
+      "There are payable items linked to the vendor"
+    ],
+    "Steps": [
+      "Send GET request to /api/vendors/{vendorId}/payable-items with valid vendorId"
+    ],
+    "Expected": "Returns list of payable items linked to the vendor including batch items, amounts, and payable details",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreatePaymentVoucher_WithValidBatchAndVendor_Succeeds",
+    "RelatedRequirement": "BR-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "Valid batch exists with linked batch items",
+      "Vendor information is available corresponding to the batch items"
+    ],
+    "Steps": [
+      "Send POST request to /api/payment-vouchers with TransportationIds, HotelIds, VisaIds, MiscellaneousIds linked to the valid batch",
+      "Include valid VendorId, PaymentVoucherDate, PaymentVoucherAmount, and Remarks"
+    ],
+    "Expected": "Payment voucher is created successfully linking to the batch items; response returns created=true and voucher details with correct payable amount",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BR10_Positive_GetProformaInvoiceReceipts_ValidInvoiceId",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with proper permissions",
+      "Proforma invoice with ID 123 exists and has receipts"
+    ],
+    "Steps": [
+      "Send a GET request to /api/proforma-invoices/123/receipts"
+    ],
+    "Expected": "System returns a 200 status code and a list of receipts linked to the proforma invoice ID 123.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BR10_Positive_GetUninvoicedReports",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with proper permissions"
+    ],
+    "Steps": [
+      "Send a GET request to /api/reports/uninvoiced"
+    ],
+    "Expected": "System returns a 200 status code and a list of uninvoiced items suitable for billing, indicating successful retrieval of uninvoiced report data.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateVendor_MissingVendorName_ShouldReturnValidationError",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "User authenticated with creation permission"
+    ],
+    "Steps": [
+      "Send POST request to /api/vendors with payload missing VendorName field but including other valid data"
+    ],
+    "Expected": "Response indicates failure with validation error about missing VendorName",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateVendor_WithValidData_ShouldSucceed",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "User is authenticated",
+      "User has permission to create vendors"
+    ],
+    "Steps": [
+      "Send POST request to /api/vendors with valid payload including Id=null, VendorName=\u0027Test Vendor\u0027, ContactPersonName=\u0027John Doe\u0027, Email=\u0027vendor@test.com\u0027, ContactNumber=\u00271234567890\u0027, Trn=\u0027TRN123\u0027, Address1=\u0027123 Main St\u0027, Address2=\u0027Suite 1\u0027, City=\u0027Test City\u0027, CountryCode=\u0027TC\u0027, BankCode=\u0027001\u0027, Iban=\u0027IBAN1234567890\u0027, SwiftCode=\u0027SWIFT01\u0027, BankName=\u0027Bank A\u0027, BankBranch=\u0027Branch X\u0027, SelectedVendorTypes=[\u0027Hotel\u0027,\u0027Transportation\u0027]"
+    ],
+    "Expected": "Vendor is created successfully and response contains the new Vendor Id and all submitted fields correctly stored",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "RetrieveCustomerDetails_ValidHotelServiceId_Positive",
+    "RelatedRequirement": "FR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "User is authenticated",
+      "Hotel service record with valid ID exists for customer"
+    ],
+    "Steps": [
+      "Send GET request to /api/hotel-services/{valid_hotel_service_id}",
+      "Receive response containing hotel service details"
+    ],
+    "Expected": "Response contains hotel service details",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "RetrieveCustomerDetails_ValidCustomerId_Positive",
+    "RelatedRequirement": "FR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetJobHotelsByJobCardId",
+    "Preconditions": [
+      "User is authenticated",
+      "Customer with valid Customer ID exists",
+      "Job card linked to customer exists"
+    ],
+    "Steps": [
+      "Send GET request to /api/jobcards/{valid_customer_id}/hotel-services",
+      "Receive response containing customer hotel services details"
+    ],
+    "Expected": "Response contains customer hotel services details successfully",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "InvalidPasswordReturnsUnauthorized",
+    "RelatedRequirement": "FR-01",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "ControllerName": "Master",
+    "ActionMethod": "LoginUser",
+    "Preconditions": [],
+    "Steps": [
+      "Send POST request to /api/auth/login with valid \u0027UserName\u0027 and incorrect \u0027Password\u0027."
+    ],
+    "Expected": "Unauthorized response with error message indicating invalid credentials.",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "ValidUserLoginReturnsAuthToken",
+    "RelatedRequirement": "FR-01",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "ControllerName": "Master",
+    "ActionMethod": "LoginUser",
+    "Preconditions": [],
+    "Steps": [
+      "Send POST request to /api/auth/login with valid \u0027UserName\u0027 and \u0027Password\u0027."
+    ],
+    "Expected": "Authentication token is returned in response body.",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BR-13_GetUninvoicedReport_UnauthorizedAccess_ReturnsForbidden",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is not authenticated or lacks reporting permission"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced without authentication or with invalid token"
+    ],
+    "Expected": "System responds with 403 Forbidden or relevant error indicating unauthorized access",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BR-13_GetUninvoicedReport_ValidRequest_ReturnsReportData",
+    "RelatedRequirement": "BR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated and authorized to access reporting endpoints",
+      "There exists uninvoiced report data in the system"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid authentication token"
+    ],
+    "Expected": "System responds with status code 200 and valid uninvoiced report data conforms to business rules",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BR04_Negative_GetUninvoicedReports_UnauthorizedAccess",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is not authenticated or token is missing"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced without authentication"
+    ],
+    "Expected": "System returns 401 Unauthorized error",
+    "ExpectedStatusCode": 401,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BR04_Positive_GetUninvoicedReports_ValidRequest",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "ControllerName": "Job",
+    "ActionMethod": "GetUnInvoiceReportItems",
+    "Preconditions": [
+      "User is authenticated with valid token"
+    ],
+    "Steps": [
+      "Send GET request to /api/reports/uninvoiced with valid authentication"
+    ],
+    "Expected": "System returns 200 status with a list of uninvoiced reports successfully grouped by event",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteVisaService_ValidId_SuccessfulRemoval_BR-06",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "A visa service item exists with a valid ID linked to a job card",
+      "The service item is not invoiced"
+    ],
+    "Steps": [
+      "Send a DELETE request to /api/visa-services/{id} with the valid visa service ID",
+      "Verify the response confirms the removal"
+    ],
+    "Expected": "The visa service item is successfully removed from the job card\u0027s service records",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "DeleteHotelService_ValidId_SuccessfulRemoval_BR-06",
+    "RelatedRequirement": "BR-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "DELETE",
+    "ControllerName": "Job",
+    "ActionMethod": "RemoveHotel",
+    "Preconditions": [
+      "A hotel service item exists with a valid ID linked to a job card",
+      "The service item is not invoiced"
+    ],
+    "Steps": [
+      "Send a DELETE request to /api/hotel-services/{id} with the valid hotel service ID",
+      "Verify the response confirms the removal"
+    ],
+    "Expected": "The hotel service item is successfully removed from the job card\u0027s service records",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateNewCustomer_MissingCustomerName_Failure",
+    "RelatedRequirement": "BR-02",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "User is authenticated"
+    ],
+    "Steps": [
+      "Send POST request to /api/customers without CustomerName field"
+    ],
+    "Expected": "Request is rejected with validation error indicating CustomerName is required",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "CreateNewCustomer_ValidData_SuccessfulCreation",
+    "RelatedRequirement": "BR-02",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "ControllerName": "Job",
+    "ActionMethod": "UpdateCost",
+    "Preconditions": [
+      "User is authenticated with valid credentials"
+    ],
+    "Steps": [
+      "Send POST request to /api/customers with valid unique CustomerName, ContactPersonName, Email, ContactNumber, Trn, Address1, City, CountryCode"
+    ],
+    "Expected": "Customer record is created successfully and unique Id is returned",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BR-01_InvalidUserLogin_ReturnsUnauthorized",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "ControllerName": "Master",
+    "ActionMethod": "LoginUser",
+    "Preconditions": [],
+    "Steps": [
+      "Send POST request to /api/auth/login with invalid Password for existing UserName"
+    ],
+    "Expected": "Response contains error indicating authentication failure without sensitive details and HTTP status 200",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  },
+  {
+    "TestName": "BR-01_ValidUserLogin_ReturnsAuthToken",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "ControllerName": "Master",
+    "ActionMethod": "LoginUser",
+    "Preconditions": [],
+    "Steps": [
+      "Send POST request to /api/auth/login with valid UserName and Password"
+    ],
+    "Expected": "Response contains a valid authentication token and HTTP status 200",
+    "ExpectedStatusCode": 200,
+    "ExpectedCreated": null,
+    "ExpectErrorObject": null,
+    "ExpectedErrorMessageContains": null
+  }
+]

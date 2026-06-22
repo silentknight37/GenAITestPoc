@@ -1,0 +1,141 @@
+```json
+[
+  {
+    "TestName": "Create a new customer record",
+    "RelatedRequirement": "BR-02",
+    "ScenarioType": "Post",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Unauthenticated"
+    ],
+    "Steps": [
+      {
+        "StepDescription": "Send a POST request to /api/customers with the required parameters.",
+        "Action": "Create customer record"
+      }
+    ],
+    "Expected": {
+      "created": true
+    },
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Update an existing customer record",
+    "RelatedRequirement": "BR-02",
+    "ScenarioType": "PUT",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      ["Authenticate user", "User token"]
+    ],
+    "Steps": [
+      {
+        "StepDescription": "Send a PUT request to /api/customers/{customerId} with the updated required parameters.",
+        "Action": "Update customer record"
+      }
+    ],
+    "Expected": {
+      "updated": true
+    },
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Retrieve a customer record",
+    "RelatedRequirement": "BR-02",
+    "ScenarioType": "GET",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      ["Authenticate user", "User token"]
+    ],
+    "Steps": [
+      {
+        "StepDescription": "Send a GET request to /api/customers/{customerId} with the required parameters.",
+        "Action": "Retrieve customer record"
+      }
+    ],
+    "Expected": {
+      "customerName": "John Doe",
+      "businessContact fields": {
+        "phone": "555-1234", "email": "john.doe@example.com"
+      },
+      "createdOn": "string in ISO 8601 format",
+      "updatedOn": "string in ISO 8601 format"
+    }
+  },
+  {
+    "TestName": "Customer record existence check",
+    "RelatedRequirement": "BRULE-08",
+    "ScenarioType": "GET",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      ["Authenticate user", "User token"]
+    ],
+    "Steps": [
+      {
+        "StepDescription": "Send a GET request to /api/customers/{customerId} with the required parameters.",
+        "Action": "Check customer record existence"
+      }
+    ],
+    "Expected": {
+      "createdOn": "string in ISO 8601 format",
+      "updatedOn": "string in ISO 8601 format",
+      "customerName": "John Doe",
+      "businessContact fields": {
+        "phone": "555-1234", "email": "john.doe@example.com"
+      }
+    }
+  },
+  {
+    "TestName": "Customer record data integrity check",
+    "RelatedRequirement": "BRULE-08",
+    "ScenarioType": "POST",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      ["Authenticate user", "User token"],
+      ["Invalid update body with missing customerName field"]
+    ],
+    "Steps": [
+      {
+        "StepDescription": "Send a PUT request to /api/customers/{customerId} with the updated required parameters.",
+        "Action": "Invalid data integrity check"
+      }
+    ],
+    "Expected": {
+      "customerName": "John Doe", // The original customer name should maintain consistency
+      "businessContact fields": true, // The business contact information should remain valid or error if invalid
+      "createdOn": "string in ISO 8601 format",
+      "updatedOn": "string in ISO 8601 format"
+    }
+  ],
+  {
+    "TestName": "Invalid customer reference to create a job card",
+    "RelatedRequirement": "BRULE-13",
+    "ScenarioType": "POST",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/reference-data",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      ["Authenticate user", "User token"]
+    ],
+    "Steps": [
+      {
+        "StepDescription": "Send a POST request to /api/jobs to create a new job card with an invalid customer reference.",
+        "Action": "Invalid customer reference check"
+      }
+    ],
+    "Expected": {
+      "errors": ["The specified customer is not found"]
+    },
+    "ExpectedStatusCode": 409
+  }
+]
+```

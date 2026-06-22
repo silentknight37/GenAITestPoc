@@ -1,0 +1,103 @@
+```json
+[
+    {
+        "TestName": "BR-04_01_Create_Event",
+        "RelatedRequirement": "BR-04",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/events",
+        "HttpMethod": "POST",
+        "Preconditions": ["Valid customer ID"],
+        "Steps": [
+            "Prepare the JSON payload for creating an event, including start date and end date.",
+            "Send a POST request to /api/events with the prepared JSON payload in the request body.",
+            "Verify that the response status code is 201 (Created).",
+            "Check that the returned event data includes expected details such as name, start date, and end date."
+        ],
+        "Expected": [
+            "A new event record should be successfully created with all necessary information.",
+            "The system should return a Created HTTP response code and include the new event's details in the response body."
+        ],
+        "ExpectedStatusCode": 201
+    },
+    {
+        "TestName": "BR-04_02_Update_Event",
+        "RelatedRequirement": "BR-04",
+        "ScenarioType": "Positive",
+        "Priority": "Medium",
+        "ApiEndpoint": "/api/events/{eventId}",
+        "HttpMethod": "PUT",
+        "Preconditions": ["Valid and existing event ID"],
+        "Steps": [
+            "Prepare the JSON payload for updating the event, including changes such as name or end date.",
+            "Send a PUT request to /api/events/{eventId} with the prepared JSON payload in the request body.",
+            "Verify that the response status code is 200 (OK).",
+            "Check that the returned event data reflects the updated information."
+        ],
+        "Expected": [
+            "The existing event record should be successfully updated with new details.",
+            "The system should return an OK HTTP response code and include the updated event's details in the response body."
+        ],
+        "ExpectedStatusCode": 200
+    },
+    {
+        "TestName": "BR-04_03_Get_Event",
+        "RelatedRequirement": "BR-04",
+        "ScenarioType": "Positive",
+        "Priority": "Medium",
+        "ApiEndpoint": "/api/events/{eventId}",
+        "HttpMethod": "GET",
+        "Preconditions": ["Valid event ID"],
+        "Steps": [
+            "Send a GET request to /api/events/{eventId}.",
+            "Verify that the response status code is 200 (OK).",
+            "Check that the returned data includes all details of the specified event."
+        ],
+        "Expected": [
+            "The system should return the detailed information of the requested event.",
+            "The response body should contain fields such as event name, start date, end date, and any other relevant attributes."
+        ],
+        "ExpectedStatusCode": 200
+    },
+     {
+        "TestName": "BR-04_04_Negative_Create_Event_InvalidDates",
+        "RelatedRequirement": "BR-04",
+        "ScenarioType": "Negative",
+        "Priority": "Low",
+        "ApiEndpoint": "/api/events",
+        "HttpMethod": "POST",
+        "Preconditions": ["Valid customer ID and end date less than start date"],
+        "Steps": [
+            "Prepare the JSON payload for creating an event with invalid dates (end_date less than start_date).",
+            "Send a POST request to /api/events with the prepared JSON payload in the request body.",
+            "Verify that the response status code is 400 Bad Request (or another HTTP status indicating validation error).",
+            "Check the expected error or warning message if provided by the system."
+        ],
+        "Expected": [
+            "The event creation should fail due to an invalid date range.",
+            "The system should return a BadRequest HTTP response along with appropriate error handling details."
+        ],
+        "ExpectedStatusCode": 400
+    },
+     {
+        "TestName": "BR-04_05_Boundary_Creation_MaxLimit",
+        "RelatedRequirement": "BR-04",
+        "ScenarioType": "Boundary",
+        "Priority": "Low",
+        "ApiEndpoint": "/api/events",
+        "HttpMethod": "POST",
+        "Preconditions": ["Valid customer ID, using maximum expected input for each field"],
+        "Steps": [
+            "Prepare and send a JSON payload containing all fields within the maximum allowed limits.",
+            "Ensure that all HTTP request headers adhere to the API's recommended practices.",
+            "Send the POST request to /api/events",
+            "Check that the response status code is still 201 Created."
+        ],
+        "Expected": [
+            "The event creation must handle inputs at or near the maximum expected limits without failing.",
+            "The system should not return any error flags, indicating normal behavior under boundary conditions."
+        ],
+        "ExpectedStatusCode": 201
+    }
+]
+```

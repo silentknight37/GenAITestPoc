@@ -1,0 +1,175 @@
+```json
+[
+  {
+    "TestName": "CreateNewJobCardAndRetrieve",
+    "RelatedRequirement": "BR-05: Job Card Management The system must allow creation of job cards linked to customers.",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Action": "Create a new job card with a customer ID in the request body.",
+        "Input": '{"customerId": 123}'
+      },
+      {
+        "Action": "Make a GET /api/jobcards request to retrieve the newly created job card."
+      }
+    ],
+    "Expected": "A HTTP 201 Created status code and details of the newly created job card with status 'Open'.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "UpdateJobCardDetails",
+    "RelatedRequirement": "BR-05: Job Card Management The system must allow updating of job card details.",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      {
+        "Create a JobCard": "POST /api/jobcards"
+      },
+      {
+        "Retrieve JobCard ID": "GET /api/jobcards"
+      }
+    ],
+    "Steps": [
+      {
+        "Action": "Update the job card detail in the request body.",
+        "Input": "{\"status\": \"Closed\"}"
+      },
+      {
+        "Action": "Make a PUT /api/jobcards/{id} request to update the job card."
+      },
+      { "Action": "Make a GET /api/jobcards/{id} request to retrieve the updated job card." }
+    ],
+    "Expected": "A HTTP 200 OK status code and the updated job card with status 'Closed'.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "RetrieveIndividualJobCard",
+    "RelatedRequirement": "BR-05: Job Card Management The system must allow retrieval of job cards.",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "Create a JobCard": "POST /api/jobcards"
+      }
+    ],
+    "Steps": [
+      {
+        "Action": "Make a GET /api/jobcards/{id} request to retrieve the job card."
+      }
+    ],
+    "Expected": "A HTTP 200 OK status code and details of the created job card.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "DeleteIndividualJobCard",
+    "RelatedRequirement": "BR-05: Job Card Management The system must allow deletion of job cards under valid conditions.",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      {
+        "Create a JobCard": "POST /api/jobcards"
+      }
+    ],
+    "Steps": [
+      {
+        "Action": "Make a DELETE /api/jobcards/{id} request to delete the job card."
+      },
+      { "Action": "Attempt a GET /api/jobcards/{id} request to ensure the job card is deleted." }
+    ],
+    "Expected": "A HTTP 204 No Content status code and no response body.",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "OpenAndCloseJobCard",
+    "RelatedRequirement": "BR-05: Job Card Management The system must allow opening and closing of job cards.",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/open",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "Create a JobCard": "POST /api/jobcards"
+      }
+    ],
+    "Steps": [
+      {
+        "Action": "Make a POST /api/jobcards/{id}/open request to open the job card."
+      },
+      { "Action": "Make a GET /api/jobcards/{id} request to ensure the job card is 'Open'." }
+    ],
+    "Expected": "A HTTP 200 OK status code and details of the updated job card with status 'Open'.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "OpenAndCloseJobCardUsingCloseEndpoint",
+    "RelatedRequirement": "BR-05: Job Card Management The system must allow opening and closing of job cards.",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "Create a JobCard": "POST /api/jobcards"
+      }
+    ],
+    "Steps": [
+      {
+        "Action": "Make a POST /api/jobcards/{id}/close request to close the job card."
+      },
+      { "Action": "Make a GET /api/jobcards/{id} request to ensure the job card is 'Closed'." }
+    ],
+    "Expected": "A HTTP 200 OK status code and details of the updated job card with status 'Closed'.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "RetrieveJobCardFinanceDetails",
+    "RelatedRequirement": "BR-05: Job Card Management The system must allow retrieval of job cards.",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "Create a JobCard": "POST /api/jobcards"
+      }
+    ],
+    "Steps": [
+      {
+        "Action": "Make a GET /api/jobcards/{id}/finance request to retrieve job card finance details."
+      }
+    ],
+    "Expected": "A HTTP 200 OK status code and Finance details of the job card.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "InvalidInputForCreateJobCard",
+    "RelatedRequirement": "BR-05: Job Card Management The system must allow creation of job cards linked to customers.",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Action": "Create a new job card with invalid customer ID in the request body.",
+        "Input": "{\"customerId\": \"invalid\"}"
+      },
+      {
+        "Action": "Make a POST /api/jobcards request to create the job card."
+      }
+    ],
+    "Expected": "A HTTP 400 Bad Request status code or similar, with an appropriate error message indicating invalid input.",
+    "ExpectedStatusCode": 400
+  }
+]
+```

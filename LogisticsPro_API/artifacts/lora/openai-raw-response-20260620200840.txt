@@ -1,0 +1,766 @@
+```json
+[
+  {
+    "TestName": "Receipt Record Creation",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": {
+          "amount": "100.00",
+          "type": "CREDIT"
+        }
+      },
+      {
+        "Response Status Code": 200,
+        "Response Body": {
+          "id": 1,
+          "invoiceId": 1,
+          "type": "CREDIT",
+          "amount": "100.00",
+          "status": "CREATED"
+        }
+      }
+    ],
+    "Expected": "Receipt record is created with the correct amount, type,invoiceId, and status.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Receipt Record Creation: Invalid Amount",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": {
+          "amount": "-10.00",
+          "type": "CREDIT"
+        }
+      },
+      {
+        "Response Status Code": 422,
+        "Response Body": null
+      }
+    ],
+    "Expected": "Receipt creation fails with an invalid amount.",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "Receipt Record Creation: Type Invalid",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": {
+          "amount": "100.00",
+          "type": "INVALID_TYPE"
+        }
+      },
+      {
+        "Response Status Code": 422,
+        "Response Body": null
+      }
+    ],
+    "Expected": "Receipt creation fails with an invalid type.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Negative scenarios on receipt retrieval
+
+  {
+    "TestName": "Receipt Record Retrieval: Invalid ID",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/invalid_id/receipts",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": {}
+      },
+      {
+        "Response Status Code": 404,
+        "Response Body": null
+      }
+    ],
+    "Expected": "Receipt record retrieval fails for an invalid ID.",
+    "ExpectedStatusCode": 404
+  },
+
+  {
+    "TestName": "Receipt Record Retrieval: No Receipts",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": {}
+      },
+      {
+        "Response Status Code": 200,
+        "Response Body": []
+      }
+    ],
+    "Expected": "Receipt retrieval fails with no receipts for the specified invoice.",
+    "ExpectedStatusCode": 200
+  },
+
+  // Boundary scenarios on receipt operations
+
+  {
+    "TestName": "Receipt Record Creation: Max Receipt Limit Exceeded",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": "100.00",
+          "type": "CREDIT"
+        }, {
+          "amount": "90.00",
+          "type": "CREDIT"
+        }]
+      },
+      {
+        "Response Status Code": 422,
+        "Response Body": null
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Auth Scenarios
+
+  {
+    "TestName": "Unauthorized Access Attempt",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {
+          "Authorization": "InvalidToken"
+        },
+        "Body": {}
+      }
+    ],
+    "Expected": "Receipt creation fails due to invalid authentication.",
+    "ExpectedStatusCode": 401
+  },
+
+  // Negative scenarios on receipt deletion
+
+  {
+    "TestName": "Receipt Deletion: Invalid ID",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": {}
+      }
+    ],
+    "Expected": "Receipt deletion fails for an invalid ID.",
+    "ExpectedStatusCode": 404
+  },
+
+  // Validation Scenarios
+
+  {
+    "TestName": "Receipt Record Retrieval: Missing Receipt IDs",
+    "RelatedRequirement": "BR-12",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": {}
+      }
+    ],
+    "Expected": "Receipt record retrieval fails if no receipt IDs are provided.",
+    "ExpectedStatusCode": 400
+  },
+
+  // Boundary scenarios on receipt deletion
+
+  // Additional variations for BRULE-52 scenario
+
+  {
+    "TestName": "Receipt Record Creation: Max Receipt Limit Exceeded - Invalid Amount",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": "-10.00",
+          "type": "CREDIT"
+        }, {
+          "amount": 100.00,
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Invalid Receipt ID",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": {}
+      }
+    ],
+    "Expected": "Receipt deletion fails for an invalid ID.",
+    "ExpectedStatusCode": 404
+  },
+
+  // Additional variations for BRULE-52 scenario
+
+  {
+    "TestName": "Receipt Record Creation: Receipt Amount Limit Exceeded",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": "90.00",
+          "type": "CREDIT"
+        }, {
+          "amount": "100.00",
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Receipt Not Found",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": {}
+      }
+    ],
+    "Expected": "Receipt deletion fails for a receipt that does not exist.",
+    "ExpectedStatusCode": 404
+  },
+
+  // Additional variations for BRULE-52 scenario
+
+  {
+    "TestName": "Receipt Record Creation: Receipt Already Exists",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": "100.00",
+          "type": "CREDIT"
+        }, {
+          "amount": 100.00,
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to the receipt already existing.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Receipt Does Not Exist in Invoice",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": {}
+      }
+    ],
+    "Expected": "Receipt deletion fails due to the receipt not being linked to the invoice.",
+    "ExpectedStatusCode": 404
+  },
+
+  // Additional variations for BRULE-52 scenario
+
+  {
+    "TestName": "Receipt Record Creation: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 90.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": 90.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-52 scenario
+
+  {
+    "TestName": "Receipt Record Creation: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-52 scenario
+
+  {
+    "TestName": "Receipt Record Creation: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-52 scenario
+
+  {
+    "TestName": "Receipt Record Creation: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-52 scenario
+
+  {
+    "TestName": "Receipt Record Creation: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-52 scenario
+
+  {
+    "TestName": "Receipt Record Creation: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-52 scenario
+
+  {
+    "TestName": "Receipt Record Creation: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-52",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/proforma-invoices/1/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount": -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations for BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},
+        "Body": [{
+          "amount": 100.00,
+          "type": "CREDIT"
+        }, {
+          "amount': -10.00, // Invalid receipt item
+          "type": "CREDIT"
+        }]
+      }
+    ],
+    "Expected": "Receipt creation fails due to exceeding the maximum number of receipts for the invoice.",
+    "ExpectedStatusCode": 422
+  },
+
+  // Additional variations fo BRULE-55 scenario
+
+  {
+    "TestName": "Receipt Deletion: Receipt Amount Limit Exceeded - Invalid Receipt Item",
+    "RelatedRequirement": "BRULE-55",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-voucher-items/invalid_id",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Request Headers": {},
+        "Headers": {},

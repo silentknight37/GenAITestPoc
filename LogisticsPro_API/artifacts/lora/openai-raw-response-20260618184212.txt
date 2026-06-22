@@ -1,0 +1,43 @@
+```json
+[
+  {
+    "TestName": "Create Customer",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": ["Empty body"],
+    "Steps": [
+      "Create a new customer using only required fields: name.",
+      "The system should validate the input data, ensuring it adheres to the specified rules."
+    ],
+    "Expected": {
+      "Status": 201,
+      "Message": "Customer created",
+      "Data": {
+        "id": "auto-generated-id"
+      }
+    },
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Create Customer with Duplicate Entry",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Boundary",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": ["Provide an already existing customer name"],
+    "Steps": [
+      "Attempt to create a customer using the same name as an existing customer.",
+      "The system should return the same error message confirming that duplicate entries are not allowed."
+    ],
+    "Expected": {
+      "Status": 409,
+      "Message": "Duplicate entry found. Please try again with a different name."
+    },
+    "ExpectedStatusCode": 409
+  }
+]
+```

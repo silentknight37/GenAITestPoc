@@ -1,0 +1,135 @@
+```json
+[
+  {
+    "TestName": "Create Proforma Invoice - Valid",
+    "RelatedRequirement": "BR-11",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": ["Valid user token"],
+    "Steps": [
+      "Send a POST request to /api/invoices with the necessary invoice data.",
+      "Verify that the created_invoice object contains an id and other relevant properties."
+    ],
+    "Expected": {
+      "id": "string",
+      "amount": "number"
+    }
+  },
+  // Generate additional test cases for BR-11 as per requirement specifications
+  // ...
+,
+  {
+    "TestName": "Create Proforma Invoice - Invalid Data",
+    "RelatedRequirement": "BR-11",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": ["Valid user token"],
+    "Steps": [
+      "Send a POST request to /api/invoices with invalid invoice data, such as missing fields or incorrect types."
+    ],
+    "Expected": {
+      "error": "InvalidInvoiceData"
+    }
+  },
+  // Generate additional test cases for BR-11 as per requirement specifications
+  // ...
+,
+  {
+    "TestName": "Void Proforma Invoice - Valid",
+    "RelatedRequirement": "BR-11",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": ["Valid user token", "Proforma invoice created with a valid ID"],
+    "Steps": [
+      "Send a POST request to /api/invoices/{id}/void with the necessary payload.",
+      "Verify that the void_invoice object contains an id and other relevant properties."
+    ],
+    "Expected": {
+      "id": "string",
+      "status": "Voided"
+    }
+  },
+  // Generate additional test cases for BR-11 as per requirement specifications
+  // ...
+,
+  {
+    "TestName": "Invalid User Token Voiding Proforma Invoice - Valid",
+    "RelatedRequirement": "BR-11",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": ["Invalid user token", "Proforma invoice created with a valid ID"],
+    "Steps": [
+      "Send a POST request to /api/invoices/{id}/void with the necessary payload."
+    ],
+    "Expected": {
+      "error": "Unauthorized"
+    }
+  },
+  // Generate additional test cases for BR-11 as per requirement specifications
+  // ...
+,
+  {
+    "TestName": "Proforma is Not Final Billing",
+    "RelatedRequirement": "BRULE-48",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": ["Valid user token", "Proforma invoice created with a valid ID"],
+    "Steps": [
+      "Send a GET request to /api/reports/uninvoiced to check if the proforma invoice is marked as non-final billing."
+    ],
+    "Expected": {
+      "uninvoiced_records": []
+    }
+  },
+  // Generate additional test cases for BRULE-48 as per requirement specifications
+  // ...
+,
+  {
+    "TestName": "Pro forma Conversion Control - Valid",
+    "RelatedRequirement": "BRULE-49",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/convert",
+    "HttpMethod": "POST",
+    "Preconditions": ["Valid user token", "Proforma invoice created with a valid ID"],
+    "Steps": [
+      "Send a POST request to /api/invoices/{id}/convert with the necessary payload.",
+      "Verify that the converted_invoice object contains an id and other relevant properties."
+    ],
+    "Expected": {
+      "id": "string",
+      "status": "Converted"
+    }
+  },
+  // Generate additional test cases for BRULE-49 as per requirement specifications
+  // ...
+,
+  {
+    "TestName": "Proforma Conversion Control - Invalid Data",
+    "RelatedRequirement": "BRULE-49",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/convert",
+    "HttpMethod": "POST",
+    "Preconditions": ["Valid user token", "Proforma invoice created with a valid ID"],
+    "Steps": [
+      "Send a POST request to /api/invoices/{id}/convert with invalid payload data, such as missing fields or incorrect types."
+    ],
+    "Expected": {
+      "error": "InvalidConversionData"
+    }
+  },
+  // Generate additional test cases for BRULE-49 as per requirement specifications
+  // ...
+]
+```

@@ -1,0 +1,71 @@
+```json
+[
+  {
+    "TestName": "Validate Hotel Stay Validity",
+    "RelatedRequirement": "BRULE-26",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Hotel card exists in the system"
+    ],
+    "Steps": [
+      "Call /api/jobcards/{id}/hotel-services endpoint with valid hotel card ID."
+    ],
+    "Expected": "The response should include check-in, check-out dates, and room-related quantities.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Validate Invalid Check-Out Date",
+    "RelatedRequirement": "BRULE-26",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Hotel card exists in the system with date fields set"
+    ],
+    "Steps": [
+      "Modify check-out date to a date before check-in date and call /api/hotel-services/{id} endpoint.",
+      "Check if the response is an error indicating an invalid stay duration."
+    ],
+    "Expected": "The response should indicate that the check-out date must be later than or equal to the check-in date.",
+    "ExpectedStatusCode": 4xx
+  },
+  {
+    "TestName": "Validate Negative Room Quantity",
+    "RelatedRequirement": "BRULE-26",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Hotel card exists in the system with valid check-in and check-out dates"
+    ],
+    "Steps": [
+      "Modify room quantity field to a negative value and call /api/hotel-services/{id} endpoint.",
+      "Check if the response is an error indicating invalid quantities."
+    ],
+    "Expected": "The response should indicate that room-related quantities must be positive.",
+    "ExpectedStatusCode": 4xx
+  },
+  {
+    "TestName": "Unauthorized Access to Hotel Services",
+    "RelatedRequirement": "BRULE-26",
+    "ScenarioType": "Auth",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/hotel-services/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Hotel card exists in the system"
+    ],
+    "Steps": [
+      "Access /api/hotel-services/{id} endpoint without valid authentication tokens.",
+      "Check if access is forbidden or results in an unauthorized error."
+    ],
+"Expected": "The response should be unauthorized or an equivalent indicator of restricted access.",
+"ExpectedStatusCode": 401
+  }
+]
+```

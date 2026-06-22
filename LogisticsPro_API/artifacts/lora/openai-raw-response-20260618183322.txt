@@ -1,0 +1,166 @@
+```json
+[
+  {
+    "TestName": "Create Event with Proper Date Range",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "TestName": "Log in as a Vendor User",
+        "RelatedRequirement": "BRULE-9",
+        "ScenarioType": "Positive",
+        "Priority": "Medium",
+        "Steps": [
+          {
+            "StepDescription": "POST /api/auth/login with valid vendor credentials"
+          }
+        ],
+        "Expected": {
+          // Expected response status and body, including API-specific message for successful login
+        }
+      },
+      {
+        "TestName": "Create Event",
+        "RelatedRequirement": "BR-04",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "Steps": [
+          {
+            "StepDescription": "POST /api/events with valid event details including start and end dates"
+          }
+        ],
+        "Expected": {
+          // Expected response status and body, including UUID of created event
+        }
+      }
+    ],
+    "Steps": [
+      {
+        "StepDescription": "Verify event date is correct in the database",
+        "RelatedRequirement": "BRULE-10",
+        "ScenarioType": "Positive",
+        "Priority": "High"
+      }
+    ]
+  },
+  {
+    "TestName": "Event Creation with Empty Start Date",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "TestName": "Log in as a Vendor User",
+        "RelatedRequirement": "BRULE-9",
+        "ScenarioType": "Positive",
+        "Priority": "Medium",
+        "Steps": [
+          {
+            "StepDescription": "POST /api/auth/login with valid vendor credentials"
+          }
+        ],
+        "Expected": {
+          // Expected response status and body, including error message for empty start date
+        }
+      }
+    ],
+    "Steps": [],
+    "Expected": {
+      "error.message": "Event cannot have an empty start date"
+    },
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Event Creation with Empty End Date",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "TestName": "Log in as a Vendor User",
+        "RelatedRequirement": "BRULE-9",
+        "ScenarioType": "Positive",
+        "Priority": "Medium",
+        "Steps": [
+          {
+            "StepDescription": "POST /api/auth/login with valid vendor credentials"
+          }
+        ],
+        "Expected": {
+          // Expected response status and body, including error message for empty end date
+        }
+      }
+    ],
+    "Steps": [],
+    "Expected": {
+      "error.message": "Event cannot have an empty end date"
+    },
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Duplicate Event Creation with Start Date",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "TestName": "Log in as a Vendor User",
+        "RelatedRequirement": "BRULE-9",
+        "ScenarioType": "Positive",
+        "Priority": "Medium",
+        "Steps": [
+          {
+            "StepDescription": "POST /api/auth/login with valid vendor credentials"
+          }
+        ],
+        "Expected": {
+          // Expected response status and body, including success or error message for duplicate start date
+        }
+      }
+    ],
+    "Steps": [],
+    "Expected": {
+      "error.message": "Event already exists within the specified time span"
+    },
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Duplicate Event Creation with End Date",
+    "RelatedRequirement": "BRULE-10",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "TestName": "Log in as a Vendor User",
+        "RelatedRequirement": "BRULE-9",
+        "ScenarioType": "Positive",
+        "Priority": "Medium",
+        "Steps": [
+          {
+            "StepDescription": "POST /api/auth/login with valid vendor credentials"
+          }
+        ],
+        "Expected": {
+          // Expected response status and body, including success or error message for duplicate end date
+        }
+      }
+    ],
+    "Steps": [],
+    "Expected": {
+      "error.message": "Event already exists within the specified time span"
+    },
+    "ExpectedStatusCode": 400
+  }
+]
+```

@@ -1,0 +1,16 @@
+# LoRA fine-tuning + serving for the GenAI Test Framework.
+# Install into a Python 3.10+ venv with a CUDA-capable GPU.
+torch>=2.1
+transformers>=4.44
+peft>=0.12
+trl>=0.9
+datasets>=2.20
+accelerate>=0.33
+bitsandbytes>=0.43      # 4-bit (QLoRA) — Linux/WSL; skip on plain Windows and use --no-4bit
+# Experiment tracking (optional — pick one, used via --report-to):
+wandb>=0.17           # Weights & Biases
+mlflow>=2.14          # MLflow
+# Model storage on the HuggingFace Hub (optional — for --push-to-hub):
+huggingface_hub>=0.24
+# Serving (OpenAI-compatible endpoint with LoRA):
+vllm>=0.5              # Linux/WSL. Alternative: Ollama (see README).

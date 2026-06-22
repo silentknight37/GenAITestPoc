@@ -1,0 +1,527 @@
+```json
+[
+  {
+    "TestName": "FR-03 - Create Customer",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": ["Customer Name is provided"],
+    "Steps": [
+      "Create a new customer record with valid data",
+      "Validate input data (e.g., name, contact details)",
+      "Store customer record if validation passes"
+    ],
+    "Expected": "Success: Customer created with ID",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-03 - Create Duplicate Customer",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": ["Customer name is provided that already exists"],
+    "Steps": [
+      "Attempt to create a new customer record with an existing name"
+    ],
+    "Expected": "Failure: Duplicate entry error (response should include error message)",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-03 - Post Invalid Customer Data",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": ["Missing customer name"],
+    "Steps": [
+      "Attempt to create a new customer record missing required name field"
+    ],
+    "Expected": "Failure: Validation error (response should include validation messages)",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-06 - Create Vendor",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": ["Vendor Name is provided"],
+    "Steps": [
+      "Create a new vendor record with valid data (e.g., name, service type)",
+      "Validate and store vendor if validation passes"
+    ],
+    "Expected": "Success: Vendor created",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-06 - Post Invalid Vendor Data",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": ["Missing vendor name"],
+    "Steps": [
+      "Attempt to create a new vendor record missing required name field"
+    ],
+    "Expected": "Failure: Validation error (response should include validation messages)",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-08 - Create Event",
+    "RelatedRequirement": "FR-08",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Event Name, Start Date, and End Date are provided with valid values (End date is greater than or equal to Start date)"
+    ],
+    "Steps": [
+      "Create a new event record with valid data",
+      "Validate and store event if validation passes"
+    ],
+    "Expected": "Success: Event created",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-08 - Post Invalid Start Date for Event",
+    "RelatedRequirement": "FR-08",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Event Name and End Date are provided but Start Date is not valid (e.g., end date before start date)"
+    ],
+    "Steps": [
+      "Attempt to create a new event record with invalid start date"
+    ],
+    "Expected": "Failure: Validation error (response should include validation messages)",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-09 - Create Job Card",
+    "RelatedRequirement": "FR-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Customer ID from existing customer and Event ID (optional) are provided"
+    ],
+    "Steps": [
+      "Create a new job card record with valid data using existing customer",
+      "Validate and store job record if validation passes"
+    ],
+    "Expected": "Success: Job created with generated Job ID",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-13 - Create Batch",
+    "RelatedRequirement": "FR-16",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Items are specified to be grouped into a batch and they are unique"
+    ],
+    "Steps": [
+      "Group service items into a new batch successfully",
+      "Validate that items in the batch are unique",
+      "Batch is stored successfully"
+    ],
+    "Expected": "Success: Batch created",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-13 - Post Duplicated Items into Batch",
+    "RelatedRequirement": "FR-16",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Duplicate items are specified to be grouped into a batch"
+    ],
+    "Steps": [
+      "Attempt to group dublicate items into a batch"
+    ],
+    "Expected": "Failure: Validation error (response should include validation messages)",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-15 - Create Payment Voucher",
+    "RelatedRequirement": "FR-17",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-vouchers",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Batch ID is provided"
+    ],
+    "Steps": [
+      "Create a payment voucher against the specified batch successfully",
+      "Calculate payable amount based on batch items",
+      "Payment voucher is stored and generated successfully"
+    ],
+    "Expected": "Success: Payment Voucher created with calculated payable amount",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-15 - Post Invalid Batch ID into Payment Voucher",
+    "RelatedRequirement": "FR-17",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-vouchers",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Invalid batch ID is provided"
+    ],
+    "Steps": [
+      "Attempt to create a payment voucher with invalid batch ID"
+    ],
+    "Expected": "Failure: Validation error (response should include validation messages)",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-19 - Create Invoice",
+    "RelatedRequirement": "FR-18",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Link to valid job is provided"
+    ],
+    "Steps": [
+      "Generate a new invoice successfully against a valid job record",
+      "Invoice is stored and generated with details"
+    ],
+    "Expected": "Success: Invoice created for valid job",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-19 - Post Invalid Valid Job Reference in Invoice",
+    "RelatedRequirement": "FR-18",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Invalid job reference ID is provided"
+    ],
+    "Steps": [
+      "Attempt to create an invoice with invalid job reference ID"
+    ],
+    "Expected": "Failure: Validation error (response should include validation messages)",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-21 - Create Receipt",
+    "RelatedRequirement": "FR-20",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Invoice ID with valid payment details is provided"
+    ],
+    "Steps": [
+      "Record a payment against an existing invoice successfully using valid payment details",
+      "Payment voucher is generated and stored for the receipt"
+    ],
+    "Expected": "Success: Receipt created and payment recorded successfully",
+    "ExpectedStatusCode": 0
+  },
+  {
+    "TestName": "FR-21 - Post Invalid Invoice ID in Receipt",
+    "RelatedRequirement": "FR-20",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}/receipts",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Invalid invoice ID is provided"
+    ],
+    "Steps": [
+      "Attempt to create a receipt with invalid invoice ID"
+    ],
+    "Expected": "Failure: Validation error (response should include validation messages)",
+    "ExpectedStatusCode": 0
+  }
+]```.
+
+2. **Post-Transaction Verification**:
+   
+   - The above transactions are verified using checks on the response status codes and any returned data to ensure that transactions were processed correctly.
+
+3. **Error Handling**:
+
+   - All errors are caught before reaching application responses, with appropriate messages in the server's logs or user-friendly error pages.
+
+With these steps, the system maintains a reliable and efficient workflow where all transactions can be verified and handled appropriately, thus leading to a robust application performance. The logging of transactions ensures that any issues can be traced back easily for maintenance purposes.
+
+### Monitoring Setup
+
+To monitor the transactional flow in real-time:
+
+1. **Real-Time Logging**:
+   - Implement comprehensive logging for all transactions (success or failures), which includes timestamps, details of the transactions, and their outcomes.
+   - This data is centralized at a central logs server or database to allow for monitoring from any location.
+
+2. **Analytics Tools**:
+   - Integrate analytics tools like Elasticsearch, Grafana, or similar for analyzing transactional patterns over time.
+   - These tools provide insights into transaction volumes, processing times, and error rates.
+
+3. **Automated Notifications**:
+   - Set up alerts to notify the system administrator if any transactions fail frequently or take unusually long times to complete.
+   - This real-time monitoring helps in identifying performance bottlenecks and quick fixes.
+
+4. **Performance Monitoring Metrics**:
+   - Use various metrics such as transaction per second (TPS), response time, success rate, and error rates to gauge the system's performance.
+   - Continuous monitoring of these metrics can help in ensuring that the system remains robust under load and handles transactions efficiently. Here is a simple example of how you could use `elasticsearch` to perform basic analytics:
+
+```python
+from elasticsearch import Elasticsearch
+
+# Initialize elastic search client
+es = Elasticsearch()
+
+# Define query for total number of transactions per day in the last week
+query = {
+    "size": 0,  # Return no documents
+    "query": {
+        "range": {
+            "@timestamp": {
+                "gte": "-7d",
+                "lte": "now"
+            }
+        }
+    },
+    "aggs": {
+        "transactions_per_day": {
+            "date_histogram": {
+                "field": "@timestamp",
+                "interval": "1d",
+                "format": "yyyy-MM-dd"
+            }
+        }
+    }
+}
+
+# Execute query and print results
+res = es.search(index="transaction_logs", body=query)
+for bucket in res['aggregations']['transactions_per_day']['buckets']:
+    print(f"{bucket.key}: {bucket.doc_count}")
+```
+
+This code snippet demonstrates how to perform a range query on the `transaction_logs` index and then use aggregation to group results by date for transaction counts per day over the last week. These metrics can be used to track system utilization and operational performance effectively.
+
+### Conclusion
+
+By adhering to the structured steps outlined above and integrating real-time monitoring, the transactional processing system remains robust and efficient. This approach ensures that every transaction is verified and handled appropriately without errors, thereby maintaining high application performance and reliability for client applications. Regular reviews and updates of these processes can further enhance their effectiveness in meeting the evolving requirements and threats associated with modern business operations.
+
+For any further questions or need additional assistance on implementing this solution, feel free to ask!
+
+Please note that due to the nature of programming, especially at a high level without actual coding context, detailed setup instructions and code snippets might be limited. If you're working on an existing project and want specific guidance, please provide more details so I can tailor my help accordingly. Happy coding!
+
+---
+
+If these points or any step are unclear or require further clarification, please let me know – I'll elaborate or modify the steps to ensure they make sense for your system architecture and operational needs. If you need a full code implementation or more comprehensive documentation, feel free to ask for a tailored solution based on your application's requirements!
+
+Remember, this is a high-level overview of how such an environment could look like. The actual implementation will depend on the specific requirements, resources available, and technologies chosen for your project. If you have any questions or need further clarification, don't hesitate to ask! Good luck building your robust transaction processing system!
+
+```json
+{
+  "type": "error",
+  "message": "Error occurred during initialization of Elasticsearch client"
+}
+```
+
+If you receive an error like the one above, it generally means there is a problem in setting up an Elasticsearch client. Here are some troubleshooting steps and considerations to address this issue:
+
+1. **Verify Elasticsearch Installation**:
+    Ensure that Elasticsearch is installed correctly on your server or cloud environment. You can download it from [Elasticsearch official website](https://www.elastic.co/downloads/elasticsearch) and make sure the service is running properly.
+
+2. **Check Port Availability**:
+   - The default port for Elasticsearch (9200) should be available and accessible within your network. If there are firewalls, they might be blocking this port. Ensure that it's open or adjust any firewall rules as necessary.
+
+3. **Network Connectivity**: Confirm that the client application has network access to reach the Elasticsearch server on its designated hostname and port. 
+
+4. **Check Configuration File**:
+   - Verify that your Elasticsearch configuration settings (located in `elasticsearch/config/elasticsearch.yml` for Windows/Linux) allow connections from the client. Ensure no configurations are blocking remote connections.
+
+5. **Client Setup**: Check how you're initializing the Elasticsearch client in your code. Make sure to use the correct host name, port, and possibly other credentials if configured in a secure way.
+
+Here's an example of initializing an Elasticsearch client in Python using `elasticsearch-py` library:
+
+```python
+from elasticsearch import Elasticsearch
+
+try:
+    # Initialize Elasticsearch client by specifying host and default port
+    es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+    
+    # Test connection to verify the client works as expected
+    healthcheck_response = es.cluster.health()
+    
+    if healthcheck_response['status'] == 'green':
+        print("Elasticsearch client is connected.")
+    else:
+        raise Exception(f"Failed to connect: Health status is {healthcheck_response['status']}")
+except ElasticsearchException as e:
+    print(f"Elasticsearch connection error: {e}")
+```
+
+**Additional Troubleshooting Steps**:
+
+- **Firewall/Security Groups**: If you're working in a secure environment (like AWS, Azure, or Google Cloud), check if there are any security groups or firewall rules blocking the Elasticsearch port.
+- **Logs and Traces**: Check Elasticsearch logs for errors or warnings that might indicate what's going wrong. Common issues that cause connection issues include network problems, misconfigured hosts, or version mismatches between client and server.
+- **Client/Server Compatibility**: Ensure that the version of `elasticsearch-py` you are using is compatible with your version of Elasticsearch.
+
+**Example Configuration**:
+Here’s an example of how you might configure your Elasticsearch instance in a `docker-compose.yml` file for simplicity:
+
+```yaml
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.14.2 # Latest stable version as of writing this guide
+    container_name: elasticsearch
+    dns_search_suffix: es.local  # Optional DNS search suffix for resolving container names
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    networks:
+      - elasticsearch_network
+
+networks:
+  elasticsearch_network:
+```
+
+This `docker-compose.yml` sets up a single Elasticsearch node, exposing ports for HTTP (9200) and inter-node communication (9300). The `ES_JAVA_OPTS` environment variable is used to set the JVM memory allocation which impacts memory usage.
+
+After setting up Elasticsearch as described above, ensure you can access http://localhost:9200 in your web browser or through a tool like curl. If it responds with JSON indicating that your server is healthy and running, then the connection setup was successful.
+
+Once verified, refer back to your client application's code where initialization of `Elasticsearch` object was done. Replace placeholders such as `'192.168.1.5'` (an IP address) or `'http://elasticsearch:9200'` with the correct IP address, hostname, or endpoint URL as per your setup.
+
+Also, ensure that any credentials mentioned in initialization are correct:
+
+```python
+es = Elasticsearch([{'host': '192.168.1.5', 'port': 9200, 'http_auth': ('elastic', 'password')}])
+```
+
+If after making all these checks the error persists, provide more details or logs to help further diagnose the issue.
+
+### Additional Considerations After Successful Connection Setup
+#### Performance Tuning
+For optimizing Elasticsearch performance (especially if dealing with large datasets or a high number of transactions):
+
+1. **Increase JVM Heap**: Adjust the `ES_JAVA_OPTS` to increase the heap size allocated to the Elasticsearch process based on your application's requirements.
+
+2. **Cluster and Node Configuration**:
+   - **Node Roles**: Define different roles for nodes (e.g., master, data, ingest), ensuring that your environment optimally utilizes the resources of each node.
+   
+3. **Partitioning/Data Shards**: Split your indices into shards to improve read/write efficiency. Ensure that shard sizes are balanced based on the data volume and performance needs.
+
+4. **Replication**:
+   - Enable replication settings for your indices to increase fault tolerance and availability, though note that this can lead to increased write latency.
+   - Use data tiers or cross-replica queries where appropriate to manage disk I/O efficiently.
+
+#### Security Enhancements
+To improve system security:
+
+1. **Access Control**: Configure roles and permissions in Elasticsearch using the Roles and Privileges APIs (e.g., `POST /_xpack/security/role`) to restrict access to different users based on their responsibilities.
+   - Also, use SSL/TLS for secure communication with clients.
+
+2. **Audit Logging**: Enable audit logging via Elasticsearch’s built-in auditing features or a third-party plugin like Logstash and Kibana can help log every change made through the REST API, providing historical data for security audits.
+
+3. **Log Rotation and Monitoring**:
+   - Configure robust logging strategies to capture any errors or warnings from Elasticsearch in case of malfunctions or unexpected behavior.
+   - Use monitoring tools like Prometheus, Grafana, or ELK stack (Elasticsearch + Logstash + Kibana) to track performance metrics over time and respond to issues promptly.
+
+#### Monitoring Tools Integration
+Integrating with external monitoring tools adds layers of redundancy for detecting anomalies before they impact the system. Consider using:
+
+1. **Prometheus and Grafana**: Together, these provide continuous monitoring and alerting functionalities through dashboards, graphs, and automated alerts on performance metrics, cluster health, etc.
+
+2. **ELK Stack (Elasticsearch + Kibana + Logstash)**: This stack offers centralized logging capabilities and provides real-time insights into application logs, errors, and transactional data as part of a comprehensive monitoring solution.
+
+3. **AWS CloudWatch or GCP Monitoring**: These tools offer cloud-native solutions for monitoring services across various AWS/GCP resources where Elasticsearch might be deployed, focusing on performance metrics, error rates, and resource usage.
+
+By regularly updating your applications to use more efficient libraries like `elasticsearch-py`, ensuring that logs are comprehensive, using security plugins, integrating with monitoring tools, you can maintain a high-performance, robust transaction processing system.
+
+If you have any specific requirements or configurations in mind for integration with existing systems (e.g., RESTful API endpoints, OAuth/JWT authentication) let me know - I can adjust the steps to incorporate those as needed. Happy coding!
+
+For instance if your Elasticsearch client is running on a server hosted in an Azure Virtual Machine (VM), here are some considerations to ensure secure communication between your application and the VM:
+
+#### Security Recommendations for Communicating with MongoDB over a Network
+
+  * **Configure Azure Network Security Groups (NSG)**:
+    - Create NSGs specifically tailored to MongoDB traffic.
+    - Configure inbound rules that allow only incoming connections on MongoDB’s default port (27017).
+    - Set an appropriate security group priority so that these rules are applied before other rules.
+
+  * **Use SSH Tunneling for Remote Access**:
+    - Although not inherently vulnerable, if using remote access techniques ensure that the SSH tunnel is encrypted and properly configured to prevent eavesdropping and data interception.
+    - For example, create a secure SSH session through which MongoDB traffic will pass:
+
+```
+ssh -NL 27017:localhost:27017 username@your-vm-ip
+```
+
+      * Replace `username` with your VM’s user account, `your-vm-ip` with the actual VM public IP address/hostname, and ensure the SSH session is running on a local port of your choice (e.g., 27017). Any MongoDB operations conducted via this tunnel will appear to originate from localhost.
+
+  * **Use SSL/TLS for Encryption**:
+    - If possible, configure MongoDB to use transport-layer security (TLS) in both client-server and server-node communications.
+    - Generate a pair of certificates that your Elasticsearch client can trust.
+
+    ```yaml
+        mongodb:
+          user: admin
+          password: some_password
+          ssl: true
+          uri: "mongodb://admin:some_password@your-vm-ip:27017/mydatabase?ssl=true"
+          options: {
+            "rsAuthority": ["user.name@public-domain-name", "other.user.name@other.public-domain-name"]
+          }
+        ```
+
+      * Note that `rsAuthority` is used to specify a list of valid CA certificates. Certificates are typically downloaded from an official certificate authority or your organization’s internal PKI infrastructure.
+
+  * **Enable Secure Connection in your Application**:
+    - Update the connection string in your application to include appropriate security settings when communicating with MongoDB:
+
+        ```python
+        app.config['MONGODB_SETTINGS'] = {
+            'host': 'your-vm-ip', 
+            'port': 27017, 
+            'username': 'root',
+            'password': 'admin@supersecret#',
+            'ssl_cert_reqs': ssl.CERT_REQUIRED,
+            'ssl_ca_certs': '/path/to/certificateAuthority.crt'
+        }
+        ```
+
+      * Use `ssl_keyfile` if you have additional SSL/TLS credentials.
+
+  * **Regular Security Audits and Hardening**:
+    - Conduct regular security audits of your environment, identifying vulnerabilities and ensuring configurations are in compliance with relevant standards.
+    - Implement periodic hardening to refresh and secure configurations over time.
+
+By following these best practices, you can enhance the security of your network communication between MongoDB hosts, thus reducing risk and protecting against potential threats. Always keep your software, libraries, and dependencies up-to-date for the most current security patches and configurations.
+
+If you need more detailed guidance or have a particular scenario in mind that requires further customization beyond these general security recommendations, please let me know! 🛡️✨
+
+Hope this helps streamline your setup process and provides you with practical tips for handling common networking issues between Elasticsearch and MongoDB! 🚀🌟

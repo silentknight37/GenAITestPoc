@@ -1,0 +1,68 @@
+```json
+[
+  {
+    "TestName": "CreateEventValidAndExpected",
+    "RelatedRequirement": "BR-04/BRULE-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "Request": {
+          "Headers": {
+            "Content-Type": "application/json"
+          },
+          "Payload": "",
+          "Status": 200
+        }
+      }
+    ],
+    "Steps": [
+      "Set up a job card with start date `2023-10-01T00:00:00Z` and an end date greater than the start date",
+      "Send a POST request to `/api/events` with the defined job card data"
+    ],
+    "Expected": {
+      "Created": true
+    },
+    "ExpectedStatusCode": 201
+  },
+  // Add more test cases for CreateEventValidAndExpected
+  ...
+,
+  {
+    "TestName": "CreateEventInvalidStartDate",
+    "RelatedRequirement": "BR-04/BRULE-10",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "Request": {
+          "Headers": {
+            "Content-Type": "application/json"
+          },
+          "Payload": JSON.stringify({
+            "StartDate": "2022-10-01T00:00:00Z",
+            "EndDate": "2023-10-01T00:00:00Z"
+          }),
+          "Status": 400
+        }
+      }
+    ],
+    "Steps": [
+      "Set up a job card with start date equal to or after the end date",
+      "Send a POST request to `/api/events` with the defined job card data"
+    ],
+    "Expected": {
+      "ErrorCode": "E001",
+      "ErrorMessage": "StartDate must be before EndDate"
+    },
+    "ExpectedStatusCode": 400
+  },
+  ...
+,
+  // Add more test cases for CreateEventInvalidStartDate
+]
+```

@@ -1,0 +1,74 @@
+```json
+[
+  {
+    "TestName": "FR-16 - Create Batch - Positive Scenario",
+    "RelatedRequirement": "FR-16",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user is authenticated and has access to the /api/batches endpoint.
+      An eligible item exists for batching."
+    ],
+    "Steps": [
+      "Send a POST request to /api/batches with a JSON body containing an array of service item IDs that need to be batched."
+    ],
+    "Expected": "The server responds with a 201 Created status code and a payload indicating the new batch has been successfully created.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "FR-16 - Create Batch - Negative Scenario",
+    "RelatedRequirement": "FR-16",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user is authenticated and has access to the /api/batches endpoint.
+      At least one item ID is invalid or not eligible for batching."
+    ],
+    "Steps": [
+      "Send a POST request to /api/batches with an array containing at least one invalid item ID or ineligible item(s)."
+    ],
+    "Expected": "The server responds with a 400 Bad Request status code and contains error messages indicating invalid input.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "FR-16 - Create Batch - Validation Scenario",
+    "RelatedRequirement": "FR-16",
+    "ScenarioType": "Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user is authenticated and has access to the /api/batches endpoint.
+      No duplicate items are included in the batch."
+    ],
+    "Steps": [
+      "Send a POST request to /api/batches with an array of item IDs that do not include duplicates.",
+      "The server should accept and handle this scenario without any errors or warnings."
+    ],
+    "Expected": "A successful response is returned with HTTP status code 201 Created.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "FR-16 - Create Batch - Boundary Scenario",
+    "RelatedRequirement": "FR-16",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user is authenticated and has access to the /api/batches endpoint.
+      The server can handle batches containing multiple items, each being unique."
+    ],
+    "Steps": [
+      "Send a POST request to /api/batches with an array of item IDs that includes multiple, unique items.",
+      "The server should accept this scenario without any errors or warnings."
+    ],
+    "Expected": "A successful response is returned with HTTP status code 201 Created.",
+    "ExpectedStatusCode": 201
+  }
+]
+```

@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>true</IsPackable>
     <PackageId>GenAITest.AspNetCore</PackageId>
-    <Version>2.30.0</Version>
+    <Version>2.72.0</Version>
     <Authors>Shanaka</Authors>
     <Description>GenAI Test Framework — adds a /genai-tests web UI endpoint to any ASP.NET Core API. Like Swagger, but for AI-powered test generation.</Description>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

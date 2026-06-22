@@ -1,0 +1,98 @@
+```json
+[
+  {
+    "TestName": "BRULE-35A-CreateBatch-Item", 
+    "RelatedRequirement": "BRULE-35", 
+    "ScenarioType": "Positive", 
+    "Priority": "Medium", 
+    "ApiEndpoint": "/api/batches", 
+    "HttpMethod": "POST", 
+    "Preconditions": [
+      {
+        "BatchId": "validBatchId",
+        "ItemIds": ["validItemId1"]
+      },
+      {
+        "BatchId": "invalidBatchId",  // Assuming a batch ID that doesn't exist
+        "ItemIds": ["validItemId1"]
+      }
+    ],
+    "Steps": [
+      "Create a valid batch with valid item IDs",
+      "Observe the response status for positive test case"
+    ],
+    "Expected": "HTTP 201 Created, Batch created successfully",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "BRULE-35B-MultipleActiveOrConflictingBatches", 
+    "RelatedRequirement": "BRULE-35", 
+    "ScenarioType": "Negative", 
+    "Priority": "High", 
+    "ApiEndpoint": "/api/batches", 
+    "HttpMethod": "POST", 
+    "Preconditions": [
+      {
+        "BatchId": "validBatchId",
+        "ItemIds": ["validItemId1"]
+      },
+      {
+        "BatchId": "otherValidBatchId",
+        "ItemIds": ["validItemId1"]
+      }
+    ],
+    "Steps": [
+      "Attempt to create multiple batches with the same item ID, including invalid batch IDs",
+      "Observe the response status for negative test case"
+    ],
+    "Expected": "HTTP 409 Conflict or similar indicates conflict or invalid BatchID",
+    "ExpectedStatusCode": 409
+  },
+  {
+    "TestName": "BRULE-35C-BatchDeletionInvalidItemId", 
+    "RelatedRequirement": "BRULE-35", 
+    "ScenarioType": "Positive|Negative", 
+    "Priority": "Medium", 
+    "ApiEndpoint": "/api/batch-items/{id}", 
+    "HttpMethod": "DELETE", 
+    "Preconditions": [
+      {
+        "BatchId": "validBatchId",
+        "ItemId": "itemIdToBeDeleted"
+      },
+      {
+        "BatchId": "invalidBatchId",  // Assuming a batch ID that doesn't exist
+        "ItemId": "itemIdToBeDeleted"
+      }
+    ],
+    "Steps": [
+      "Attempt to delete a non-existent batch item",
+      "Observe the response status for negative test case"
+    ],
+    "Expected": "HTTP 404 Not Found or similar indicates invalid item ID",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "BRULE-35D-GetBatchEligibleItemsWithInvalidFilter", 
+    "RelatedRequirement": "BRULE-35", 
+    "ScenarioType": "Negative", 
+    "Priority": "Medium", 
+    "ApiEndpoint": "/api/batch-eligible-items", 
+    "HttpMethod": "GET", 
+    "Preconditions": [
+      {
+        "FilterParams": {}
+      },
+      {
+        "FilterParams": {"invalidParam": "value"}  // Invalid filter parameter
+      }
+    ],
+    "Steps": [
+      "Attempt to get batch-eligible items with invalid filter parameters",
+      "Observe the response status for negative test case"
+    ],
+    "Expected": "HTTP 400 Bad Request indicates the filter is invalid",
+    "ExpectedStatusCode": 400
+  }
+]
+```

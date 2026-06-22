@@ -1,0 +1,90 @@
+[
+  {
+    "TestName": "Retrieve Vendor Success by ID",
+    "RelatedRequirement": "FR-07",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Vendor exists with VendorId 123"
+    ],
+    "Steps": [
+      "Send a GET request to /api/vendors/123/payable-items"
+    ],
+    "Expected": "A list of payable items for vendor with VendorId 123",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Retrieve Vendor Details by Visa Services",
+    "RelatedRequirement": "FR-07",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/visa-services",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "JobCard with ID 456 has Visa Services"
+    ],
+    "Steps": [
+      "Send a GET request to /api/jobcards/456/visa-services"
+    ],
+    "Expected": "Details of visa services for JobCard with ID 456",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Invalid VendorId Returns Not Found",
+    "RelatedRequirement": "FR-07",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Vendor with VendorId 456 does not exist"
+    ],
+    "Steps": [
+      "Send a GET request to /api/vendors/456/payable-items"
+    ],
+    "Expected": {
+      "message": "Not Found"
+    },
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "Empty Payload Returns Validation Error",
+    "RelatedRequirement": "FR-07",
+    "ScenarioType": "Validation",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "POST or DELETE",
+    "Preconditions": [
+      "Vendor exists with VendorId 123"
+    ],
+    "Steps": [
+      "Send a POST or DELETE request to /api/vendors/123/payable-items without payload data",
+      "Check response body for validation error message"
+    ],
+    "Expected": {
+      "error_message": "Cannot process empty payload."
+    },
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Non-String VendorId Returns Internal Server Error",
+    "RelatedRequirement": "FR-07",
+    "ScenarioType": "Validation",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Vendor exists"
+    ],
+    "Steps": [
+      "Send a GET request to /api/vendors/123.456/payable-items (invalid VendorId)",
+      "Check response status code and body for Internal Server Error message"
+    ],
+    "Expected": {
+      "error_message": "Invalid vendor id: 123.456"
+    },
+    "ExpectedStatusCode": 500
+  }
+]

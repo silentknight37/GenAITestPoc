@@ -1,0 +1,24 @@
+[
+  {
+    "TestName": "Check Financial Data Integrity After Closing a Job Card",
+    "RelatedRequirement": "BRULE-01",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A job card exists with ID {id}"
+    ],
+    "Steps": [
+      "Log in as an authorized user",
+      "Call the close endpoint with job card's current state"
+    ],
+    "Expected": "{{success message}} indicating financial data has been updated correctly",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Verify Reference Data Exists When Deleting Batch Items",
+    "RelatedRequirement": "BRULE-01",
+    "ScenarioType": "Positive",
+ 
+[...]

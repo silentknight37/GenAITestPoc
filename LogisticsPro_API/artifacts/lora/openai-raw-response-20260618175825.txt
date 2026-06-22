@@ -1,0 +1,57 @@
+```json
+[
+  {
+    "TestName": "Create Customer",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Send a POST request to the POST /api/customers endpoint with valid customer data payload.",
+      "Verify that the response status is 201 (Created)."
+    ],
+    "Expected": {
+      "created": true
+    },
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Create Customer",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Send a POST request to the POST /api/customers endpoint with missing name field.",
+      "Verify that the response status is 400 (Bad Request)."
+    ],
+    "Expected": {
+      "created": false,
+      "error": "Validation error: Name is mandatory."
+    },
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Create Customer",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "POST /api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Send a POST request to the POST /api/customers endpoint with an invalid customer name.",
+      "Verify that the response status is 400 (Bad Request)."
+    ],
+    "Expected": {
+      "created": false,
+      "error": "Validation error: Name contains invalid characters."
+    },
+    "ExpectedStatusCode": 400
+  }
+]
+```

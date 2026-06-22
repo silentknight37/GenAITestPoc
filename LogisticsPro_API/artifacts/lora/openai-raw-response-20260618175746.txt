@@ -1,0 +1,156 @@
+```json
+[
+  {
+    "TestName": "FR-02: Token Validation - Invalid Input",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Boundary",
+    "Priority": "Medium",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "Name": "Invalid JWT token (missing prefix)",
+        "Value": ""
+      }
+    ],
+    "Steps": [
+      `Attempt to validate API endpoint with invalid JWT Token`
+    ],
+    "Expected": "Unauthorized response",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "FR-02: Token Validation - Expired Request",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Boundary",
+    "Priority": "Medium",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "Name": "Expired JWT token (token expired in a year)",
+        "Value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTEyMDQ1MFwieHMh"
+      }
+    ],
+    "Steps": [
+      `Attempt to validate API endpoint with expired JWT Token`
+    ],
+    "Expected": "Unauthorized response",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "FR-02: Token Validation - Malformed Token",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "Name": "Malformed JWT token (unencoded)",
+        "Value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTEyMDQ1MFwieHMh"
+      }
+    ],
+    "Steps": [
+      `Attempt to validate API endpoint with malformed JWT Token`
+    ],
+    "Expected": "Unauthorized response",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "FR-02: Token Validation - Tampered Token (fake signature)",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "Name": "Tampered JWT token (using fake signature)",
+        "Value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTEyMDQ1MFwieHMh"
+      }
+    ],
+    "Steps": [
+      `Attempt to validate API endpoint with tampered JWT Token`
+    ],
+    "Expected": "Unauthorized response",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "BRULE-06: Token Validity - Expired Request",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Boundary",
+    "Priority": "Medium",
+    "ApiEndpoint": null,
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "Name": "Expired JWT token (token expired in a year)",
+        "Value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTEyMDQ1MFwieHMh"
+      }
+    ],
+    "Steps": [
+      `Attempt to validate API endpoint with expired JWT Token`
+    ],
+    "Expected": ["Failed token signature", "Invalid token", "The request failed because the access token has been expired"],
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BRULE-06: Token Validity - Malformed Token",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": null,
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "Name": "Malformed JWT token (unencoded)",
+        "Value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTEyMDQ1MFwieHMh"
+      }
+    ],
+    "Steps": [
+      `Attempt to validate API endpoint with malformed JWT Token`
+    ],
+    "Expected": ["Failed token signature", "Invalid token"],
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BRULE-06: Token Validity - Tampered Token (fake signature)",
+    "RelatedRequirement": "BRULE-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": null,
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "Name": "Tampered JWT token (using fake signature)",
+        "Value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTEyMDQ1MFwieHMh"
+      }
+    ],
+    "Steps": [
+      `Attempt to validate API endpoint with tampered JWT Token`
+    ],
+    "Expected": ["Failed token signature", "Invalid token"],
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "FR-02: Token Validation - Unauthorized Access",
+    "RelatedRequirement": "FR-02",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "Name": "Invalid JWT token without refresh token",
+        "Value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTEyMDQ1MFwieHMh"
+      }
+    ],
+    "Steps": [
+      `Attempt to validate API endpoint with invalid JWT token without refresh token`
+    ],
+    "Expected": ["Unauthorized access error"],
+    "ExpectedStatusCode": 403
+  }
+]
+```

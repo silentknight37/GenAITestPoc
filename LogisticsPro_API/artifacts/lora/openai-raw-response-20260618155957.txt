@@ -1,0 +1,86 @@
+```json
+[
+  {
+    "TestName": "Batch Process Eligible Items",
+    "RelatedRequirement": "BRULE-37",
+    "ScenarioType": "Positive|Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batch-eligible-items",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "A non-empty list of operational service items exists."
+    ],
+    "Steps": [
+      "Send a GET request to /api/batch-eligible-items"
+    ],
+    "Expected": "A JSON response containing a list of batch eligible operational service items.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Batch Creation Success",
+    "RelatedRequirement": "BRULE-37",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Batch eligible operational service items exist."
+    ],
+    "Steps": [
+      "Send a POST request to /api/batches with batch eligible operational service items",
+      "Include the following JSON payload:",
+      "{ \"items\": [\"item1\", \"item2\"] }"
+    ],
+    "Expected": "A JSON response containing details of created batch and a list of allocated batch items.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Batch Creation Failure (Missing payload)",
+    "RelatedRequirement": "BRULE-37",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Batch eligible operational service items exist."
+    ],
+    "Steps": [
+      "Send a POST request to /api/batches without the JSON payload"
+    ],
+    "Expected": `A JSON error response indicating missing or invalid payload.`,
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Batch Item Deletion Success",
+    "RelatedRequirement": "BRULE-37",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "Batch items exist."
+    ],
+    "Steps": [
+      "Send a DELETE request to /api/batch-items/1"
+    ],
+    "Expected": `A JSON response indicating successful deletion of the batch item.`,
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Invalid Batch Item Deletion (Non-existant ID)",
+    "RelatedRequirement": "BRULE-37",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "Batch items exist."
+    ],
+    "Steps": [
+      "Send a DELETE request to /api/batch-items/42"
+    ],
+    "Expected": `A JSON error response indicating the batch item with ID 42 does not exist.`,
+    "ExpectedStatusCode": 404
+  }
+]
+```

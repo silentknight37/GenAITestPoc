@@ -1,0 +1,103 @@
+[
+  {
+    "TestName": "Event Creation Positive",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "{\"event_name\": \"Sample Event\", \"start_date\": \"2023-10-01 09:00:00\", \"end_date\": \"2023-10-05 17:00:00\"}"
+    ],
+    "Steps": [
+      "Create a new event using the /api/events endpoint.",
+      "Provide all required fields: name, start date, and end date."
+    ],
+    "Expected": "The API should return an HTTP status code of 201 (Created) along with a JSON response containing the newly created event's details.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Event Creation Negative - Invalid Date",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "{\"event_name\": \"Sample Event\", \"start_date\": \"2023-10-05 17:00:00\", \"end_date\": \"2023-10-01 09:00:00\"}"
+    ],
+    "Steps": [
+      "Create a new event using the /api/events endpoint.",
+      "Provide invalid date: start date should be before end date but is not."
+    ],
+    "Expected": "The API should return an HTTP status code of 400 (Bad Request) along with a JSON response indicating validation failure, such as \"{error_description\":\"End date must be greater than or equal to Start Date\"}\".",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Event Creation Negative - Empty Start Date",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "{\"event_name\": \"Sample Event\", \"start_date\": \"\", \"end_date\": \"2023-10-05 17:00:00\"}"
+    ],
+    "Steps": [
+      "Create a new event using the /api/events endpoint.",
+      "Provide an empty string for start date."
+    ],
+    "Expected": "The API should return an HTTP status code of 400 (Bad Request) along with a JSON response indicating validation failure, such as \"{error_description\":\"Event name is required\"}\" or similar.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Event Validation - Missing Name",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Boundary",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "{\"start_date\": \"2023-10-01 09:00:00\", \"end_date\": \"2023-10-05 17:00:00\"}"
+    ],
+    "Steps": [
+      "Create a new event using the /api/events endpoint.",
+      "Provide only required fields but missing event name."
+    ],
+    "Expected": "The API should return an HTTP status code of 422 (Unprocessable Entity) along with a JSON response indicating validation failure, such as \"{error_description\":\"Event name is required\"}\" or similar.",
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "Event Retrieval Positive - Valid ID",
+    "RelatedRequirement": "BR-04",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/events/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "TestName": "Create Event Positive (for id)",
+        "RelatedRequirement": "BR-04",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/events",
+        "HttpMethod": "POST",
+        "Preconditions": [
+          "{\"event_name\": \"Sample Event\", \"start_date\": \"2023-10-01 09:00:00\", \"end_date\": \"2023-10-05 17:00:00\"}"
+        ],
+        "Steps": [
+          "Create a new event using the /api/events endpoint.",
+          "Provide all required fields."
+        ],
+        "Expected": "The API should return an HTTP status code of 201 (Created) along with JSON response containing event details.",
+        "ExpectedStatusCode": 201
+      },
+      "{\"id\": \"generated_event_id_here\"}"
+    ],
+    "Steps": [
+      "Retrieve the newly created event using its ID."
+    ],
+    "Expected": "The API should return an HTTP status code of 200 (OK) along with a JSON response containing details of the retrieved event.",
+    "ExpectedStatusCode": 200
+  }
+]

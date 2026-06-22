@@ -1,0 +1,144 @@
+```json
+[
+    {
+        "TestName": "Ensure receipt creation results in a valid record",
+        "RelatedRequirement": "BR-12",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/proforma-invoices/{id}/receipts",
+        "HttpMethod": "POST",
+        "Preconditions": [
+            "Proforma invoice exists with id {id}"
+        ],
+        "Steps": [
+            {
+                "Action": "Create a receipt",
+                "Description": "Send POST request to /api/proforma-invoices/{id}/receipts"
+            },
+            {
+                "Expected": "Receipt record created",
+                "Description": "Ensure response indicates success (status code 201)"
+            }
+        ],
+        "Expected": "A payment receipt is successfully recorded for a given proforma invoice.",
+        "ExpectedStatusCode": 201
+    },
+    {
+        "TestName": "Link receipt to an existing invoice",
+        "RelatedRequirement": "BR-12",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/receipts",
+        "HttpMethod": "POST",
+        "Preconditions": [
+            "Receipt exists with id {receiptId}",
+            "Proforma invoice exists with id {invoiceId}"
+        ],
+        "Steps": [
+            {
+                "Action": "Link receipt to an invoice",
+                "Description": "Send POST request to /api/receipts with reference to the existing invoice"
+            },
+            {
+                "Expected": "Receipt successfully linked to an invoice",
+                "Description": "Ensure response includes appropriate linking information"
+            }
+        ],
+        "Expected": "A receipt is successfully associated with its corresponding invoice.",
+        "ExpectedStatusCode": 201
+    },
+    {
+        "TestName": "Voiding a receipt preserves transaction history",
+        "RelatedRequirement": "BRULE-54",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/payment-voucher-items/{id}",
+        "HttpMethod": "DELETE",
+        "Preconditions": [
+            "Receipt exists with id {receiptId}"
+        ],
+        "Steps": [
+            {
+                "Action": "Void a receipt",
+                "Description": "Send DELETE request to /api/payment-voucher-items/{receiptId}"
+            },
+            {
+                "Expected": "Receipt voided successfully",
+                "Description": "Ensure response includes successful status code (status code 204)"
+            }
+        ],
+        "Expected": "A receipt is successfully removed from its associated transaction log.",
+        "ExpectedStatusCode": 204
+    },
+    {
+        "TestName": "Negative: Attempting to void a receipt with invalid id",
+        "RelatedRequirement": "BRULE-54",
+        "ScenarioType": "Negative",
+        "Priority": "Medium",
+        "ApiEndpoint": "/api/payment-voucher-items/{id}",
+        "HttpMethod": "DELETE",
+        "Preconditions": [
+            "{receiptId} is an invalid id"
+        ],
+        "Steps": [
+            {
+                "Action": "Void a receipt with incorrect ID",
+                "Description": "Send DELETE request to /api/payment-voucher-items/{invalidReceiptId}"
+            },
+            {
+                "Expected": "Transaction not found error",
+                "Description": "Ensure response indicates transaction not found (status code 404)"
+            }
+        ],
+        "Expected": "Attempting to void a receipt with an invalid id should return an error.",
+        "ExpectedStatusCode": 404
+    },
+    {
+        "TestName": "Negative: Receipt amount limit exceeded",
+        "RelatedRequirement": "BRULE-52",
+        "ScenarioType": "Negative",
+        "Priority": "Low",
+        "ApiEndpoint": "/api/proforma-invoices/{id}/receipts",
+        "HttpMethod": "POST",
+        "Preconditions": [
+            "Proforma invoice with id {id} has a total amount of 100",
+            "{additionalAmount} to meet the limit"
+        ],
+        "Steps": [
+            {
+                "Action": "Attempt to add a receipt that exceeds the limit",
+                "Description": "Send POST request to /api/proforma-invoices/{id}/receipts with additionalAmount exceeded by BRULE-52 threshold"
+            },
+            {
+                "Expected": "Amount limit error",
+                "Description": "Ensure response indicates amount limit exceeded (status code 400)"
+            }
+        ],
+        "Expected": "Receipt cannot exceed the allowed receivable amount for an invoice unless overpayment handling is explicitly supported.",
+        "ExpectedStatusCode": 400
+    },
+    {
+        "TestName": "Negative: Retrieval of uninvoiced receipts",
+        "RelatedRequirement": "BRULE-54",
+        "ScenarioType": "Negative",
+        "Priority": "Medium",
+        "ApiEndpoint": "/api/reports/uninvoiced",
+        "HttpMethod": "GET",
+        "Preconditions": [
+            "No uninvoiced receipts exist"
+        ],
+        "Steps": [
+            {
+                "Action": "Attempt to retrieve uninvoiced receipts",
+                "Description": "Send GET request to /api/reports/uninvoiced"
+            },
+            {
+                "Expected": "Empty list",
+                "Description": "Ensure response is an empty array"
+            }
+        ],
+        "Expected": "No un-invoiced receipts should return an empty list.",
+        "ExpectedStatusCode": 200
+    }
+]
+```

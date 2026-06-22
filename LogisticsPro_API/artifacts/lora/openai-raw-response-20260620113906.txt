@@ -1,0 +1,146 @@
+[
+  {
+    "TestName": "Verify POST /api/users and associated login",
+    "RelatedRequirement": "BRULE-14 (Identity Context Every authorized transaction must be processed within the context of the authenticated user identity.)",
+    "ScenarioType": "Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/users",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "No pre-user exists"
+    ],
+    "Steps": [
+      {
+        "Step": "Register a new user through /api/users with valid credentials (e.g., username: 'john_doe', password: 'password123')"
+      },
+      {
+        "Step": "Send an email verification link to the registered user's email"
+      },
+      {
+        "Step": "Confirm the user account by clicking on the verification link in the email"
+      },
+      {
+        "Step": "Log in to the system using /api/auth/login with the newly created username and password"
+      }
+    ],
+    "Expected": [
+      {
+        "Step": "Login should succeed without returning an error",
+        "Expected": {
+          "token": "an object containing a valid JWT token"
+        },
+        "ExpectedStatusCode": 200
+      }
+    ]
+  },
+  {
+    "TestName": "Verify POST /api/auth/login fails with invalid credentials",
+    "RelatedRequirement": "BRULE-14 (Identity Context Every authorized transaction must be processed within the context of the authenticated user identity.)",
+    "ScenarioType": "Auth",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "No pre-user exists"
+    ],
+    "Steps": [
+      {
+        "Step": "Attempt to log in using /api/auth/login with invalid credentials (e.g., username: 'wrongUsername', password: 'password123')"
+      }
+    ],
+    "Expected": [
+      {
+        "Step": "Login should fail and return an error response",
+        "Expected": {
+          "error.message": "'Invalid Credentials'"
+        },
+        "ExpectedStatusCode": 401
+      }
+    ]
+  },
+  {
+    "TestName": "Verify POST /api/auth/login fails with expired token",
+    "RelatedRequirement": "BRULE-14 (Identity Context Every authorized transaction must be processed within the context of the authenticated user identity.)",
+    "ScenarioType": "Auth",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A pre-user exists and valid token is generated"
+    ],
+    "Steps": [
+      {
+        "Step": "Attempt to log in using /api/auth/login with an expired token"
+      }
+    ],
+    "Expected": [
+      {
+        "Step": "Login should fail and return an error response",
+        "Expected": {
+          "error.message": "'expired'"
+        },
+        "ExpectedStatusCode": 401
+      }
+    ]
+  },
+  {
+    "TestName": "Verify DELETE /api/jobcards with valid token and authorized user",
+    "RelatedRequirement": "BRULE-14 (Identity Context Every authorized transaction must be processed within the context of the authenticated user identity.)",
+    "ScenarioType": "Auth",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "A pre-user exists and valid token is generated"
+    ],
+    "Steps": [
+      {
+        "Step": "Log in to the system using /api/auth/login with the newly created username and password"
+      },
+      {
+        "Step": "Retrieve job card ID from a previously created job card"
+      },
+      {
+        "Step": "Attempt to delete a job card using /api/jobcards/{id} with valid token"
+      }
+    ],
+    "Expected": [
+      {
+        "Step": "Job card should be successfully deleted",
+        "Expected": null,
+        "ExpectedStatusCode": 204
+      }
+    ]
+  },
+  {
+    "TestName": "Verify PATCH /api/service-costs without valid user or token credentials",
+    "RelatedRequirement": "BRULE-14 (Identity Context Every authorized transaction must be processed within the context of the authenticated user identity.)",
+    "ScenarioType": "Auth",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/service-costs/{id}",
+    "HttpMethod": "PATCH",
+    "Preconditions": [
+      "A pre-user exists and token is generated"
+    ],
+    "Steps": [
+      {
+        "Step": "Log in to the system using /api/auth/login with the newly created username and password"
+      },
+      {
+        "Step": "Create a service cost using POST /api/service-costs if not already done"
+      },
+      {
+        "Step": "Attempt to update service costs without valid user or token credentials. e.g., send headers without authentication information."
+      }
+    ],
+    "Expected": [
+      {
+        "Step": "Update should fail and return an error response",
+        "Expected": {
+          "error.message": "'Forbidden'"
+        },
+        "ExpectedStatusCode": 403
+      }
+    ]
+  }
+]

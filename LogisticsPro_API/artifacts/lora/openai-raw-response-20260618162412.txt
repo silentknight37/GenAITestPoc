@@ -1,0 +1,62 @@
+[
+    {
+        "TestName": "FR21_01_High_Operational_Report",
+        "RelatedRequirement": "FR-21",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/reports/operational",
+        "HttpMethod": "GET",
+        "Preconditions": [],
+        "Steps": ["Login as an authorized user", "Navigate to reports page or access operational report endpoint"],
+        "Expected": "Operational report data is successfully returned and displayed in the system.",
+        "ExpectedStatusCode": 200
+    },
+    {
+        "TestName": "FR21_02_High_Financial_Report",
+        "RelatedRequirement": "FR-21",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/reports/financial",
+        "HttpMethod": "GET",
+        "Preconditions": [],
+        "Steps": ["Login as an authorized user", "Navigate to reports page or access financial report endpoint"],
+        "Expected": "Financial report data is successfully returned and displayed in the system.",
+        "ExpectedStatusCode": 200
+    },
+    {
+        "TestName": "FR21_03_High_PAndL_Report",
+        "RelatedRequirement": "FR-21",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/reports/profit-and-loss",
+        "HttpMethod": "GET",
+        "Preconditions": [],
+        "Steps": ["Login as an authorized user", "Navigate to reports page or access P&L report endpoint"],
+        "Expected": "P&L report data is successfully returned and displayed in the system.",
+        "ExpectedStatusCode": 200
+    },
+    {
+        "TestName": "FR21_04_Low_Fail_Operational_Report_GarbageInput",
+        "RelatedRequirement": "FR-21",
+        "ScenarioType": "Negative",
+        "Priority": "Low",
+        "ApiEndpoint": "/api/reports/operational",
+        "HttpMethod": "GET",
+        "Preconditions": ["Provide garbage input as a URL parameter"],
+        "Steps": ["Perform the report request with the specified request path parameter"],
+        "Expected": "An error message or HTTP error indicating bad request is returned.",
+        "ExpectedStatusCode": [400, 500]
+    },
+    {
+        "TestName": "FR21_05_Low_Fail_Provisioned_User_Report_Credentials",
+        "RelatedRequirement": "FR-21",
+        "ScenarioType": "Auth",
+        "Priority": "Low",
+        "ApiEndpoint": "/api/reports/history",
+        "HttpMethod": "GET",
+        "Preconditions": ["Use a valid user ID but use non-existent credentials"],
+        "Steps": ["Perform the report request with the specified credentials using an invalid combination of username and password"],
+        "Expected": "Unauthorized access is denied as expected.",
+        "ExpectedStatusCode": 401
+    }
+]

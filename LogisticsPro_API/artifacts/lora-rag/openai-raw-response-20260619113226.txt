@@ -1,0 +1,79 @@
+```json
+[
+  {
+    "TestName": "Create Vendor Positive Scenario - Valid Input",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Create a request body with valid vendor details: name='TestVendor', serviceType='Transportation'",
+      "Send a POST request to /api/vendors with the above request body"
+    ],
+    "Expected": "The server responds with a successful status code (201) and includes a new vendor record in the response body",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Create Vendor Negative Scenario - Missing Name Field",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Create a request body with only the serviceType field: {\"serviceType\": \"Transportation\"}",
+      "Send a POST request to /api/vendors with the above request body"
+    ],
+    "Expected": "The server responds with an unsuccessful status code (400) and includes a validation error indicating that the name field is required",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Create Vendor Boundary Scenario - Large Name Field",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Boundary",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Create a request body with the maximum allowed vendor name length (e.g., 256 characters). This assumes any database schema has a similar limit.",
+      "Send a POST request to /api/vendors with the above request body"
+    ],
+    "Expected": "The server responds with a successful status code (201) and includes the new vendor record in the response body",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Create Vendor Negative Scenario - Invalid ServiceType",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Create a request body with an invalid serviceType (e.g., 'Unknown')",
+      "Send a POST request to /api/vendors with the above request body"
+    ],
+    "Expected": "The server responds with an unsuccessful status code (400) and includes a validation error indicating that the service type must be valid",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Create Vendor Negative Scenario - Duplicate ServiceType",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Create a request body with the same name and service type as an existing vendor in the database."
+      "Send a POST request to /api/vendors with the above request body"
+    ],
+    "Expected": "The server responds with an unsuccessful status code (400) and includes a validation error indicating that the combination of vendor name and service type is already taken",
+    "ExpectedStatusCode": 400
+  }
+]
+```

@@ -1,0 +1,127 @@
+```json
+[
+  {
+    "TestName": "Create Customer with Billable Items",
+    "RelatedRequirement": "BRULE-08",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": ["customerReference exists", "employeeRole='Admin'"],
+    "Steps": [
+      `Step 1: Assert that the customer reference provided in the payload exists`,
+      `Step 2: Create a new customer with the specified payload`,
+      `Expected Status Code and Response Body: 201 Created`
+    ],
+    "Expected": "newCustomerId is returned in the response body",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Update Customer with Billable Items",
+    "RelatedRequirement": "BRULE-8",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}",
+    "HttpMethod": "PUT",
+    "Preconditions": ["customerReference exists, employeeRole='Admin'"],
+    "Steps": [
+      `Step 1: Assert that the customer reference provided in the payload exists`,
+      `Step 2: Update the customer with the specified payload`,
+      `Expected Status Code and Response Body: 200 OK`
+    ],
+    "Expected": "Customer details updated",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Retrieve Customer by ID",
+    "RelatedRequirement": "BRULE-8",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}",
+    "HttpMethod": "GET",
+    "Preconditions": ["customerReference exists, employeeRole='Admin'"],
+    "Steps": [
+      `Step 1: Assert that the customer reference provided in the URL matches the customerId`,
+      `Step 2: Retrieve the customer by ID`,
+      `Expected Status Code and Response Body: 200 OK`
+    ],
+    "Expected": "Customer details are returned in the response body",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Create Customer without Billable Items",
+    "RelatedRequirement": "BRULE-8",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": ["customerReference exists", "employeeRole='Admin'"],
+    "Steps": [
+      `Step 1: Verify that the company name field does not contain any invalid characters`,
+      `Step 2: Create a new customer without billable items using the same payload`,
+      `Expected Status Code: 400 Bad Request`
+    ],
+    "ExpectedStatus": 400
+  },
+  {
+    "TestName": "Create Customer with Incorrect Business Contact Fields",
+    "RelatedRequirement": "BRULE-8",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": ["customerReference exists", "employeeRole='Admin'"],
+    "Steps": [
+      `Step 1: Verify that all required business contact fields are present and not blank`,
+      `Step 2: Create a new customer with incorrect business contact fields using the same payload`,
+      `Expected Status Code: 400 Bad Request`
+    ],
+    "ExpectedStatus": 400
+  },
+  {
+    "TestName": "Update Customer Without Billable Items",
+    "RelatedRequirement": "BRULE-8",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}",
+    "HttpMethod": "PUT",
+    "Preconditions": ["customerReference exists, employeeRole='Admin'"],
+    "Steps": [
+      `Step 1: Verify that no billable items are present in the payload`,
+      `Step 2: Update the customer without billable items using the same payload`,
+      `Expected Status Code: 400 Bad Request`
+    ],
+    "ExpectedStatus": 400
+  },
+  {
+    "TestName": "Update Customer with Incorrect Business Contact Fields",
+    "RelatedRequirement": "BRULE-8",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/{customerId}",
+    "HttpMethod": "PUT",
+    "Preconditions": ["customerReference exists, employeeRole='Admin'"],
+    "Steps": [
+      `Step 1: Verify that all required business contact fields are present and not blank`,
+      `Step 2: Update the customer with incorrect business contact fields using the same payload`,
+      `Expected Status Code: 400 Bad Request`
+    ],
+    "ExpectedStatus": 400
+  },
+  {
+    "TestName": "Create Customer with No Billable Items in Billservice and Transportationservices",
+    "RelatedRequirement": "BRULE-13",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/transportation-services/{id}",
+    "HttpMethod": "POST",
+    "Preconditions": ["customerReference exists, employeeRole='Admin'"],
+    "Steps": [
+      `Step 1: Verify that no billable items are present in the payload`,
+      `Step 2: Create a customer without billable items in transportationservices using the same payload`,
+      `Expected Status Code: 400 Bad Request`
+    ],
+    "ExpectedStatus": 400
+  }
+]
+```

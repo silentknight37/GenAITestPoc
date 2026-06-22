@@ -1,0 +1,226 @@
+```json
+[
+  {
+    "TestName": "BR_05: Create a job card",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "POST",
+    "Preconditions": ["a customer exists", "$.data.status"],
+    "Steps": [
+      {
+        "Message": "Create a job card with provided details and validate the response.",
+        "Request": {
+            "uri": "/api/jobcards",
+            "method" : "POST",
+            "headers":  {"Content-Type": "application/json"},
+            "body": "{\"customer_id\": 1, \"service_items\":[{\"description\": \"Testing\", \"cost\": 20}]}"
+        },
+        "Assertions": {
+          "ResponseDataKey": "data.id"
+        }
+      }
+    ],
+    "Expected": "Job card created successfully with an ID",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "BR_05: Update a job card",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "PUT",
+    "Preconditions": ["a job card exists", $.data.status],
+    "Steps": [
+      {
+        "Message": "Update the job card with provided details and validate the response.",
+        "Request": {
+          "uri": "/api/jobcards/" + $.data.id,
+          "method" : "PUT",
+          "headers":  {"Content-Type": "application/json"},
+          "body": "{\"status\": \"Completed\"}"
+        },
+        "Assertions": {
+          "ResponseDataKey": $.data.status
+        }
+      }
+    ],
+    "Expected": "Job card updated successfully with the updated status",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BR_05: Retrieve a job card",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "GET",
+    "Preconditions": ["a job card exists", $.data.status],
+    "Steps": [
+      {
+        "Message": "Retrieve the job card and validate that it matches the expected details.",
+        "Request": {
+          "uri": "/api/jobcards/" + $.data.id,
+          "method" : "GET"
+        },
+        "Assertions": {
+          "ResponseDataKey": ["id", "customer_id", "status", "service_items"]
+        }
+      }
+    ],
+    "Expected": "Job card retrieved successfully",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BR_05: Delete a job card",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["a job card exists", $.data.status],
+    "Steps": [
+      {
+        "Message": "Delete the job card and validate that there is no response or error.",
+        "Request": {
+          "uri": "/api/jobcards/" + $.data.id,
+          "method" : "DELETE"
+        }
+      }
+    ],
+    "Expected": "Job card deleted successfully",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "BR_05: Open a job card",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "POST",
+    "Preconditions": ["a closed job card exists", $.data.status],
+    "Steps": [
+      {
+        "Message": "Open the job card with provided details and validate the response.",
+        "Request": {
+          "uri": "/api/jobcards/" + $.data.id + "/open",
+          "method" : "POST"
+        },
+        "Assertions": {
+          "ResponseDataKey": "status"
+        }
+      }
+    ],
+    "Expected": "Job card opened successfully with the updated status",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BR_05: Close a job card",
+    "RelatedRequirement": "BR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "POST",
+    "Preconditions": ["an open job card exists", $.data.status],
+    "Steps": [
+      {
+        "Message": "Close the job card with provided details and validate the response.",
+        "Request": {
+          "uri": "/api/jobcards/" + $.data.id + "/close",
+          "method" : "POST"
+        },
+        "Assertions": {
+          "ResponseDataKey": "status"
+        }
+      }
+    ],
+    "Expected": "Job card closed successfully with the updated status",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BR_07: Create a service cost item",
+    "RelatedRequirement": "BR-07",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "PUT",
+    "Preconditions": ["a job card exists", "$.data.status"],
+    "Steps": [
+      {
+        "Message": "Create a service cost item with provided details and validate the response.",
+        "Request": {
+          "uri": "/api/service-costs",
+          "method" : "POST",
+          "headers":  {"Content-Type": "application/json"},
+          "body": "{\"job_id\": $.data.id, \"service_item_id\": 1, \"description\": \"Testing Cost\", \"amount\": -20}"
+        },
+        "Assertions": {
+          "ResponseDataKey": "id"
+        }
+      }
+    ],
+    "Expected": "Service cost item created successfully with an ID",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "BR_07: Update a service cost item",
+    "RelatedRequirement": "BR-07",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "PUT",
+    "Preconditions": ["a service cost item exists", ("$.data.status").toString()],
+    "Steps": [
+      {
+        "Message": "Update the service cost item with provided details and validate the response.",
+        "Request": {
+          "uri": "/api/service-costs/" + $.data.id,
+          "method" : "PUT",
+          "headers":  {"Content-Type": "application/json"},
+          "body": "{\"description\": \"Testing Updated Cost\", \"amount\": -30}"
+        },
+        "Assertions": {
+          "ResponseDataKey": ".id, .status"
+        }
+      }
+    ],
+    "Expected": "Service cost item updated successfully with the updated details and status",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BR_07: Retrieve a service cost item",
+    "RelatedRequirement": "BR-07",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "GET",
+    "Preconditions": ["a service cost item exists", $.data.status],
+    "Steps": [
+      {
+        "Message": "Retrieve the service cost item and validate that it matches the expected details.",
+        "Request": {
+          "uri": "/api/service-costs/" + $.data.id,
+          "method" : "GET"
+        },
+        "Assertions": {
+          "ResponseDataKey": ["id", "job_id", "service_item_id", "description", "amount"]
+        }
+      }
+    ],
+    "Expected": "Service cost item retrieved successfully",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BR_07: Delete a service cost item",
+    "RelatedRequirement": "BR-07",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["a service cost item exists", $.data.status],
+    "Steps": [
+      {
+        "Message": "Delete the service cost item and validate that there is no response or error.",
+        "Request": {
+          "uri": "/api/service-costs/" + $.data.id,
+          "method" : "DELETE"
+        }
+      }
+    ],
+    "Expected": "Service cost item deleted successfully",
+    "ExpectedStatusCode": 204
+  }
+]
+```

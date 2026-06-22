@@ -1,0 +1,73 @@
+[
+  {
+    "TestName": "CRUD_Invoice_Create",
+    "RelatedRequirement": "BR-11,
+POST /api/invoices",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An authenticated user"
+    ],
+    "Steps": [
+      "Execute POST endpoint with minimal valid JSON body: { \"name\": \"Proforma Invoice 1\" }"
+    ],
+    "Expected": "A 201 Created response with an invoice UUID",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "CRUD_Invoice_RetrieveByID",
+    "RelatedRequirement": "BR-11,
+GET /api/invoices/{id}",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/:id",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "An authenticated user",
+      "A created invoice with ID {id}"
+    ],
+    "Steps": [
+      "Execute GET endpoint with the created invoice's UUID"
+    ],
+    "Expected": "A 200 OK response with the invoice details",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "CRUD_Invoice_ConvertToFinalInvoice_ValidConversionRule",
+    "RelatedRequirement": "BRULE-48,
+POST /api/invoices/{id}/void",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/:id/void",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An authenticated user",
+      "An unpaid proforma invoice with ID {id}"
+    ],
+    "Steps": [
+      "Execute POST endpoint with the created invoice's UUID without body"
+    ],
+    "Expected": "A 200 OK response as successful conversion to final invoice",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "CRUD_Invoice_ConvertToFinalInvoice_InvalidConversionRule",
+    "RelatedRequirement": "BRULE-49,
+POST /api/invoices/{id}/void",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/:id/void",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An authenticated user",
+      "A unpaid proforma invoice with ID {id}"
+    ],
+    "Steps": [
+      "Execute POST endpoint with the created invoice's UUID but include invalid conversion logic"
+    ],
+    "Expected": "A 400 Bad Request response detailing business consistency and duplicate billing issues",
+    "ExpectedStatusCode": 400
+  }
+]

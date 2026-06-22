@@ -1,0 +1,118 @@
+```json
+[
+  {
+    "TestName": "Positive Profit and Loss Report",
+    "RelatedRequirement": "BR-13: Reporting analytics The system must provide reporting capabilities for operational and financial data.",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/profit-and-loss",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Database contains operational and financial data."
+    ],
+    "Steps": [
+      "Navigate to the profit and loss report page.",
+      "Verify that all necessary fields are filled in."
+    ],
+    "Expected": {
+      "status-code": 200,
+      "response-body": "{\"profit\": 100, \"loss\": 50}"
+    }
+  },
+  {
+    "TestName": "Positive Operating Report",
+    "RelatedRequirement": "BR-13: Reporting analytics The system must provide reporting capabilities for operational and financial data.",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Database contains operational and financial data."
+    ],
+    "Steps": [
+      "Navigate to the operational report page.",
+      "Verify that all necessary fields are filled in."
+    ],
+    "Expected": {
+      "status-code": 200,
+      "response-body": "{\"operation\": \"processing\", \"quantity\": 1000}"
+    }
+  },
+  {
+    "TestName": "Positive Uninvoiced Report",
+    "RelatedRequirement": "BR-13: Reporting analytics The system must provide reporting capabilities for operational and financial data.",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Database contains operational and financial data."
+    ],
+    "Steps": [
+      "Navigate to the uninvoiced report page.",
+      "Verify that all necessary fields are filled in."
+    ],
+    "Expected": {
+      "status-code": 200,
+      "response-body": "{\"uninvoiced\":[{\"item\":\"Product A\", \"quantity\":100}, {\"item\":\"Product B\", \"quantity\":50}]}"
+    }
+  },
+  {
+    "TestName": "Negative Profit and Loss Report",
+    "RelatedRequirement": "BR-13: Reporting analytics The system must provide reporting capabilities for operational and financial data.",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/profit-and-loss",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Database does not contain operational or financial data."
+    ],
+    "Steps": [
+      "Navigate to the profit and loss report page.",
+      "Verify that an error message is displayed."
+    ],
+    "Expected": {
+      "status-code": 404,
+      "response-body": "{\"error\":\"No reports found\"}"
+    }
+  },
+  {
+    "TestName": "Negative Operating Report",
+    "RelatedRequirement": "BR-13: Reporting analytics The system must provide reporting capabilities for operational and financial data.",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Database does not contain operational or financial data."
+    ],
+    "Steps": [
+      "Navigate to the operating report page.",
+      "Verify that an error message is displayed."
+    ],
+    "Expected": {
+      "status-code": 404,
+      "response-body": "{\"error\":\"No reports found\"}"
+    }
+  },
+  {
+    "TestName": "Negative Uninvoiced Report",
+    "RelatedRequirement": "BR-13: Reporting analytics The system must provide reporting capabilities for operational and financial data.",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Database does not contain operational or financial data."
+    ],
+    "Steps": [
+      "Navigate to the uninvoiced report page.",
+      "Verify that an error message is displayed."
+    ],
+    "Expected": {
+      "status-code": 404,
+      "response-body": "{\"error\":\"No reports found\"}"
+    }
+  }
+]
+```

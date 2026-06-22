@@ -1,0 +1,72 @@
+[
+    {
+        "TestName": "BRULE-26_HotelStayValidity_ValidHotelDetails",
+        "RelatedRequirement": "BRULE-26",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+        "HttpMethod": "GET",
+        "Preconditions": ["A valid jobcard ID is provided"],
+        "Steps": [
+            "Retrieve hotel service details for a valid jobcard."
+        ],
+        "Expected": "Room related quantities should be positive, and check-out date should be later than or equal to the check-in date.",
+        "ExpectedStatusCode": 200
+    },
+    {
+        "TestName": "BRULE-26_HotelStayValidity_InvalidCheckInDate",
+        "RelatedRequirement": "BRULE-26",
+        "ScenarioType": "Negative",
+        "Priority": "High",
+        "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+        "HttpMethod": "GET",
+        "Preconditions": ["An invalid check-in date is provided (e.g., future or past date not matching the booking model)"],
+        "Steps": [
+            "Attempt to retrieve hotel service details for a jobcard with an invalid check-in date."
+        ],
+        "Expected": "The system should reject the request and return an appropriate error message indicating the invalidity.",
+        "ExpectedStatusCode": 400 or 500
+    },
+    {
+        "TestName": "BRULE-26_HotelStayValidity_InvalidCheckOutDate",
+        "RelatedRequirement": "BRULE-26",
+        "ScenarioType": "Negative",
+        "Priority": "High",
+        "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+        "HttpMethod": "GET",
+        "Preconditions": ["An invalid check-out date is provided (e.g., less than the check-in date)"],
+        "Steps": [
+            "Attempt to retrieve hotel service details for a jobcard with an invalid check-out date."
+        ],
+        "Expected": "The system should reject the request and return an appropriate error message indicating the invalidity.",
+        "ExpectedStatusCode": 400 or 500
+    },
+    {
+        "TestName": "BRULE-26_HotelStayValidity_MissingCheckInDate",
+        "RelatedRequirement": "BRULE-26",
+        "ScenarioType": "Negative",
+        "Priority": "High",
+        "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+        "HttpMethod": "GET",
+        "Preconditions": ["No check-in date is provided"],
+        "Steps": [
+            "Attempt to retrieve hotel service details for a jobcard without a check-in date."
+        ],
+        "Expected": "The system should reject the request and return an appropriate error message indicating the invalidity.",
+        "ExpectedStatusCode": 400 or 500
+    },
+    {
+        "TestName": "BRULE-26_HotelStayValidity_MissingCheckOutDate",
+        "RelatedRequirement": "BRULE-26",
+        "ScenarioType": "Negative",
+        "Priority": "High",
+        "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
+        "HttpMethod": "GET",
+        "Preconditions": ["No check-out date is provided"],
+        "Steps": [
+            "Attempt to retrieve hotel service details for a jobcard without a check-out date."
+        ],
+        "Expected": "The system should reject the request and return an appropriate error message indicating the invalidity.",
+        "ExpectedStatusCode": 400 or 500
+    }
+]

@@ -1,0 +1,125 @@
+```json
+[
+  {
+    "TestName": "Create Customer with Mandatory Attributes",
+    "RelatedRequirement": "BR-02 BRULE-08"),
+    "ScenarioType": "Positive|Boundary|Auth|Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers", // pre-assigned endpoint
+    "HttpMethod": "POST",
+    " Preconditions": [
+      `customerId` is not required for this test`
+    ],
+    "Steps": [
+      "Post a customer record with mandatory attributes: {name, email}`,
+      "Check if the HTTP status code is 201 Created"
+    ],
+    "Expected": {
+      "message": success message from server
+    },
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Create Customer with Invalid Mandatory Attribute",
+    "RelatedRequirement": "BR-02 BRULE-08"),
+    "ScenarioType": "Negative|Boundary|Auth|Validation",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers", // pre-assigned endpoint
+    "HttpMethod": "POST",
+    " Preconditions": [
+      `customerId` is not required for this test`
+    ],
+    "Steps": [
+      "Post a customer record with an invalid mandatory attribute: {name, email}`",
+      "Check if the HTTP status code is 4xx/5xx",
+      "Verify that the server returns a human-readable error message"
+    ],
+    "Expected": {
+      "message": expected error message from server
+    },
+    "ExpectedStatusCode": [400, 498]
+  },
+  {
+    "TestName": "Update Customer with Valid Attributes",
+    "RelatedRequirement": "BR-02 BRULE-08"),
+    "ScenarioType": "Positive|Boundary|Auth|Validation",
+    "Priority": "High",
+    "ApiEndpoint": `/api/customers/{customerId}`, // pre-assigned endpoint
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      `customerId` is not required for this test`
+    ],
+    "Steps": [
+      "Update an existing customer record with valid attributes: {name, email}`",
+      "Check if the HTTP status code is 204 No Content"
+    ],
+    "Expected": {
+      "created": true
+    },
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Update Customer with Invalid Mandatory Attribute",
+    "RelatedRequirement": "BR-02 BRULE-08"),
+    "ScenarioType": "Negative|Boundary|Auth|Validation",
+    "Priority": "High",
+    "ApiEndpoint": `/api/customers/{ customerId}`, // pre-assigned endpoint
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      `customerId` is not required for this test`
+    ],
+    "Steps": [
+      "Update an existing customer record with an invalid mandatory attribute: {name, email}`",
+      "Check if the HTTP status code is 4xx/5xx",
+      "Verify that the server returns a human-readable error message"
+    ],
+    "Expected": {
+      "message": expected error message from server
+    },
+    "ExpectedStatusCode": [400, 498]
+  },
+  {
+    "TestName": "Retrieve Customer Details with Valid ID",
+    "RelatedRequirement": "BR-02 BRULE-13"),
+    "ScenarioType": "Positive|Boundary|Auth|Validation",
+    "Priority": "High",
+    "ApiEndpoint": `/api/customers/{customerId}`, // pre-assigned endpoint
+    "HttpMethod": "GET",
+    "Preconditions": [
+      `customerId` is not required for this test`
+    ],
+    "Steps": [
+      "Retrieve customer details by providing a valid ID: { customerId}`",
+      "Check if the HTTP status code is 200 OK"
+    ],
+    "Expected": [
+      {
+        "id": "{ customerId}",
+        "name": "{expected name}",
+        "email": "{expected email}",
+        // other fields from response body
+      }
+    ]
+  },
+  {
+    "TestName": "Retrieve Customer Details with Invalid ID",
+    "RelatedRequirement": "BR-02 BRULE-13"),
+    "ScenarioType": "Negative|Boundary|Auth|Validation",
+    "Priority": "High",
+    "ApiEndpoint": `/api/customers/{customerId}`, // pre-assigned endpoint
+    "HttpMethod": "GET",
+    "Preconditions": [
+      ` customerId` is not required for this test`
+    ],
+    "Steps": [
+      "Attempt to retrieve customer details by providing an invalid ID: {customerId}`",
+      "Check if the HTTP status code is 4xx/5xx",
+      "Verify that the server returns a human-readable error message"
+    ],
+    "Expected": {
+      "message": expected error message from server
+    },
+    "ExpectedStatusCode": [400, 498]
+  }
+]
+```

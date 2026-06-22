@@ -1,0 +1,142 @@
+```json
+[
+  {
+    "TestName": "TestVendorList",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      "Create a new vendor: POST /api/vendors"
+    ],
+    "Expected": "Return 200 status code with the list of payable items for the newly created vendor.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "TestVendorUpdate",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      { "step": "Create a new vendor: POST /api/vendors" }
+    ],
+    "Steps": [
+      "Update the newly created vendor: PUT /api/vendors/{vendorId}"
+    ],
+    "Expected": "Return 200 status code with updated vendor details.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "TestVendorDelete",
+    "RelatedRequirement": "BR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      { "step": "Create a new vendor: POST /api/vendors" }
+    ],
+    "Steps": [
+      "Delete the newly created vendor: DELETE /api/vendors/{vendorId}"
+    ],
+    "Expected": "Return 204/No Content status code.",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "TestVendorCreateInvalidDetails",
+    "RelatedRequirement": "BRRULE-09",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Attempt to create a vendor with invalid details, e.g., missing vendor name"
+    ],
+    "Expected": "Return 400 status code with error message indicating required fields are missing.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "TestVendorCreateClassificationFail",
+    "RelatedRequirement": "BRULE-09",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Attempt to create a vendor with invalid classification, e.g., classify as non-operational"
+    ],
+    "Expected": "Return 400 status code with error message indicating vendor must be operational.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "TestVendorNoPayableItems",
+    "RelatedRequirement": "BRULE-42",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      { "step": "Create a new vendor with no payable items: POST /api/vendors" }
+    ],
+    "Steps": [
+      "Retrieve/payable items for the newly created vendor: GET /api/vendors/{vendorId}/payable-items"
+    ],
+    "Expected": "Return 200 status code with an empty list of payable items.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "TestVendorPayableItemSync",
+    "RelatedRequirement": "BRULE-42",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      { "step": "Create a new vendor: POST /api/vendors" }
+    ],
+    "Steps": [
+      "Add payable items to the newly created vendor: POST /api/payable-items-to-vendor/{vendorId}"
+    ],
+      "Retrieve/payable items for the newly created vendor: GET /api/vendors/{vendorId}/payable-items"
+    ],
+    "Expected": "Return 200 status code with updated list of payable items.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "TestVendorAddInvalidPayableItem",
+    "RelatedRequirement": "BRULE-42",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/payable-items-to-vendor/{vendorId}",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      { "step": "Create a new vendor: POST /api/vendors" }
+    ],
+    "Steps": [
+      "Attempt to add an invalid payable item, e.g., non-existent item ID"
+    ],
+    "Expected": "Return 404 status code with error message indicating item not found.",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "TestVendorInvalidEndpoint",
+    "RelatedRequirement": "NULL",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/unknown-endpoint",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      "Attempt to access an unknown endpoint"
+    ],
+    "Expected": "Return 404 status code with error message indicating endpoint not found.",
+    "ExpectedStatusCode": 404
+  }
+]
+```

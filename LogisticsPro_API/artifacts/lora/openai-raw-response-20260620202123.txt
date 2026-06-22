@@ -1,0 +1,77 @@
+```json
+[
+  {
+    "TestName": "Remove Service Item - Valid ID",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["Service item exists", "Token is valid"],
+    "Steps": [
+      "Delete the service item with ID {id}",
+      "Verify that the service item is no longer returned when querying the batch items collection"
+    ],
+    "Expected": {
+      "result": "The service item was successfully deleted",
+      "code": 204
+    },
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Remove Service Item - Unauthorized Access (Invalid Token)",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["Service item exists", "Token is invalid"],
+    "Steps": [
+      "Attempt to delete the service item with ID {id} using an invalid token",
+      "Verify that the request was unauthorized and that the service item still exists"
+    ],
+    "Expected": {
+      "result": "Unauthorized access attempt failed, service item still exists in batch items collection",
+      "code": 401
+    },
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "Remove Service Item - Not Logged In",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["Service item exists", user logs out before attempting deletion"],
+    "Steps": [
+      "Attempt to delete the service item with ID {id} while user is logged out",
+      "Verify that the request was unauthorized and that the service item still exists"
+    ],
+    "Expected": {
+      "result": "Unauthorized access attempt failed, service item still exists in batch items collection",
+      "code": 401
+    },
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "Remove Service Item - Invoiced",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["Service item exists with invoices", user logs in],
+    "Steps": [
+      "Attempt to delete the service item with ID {id} after it has been invoiced",
+      "Verify that the deletion failed and the service item still exists"
+    ],
+    "Expected": {
+      "result": "The service item cannot be removed because it is currently invoiced",
+      "code": 409
+    },
+    "ExpectedStatusCode": 409
+  },
+  // Add other variations with valid, invalid, missing, malformed, and boundary inputs for testing scenarios.
+]
+```

@@ -1,0 +1,108 @@
+[
+  {
+    "TestName": "Adding a new service item (BRULE-21, BRULE-22)",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user must be authenticated and authorized to create a new service item."
+    ],
+    "Steps": [
+      "Create a POST request to /api/service-costs with the following JSON body:",
+      '{"job_id": 1, "service_type": "Hotel", "cost": 100}',
+      "Verify that the HTTP status code is 201 Created and check the response for the newly created service item."
+    ],
+    "Expected": "A new service cost record should be successfully created with a matching job card.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Adding a new service item (BRULE-27)",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user must be authenticated and authorized to create a new service item."
+    ],
+    "Steps": [
+      "Create a POST request to /api/service-costs with an invalid JSON body (missing 'service_type' field).",
+      "Verify that the HTTP status code is 400 Bad Request and check for an appropriate error message in the response body."
+    ],
+    "Expected": "The server should reject the request because it is missing a service type.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Adding a new null service item (BRULE-27)",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user must be authenticated and authorized to create a new service item."
+    ],
+    "Steps": [
+      "Create a POST request to /api/service-costs with an empty JSON object {}.",
+      "Verify that the HTTP status code is 400 Bad Request and check for an appropriate error message in the response body."
+    ],
+    "Expected": "The server should reject the request because it contains no service type.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Adding a new zero-cost service item (BRULE-21)",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user must been authenticated and authorized to create a new service item."
+    ],
+    "Steps": [
+      "Create a POST request to /api/service-costs with the following JSON body:",
+      '{"job_id": 1, "service_type": "Hotel", "cost": 0}',
+      "Verify that the HTTP status code is 201 Created and check for the newly created service item."
+    ],
+    "Expected": "A new service cost record for a zero-cost hotel service should be successfully created.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Adding a negative cost service item (BRULE-12)",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user must been authenticated and authorized to create a new service item."
+    ],
+    "Steps": [
+      "Create a POST request to /api/service-costs with the following JSON body:",
+      '{"job_id": 1, "service_type": "Hotel", "cost": -50}',
+      "Verify that the HTTP status code is 400 Bad Request and check for an appropriate error message in the response body."
+    ],
+    "Expected": "The server should reject the request due to a negative cost.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Adding null job ID (BRULE-12)",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A user must been authenticated and authorized to create a new service item."
+    ],
+    "Steps": [
+      "Create a POST request to /api/service-costs with the following JSON body:",
+      '{"job_id": null, "service_type": "Hotel", "cost": 100}',
+      "Verify that the HTTP status code is either 400 Bad Request or 422 Unprocessable Entity and check for an appropriate error message in the response body."
+    ],
+    "Expected": "The server should either reject the request with a null job ID or handle it gracefully before rejecting due to other validation failures.",
+    "ExpectedStatusCode": -1
+  }
+]

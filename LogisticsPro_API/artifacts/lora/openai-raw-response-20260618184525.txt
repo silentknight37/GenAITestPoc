@@ -1,0 +1,42 @@
+```json
+[
+  {
+    "TestName": "CalculateJobCost",
+    "RelatedRequirement": "FR-15",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "API is working"
+    ],
+    "Steps": [
+      "Create a new service cost entry in the /api/service-costs endpoint",
+      "Include necessary information like date, employee id, job description",
+      "Verify that the POST request returns a status code of 201 created"
+    ],
+    "Expected": "",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "CalculateJobCost",
+    "RelatedRequirement": "FR-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "API is working"
+    ],
+    "Steps": [
+      "Attempt to create a new service cost without authentication (should result in 401 unauthorized)",
+      "Create a new service cost with missing data (should result in 422 unprocessable entity)"
+    ],
+    "Expected": {
+      "error": true,
+      "message": "Unauthorized"
+    },
+    "ExpectedStatusCode": 401
+  }
+]
+```

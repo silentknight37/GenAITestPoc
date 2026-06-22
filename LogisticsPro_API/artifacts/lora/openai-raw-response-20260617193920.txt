@@ -1,0 +1,62 @@
+[
+  {
+    "TestName": "BR-10_InvoiceCreation",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Send a POST request to /api/invoices with valid JSON data representing an invoice.",
+      "Verify that the request status code is 201 (Created)."
+    ],
+    "Expected": "A new invoice should be created in the system and its ID should be included in the response body with a content-type of 'application/json'.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "BR-10_InvoiceRetrieval",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      "Retrieve an invoice using a unique ID that was created in the previous test (BR-10_InvoiceCreation)",
+      "Verify that the request status code is 200 (OK)."
+    ],
+    "Expected": "The invoice details should be successfully retrieved and returned with a content-type of 'application/json'.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "BR-10_InvoiceVoiding_ValidInvoiceScenario",
+    "RelatedRequirement": "FR-19",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/invoices/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Find a valid invoice ID and send a POST request to /api/invoices/{id}/void.",
+      "Verify that the request status code is 204 (No Content)."
+    ],
+    "Expected": "The specified invoice should be successfully voided in the system, indicating by a HTTP 204 response with no content.",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "BR-10_InvoiceVoiding_InvalidInvoiceScenario",
+    "RelatedRequirement": "FR-19",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/invoices/{id}/void",
+    "HttpMethod": "POST",
+    "Preconditions": ["An invalid invoice ID or a non-existent invoice is provided as the endpoint parameter."],
+    "Steps": [
+      "Attempt to send a POST request to /api/invoices/{id}/void with an incorrect invoice ID.",
+      "Verify that the request status code is 404 (Not Found) or a similar HTTP error status code."
+    ],
+    "Expected": "The system should return an appropriate error response, such as a 404 status indicating that the invoice was not found. The error message should clearly indicate that the provided invoice ID does not exist.",
+    "ExpectedStatusCode": [404]
+  }
+]

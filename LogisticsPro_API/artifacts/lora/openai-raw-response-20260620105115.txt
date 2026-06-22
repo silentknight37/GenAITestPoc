@@ -1,0 +1,110 @@
+```json
+[
+  {
+    "TestName": "Vendor create and retrieve",
+    "RelatedRequirement": "BRULE-42 Vendor Consistency for Voucher",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": ["Vendor name provided", "Vendor can be classified for operational usage"],
+    "Steps":
+    [
+      {
+        "stepDescription": "Create a new vendor using valid input"
+      },
+      {
+        "responseDescription": "HTTP 201 Created response received"
+      }
+    ],
+    "Expected": "Vendor record is created and available for retrieval",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Vendor delete after create",
+    "RelatedRequirement": "BRULE-42 Vendor Consistency for Voucher",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      "Vendor record created",
+      "Vendor ID is provided"
+    ],
+    "Steps":
+    [
+      {
+        "stepDescription": "Delete the vendor using its created ID"
+      },
+      {
+        "responseDescription": "HTTP 204 No Content response received"
+      }
+    ],
+    "Expected": "Vendor record is deleted from system",
+    "ExpectedStatusCode": 204
+  },
+  {
+    "TestName": "Vendor retrieval after create and delete",
+    "RelatedRequirement": "BRULE-42 Vendor Consistency for Voucher",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "Vendor record deleted",
+      "Vendor ID is provided"
+    ],
+    "Steps":
+    [
+      {
+        "stepDescription": "Attempt to retrieve the vendor after deletion"
+      },
+      {
+        "responseDescription": "HTTP 404 Not Found response received"
+      }
+    ],
+    "Expected": "Vendor retrieval fails and returns 404 error",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "Vendor record completeness with invalid vendor name",
+    "RelatedRequirement": "BRULE-9 Vendor Record Completeness",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors/{id}",
+    "HttpMethod": "POST",
+    "Preconditions": ["Invalid vendor name provided"],
+    "Steps":
+    [
+      {
+        "stepDescription": "Create a new vendor with an invalid name"
+      },
+      {
+        "responseDescription": "HTTP 400 Bad Request response received, including validation error message indicating missing/vendor name requirement"
+      }
+    ],
+    "Expected": "Vendor record is not created and system returns appropriate error",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Vendor create with incomplete vendor info",
+    "RelatedRequirement": "BRULE-9 Vendor Record Completeness",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors/{id}",
+    "HttpMethod": "POST",
+    "Preconditions": ["Vendor name provided but other required fields are missing"],
+    "Steps":
+    [
+      {
+        "stepDescription": "Create a new vendor with minimal information"
+      },
+      {
+        "responseDescription": "HTTP 400 Bad Request response received, including validation error messages indicating the missing fields"
+      }
+    ],
+    "Expected": "Vendor record is not created and system returns appropriate error",
+    "ExpectedStatusCode": 400
+  }
+]
+```

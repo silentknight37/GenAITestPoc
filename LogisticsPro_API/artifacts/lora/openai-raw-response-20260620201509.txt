@@ -1,0 +1,21 @@
+```json
+[
+  {
+    "TestName": "FR-05-P1-Customer details valid (ID: FR-05)",
+    "RelatedRequirement": "FR-05",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers/123/billable-items",
+    "HttpMethod": "GET",
+    "Preconditions": ["Customer ID (123) exists", "API is reachable"],
+    "Steps": [
+      "Make a GET request to /api/customers/123/billable-items"
+    ],
+    "Expected": {
+      "status": 200,
+      "message": "Customer details retrived"
+    }
+  },
+  // Add more tests here...
+]
+```

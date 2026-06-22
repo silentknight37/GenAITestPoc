@@ -1,0 +1,33 @@
+```json
+[
+  {
+    "TestName": "FR-14 Positive | Removal of Service Item",
+    "RelatedRequirement": "FR-14",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batch-items/{id}",
+    "HttpMethod": "DELETE",
+    "Preconditions": [
+      {
+        "ConditionType": "PreRequisite",
+        "EntityName": "Service Item",
+        "Action": "Exists"
+      },
+      {
+        "ConditionType": "User Role",
+        "RoleName": "Employee",
+        "Expected": true
+      }
+    ],
+    "Steps": [
+      `GET /api/jobcards/123`,
+      `DELETE /api/batch-items/{id}?api-key=abc123`
+    ],
+    "Expected": {
+      "created": false,
+      "token": null
+    },
+    "ExpectedStatusCode": 200
+  }
+]
+```

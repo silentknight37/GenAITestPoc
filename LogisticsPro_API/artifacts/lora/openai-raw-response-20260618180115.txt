@@ -1,0 +1,48 @@
+```json
+[
+{
+  "TestName": "AddServiceItem Positive Scenario - Valid Inputs",
+  "RelatedRequirement": "FR-12",
+  "ScenarioType": "Positive",
+  "Priority": "Medium",
+  "ApiEndpoint": null,
+  "HttpMethod": null,
+  "Preconditions": ["Create a new customer and vendor", "Create a hotel service in the job card"],
+  "Steps": [
+    "Make a POST request to /api/service-costs with required fields (Cost Processing set to 'Fixed')",
+    "Assert status code equal to 200"
+  ],
+  "Expected": {“message”: “Service cost added successfully"},
+  "ExpectedStatusCode": 200
+},
+{
+  "TestName": "AddServiceItem Positive Scenario - Different Cost Processing Type",
+  "RelatedRequirement": "FR-12",
+  "ScenarioType": "Positive",
+  "Priority": "Medium",
+  "ApiEndpoint": null,
+  "HttpMethod": null,
+  "Preconditions": ["Create a new customer and vendor", "Create a transportation service in the hotel service"],
+  "Steps": [
+    "Make a POST request to /api/service-costs with Cost Processing set to 'Per Hour'",
+    "Assert status code equal to 200"
+  ],
+  "Expected": {“message”: “Service cost added successfully"},
+  "ExpectedStatusCode": 200
+},
+{
+  "TestName": "AddServiceItem Negative Scenario - Invalid Input",
+  "RelatedRequirement": "FR-12",
+  "ScenarioType": "Negative",
+  "Priority": "Medium",
+  "ApiEndpoint": "PUT /api/service-costs",
+  "HttpMethod": "POST",
+  "Preconditions": ["Create a new customer and vendor"],
+  "Steps": [
+    "Try to upload an invalid image as the file in the POST request"
+  ],
+  "Expected": {“error message”: “Invalid Input”},
+  "ExpectedStatusCode": 400
+}
+]
+```

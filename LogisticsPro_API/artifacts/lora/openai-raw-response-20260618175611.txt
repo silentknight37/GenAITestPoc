@@ -1,0 +1,120 @@
+```json
+[
+  {
+    "TestName": "Retrieve Operational Report",
+    "RelatedRequirement": "BR-13/BRULE-56",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": ["Navigate to the /api/reports/operational endpoint", "Observe JSON data as expected for operational reports"],
+    "Expected": "Operational details such as turnover, profit, or any sales figures.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Retrieve Historical Report",
+    "RelatedRequirement": "BR-13/BRULE-56",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": ["Navigate to the /api/reports/history endpoint", "Observe JSON data as expected for historical reports"],
+    "Expected": "Historical data such as sales figures over time or any performance indicators.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Retrieve Uninvoiced Report",
+    "RelatedRequirement": "BR-13/BRULE-56",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": ["Navigate to the /api/reports/uninvoiced endpoint", "Observe JSON data as expected for uninvoiced reports"],
+    "Expected": "Uninvoiced items and their totals.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Retrieve Profit and Loss Report",
+    "RelatedRequirement": "BR-13/BRULE-56",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/profit-and-loss",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": ["Navigate to the /api/reports/profit-and-loss endpoint", "Observe JSON data as expected for profit and loss reports"],
+    "Expected": "Profit and loss details such as revenue, expenses, or any financial metrics.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Invalid Operational Report Request Error",
+    "RelatedRequirement": "BR-13/BRULE-56",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": ["Provide invalid parameters or missing authentication"],
+    "Steps": ["Send a valid GET request to /api/reports/operational without required headers", "Observe an HTTP response in the error format as expected, such as 401 Unauthorized, 404 Not Found, etc."],
+    "Expected": {
+      "error":{
+        "status":"error",
+        "message":"Invalid request"
+      }
+    },
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Invalid History Report Request Error",
+    "RelatedRequirement": "BR-13/BRULE-56",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": ["Provide invalid parameters or missing authentication"],
+    "Steps": ["Send a valid GET request to /api/reports/history without required headers", "Observe an HTTP response in the error format as expected, such as 401 Unauthorized, 404 Not Found, etc."],
+    "Expected": {
+      "error":{
+        "status":"error",
+        "message":"Invalid request"
+      }
+    },
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Invalid Uninvoiced Report Request Error",
+    "RelatedRequirement": "BR-13/BRULE-56",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/uninvoiced",
+    "HttpMethod": "GET",
+    "Preconditions": ["Provide invalid parameters or missing authentication"],
+    "Steps": ["Send a valid GET request to /api/reports/uninvoiced without required headers", "Observe an HTTP response in the error format as expected, such as 401 Unauthorized, 404 Not Found, etc."],
+    "Expected": {
+      "error":{
+        "status":"error",
+        "message":"Invalid request"
+      }
+    },
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Invalid Profit and Loss Report Request Error",
+    "RelatedRequirement": "BR-13/BRULE-56",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/profit-and-loss",
+    "HttpMethod": "GET",
+    "Preconditions": ["Provide invalid parameters or missing authentication"],
+    "Steps": ["Send a valid GET request to /api/reports/profit-and-loss without required headers", "Observe an HTTP response in the error format as expected, such as 401 Unauthorized, 404 Not Found, etc."],
+    "Expected": {
+      "error":{
+        "status":"error",
+        "message":"Invalid request"
+      }
+    },
+    "ExpectedStatusCode": 400
+  }
+]
+```

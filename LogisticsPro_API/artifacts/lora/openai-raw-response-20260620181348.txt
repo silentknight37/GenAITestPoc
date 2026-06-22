@@ -1,0 +1,120 @@
+```json
+[
+  {
+    "TestName": "BR-01-Login - Login with Valid Credentials",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Given a user's valid credentials (username, email, password)",
+      "When the user sends a POST request to /api/auth/login with JSON payload matching the credentials",
+      "Then the system should return an authenticated token"
+    ],
+    "Expected": {
+      "responseBody": "Valid token object",
+      "expectedStatusCode": 200
+    }
+  },
+  {
+    "TestName": "BR-01-Login - Login with Invalid Email/Password combination",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Given a user with an invalid email/password combination",
+      "When the user sends a POST request to /api/auth/login with JSON payload matching the invalid credentials",
+      "Then the system should return an unauthorized response"
+    ],
+    "Expected": {
+      "responseBody": "{}",
+      "expectedStatusCode": 401,
+      "error": {
+        "message": "Invalid credentials"
+      }
+    }
+  },
+  {
+    "TestName": "BR-01-Login - Expired Token",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Given a user with an expired access token",
+      "When the user sends a GET request to /api/jobcards/{id}/finance without providing a new token",
+      "Then the system should return a token expiration error"
+    ],
+    "Expected": {
+      "responseBody": "{token_expiration: true}",
+      "expectedStatusCode": 403,
+      "token": null
+    }
+  },
+  {
+    "TestName": "FR-01-Authenticate User - Valid Credentials",
+    "RelatedRequirement": "FR-01",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Given a user's valid credentials (username, email, password)",
+      "When the user sends a POST request to /api/auth/login with JSON payload matching the credentials",
+      "Then the system should return an authentication token"
+    ],
+    "Expected": {
+      "responseBody": "Valid token object",
+      "expectedStatusCode": 200
+    }
+  },
+  {
+    "TestName": "FR-01-Authenticate User - Invalid Credentials",
+    "RelatedRequirement": "FR-01",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Given a user with an invalid email/password combination",
+      "When the user sends a POST request to /api/auth/login with JSON payload matching the invalid credentials",
+      "Then the system should return an unauthorized response"
+    ],
+    "Expected": {
+      "responseBody": "{}",
+      "expectedStatusCode": 401,
+      "error": {
+        "message": "Invalid credentials"
+      }
+    }
+  },
+  {
+    "TestName": "FR-01-Authenticate User - Expired Token",
+    "RelatedRequirement": "FR-01",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Given a user with an expired access token",
+      "When the user sends a GET request to /api/customers/{customerId}/billable-items without providing a new token",
+      "Then the system should return a token expiration error"
+    ],
+    "Expected": {
+      "responseBody": "{token_expiration: true}",
+      "expectedStatusCode": 403,
+      "token": null
+    }
+  }
+]
+```

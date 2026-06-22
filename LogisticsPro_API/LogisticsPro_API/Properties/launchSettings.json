@@ -16,7 +16,18 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:8080",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "OPENAI_LORA_BASE_URL": "https://api.together.xyz/v1",
+        "OPENAI_LORA_MODEL": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        "OPENAI_LORA_API_KEY": "tgp_v1_E5gB1BYtW7c4k7Xbo6lFHnT2JLqVD_Qco7hOniAHneU",
+        "GENAI_LEAN_PROMPT": "1",
+        "GENAI_TESTS_PER_REQ": "30",
+        "GENAI_LORA_PASSES": "1",
+        "GENAI_LORA_CONCURRENCY": "6",
+        "GENAI_LORA_RAG_CONCURRENCY": "6",
+        "GENAI_LORA_MAX_TOKENS": "4000",
+        "OPENAI_TRAINING_DATA": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\lora\\training.jsonl",
+        "QDRANT_URL": "http://localhost:6333"
       }
     },
     "LogisticsPro_API": {

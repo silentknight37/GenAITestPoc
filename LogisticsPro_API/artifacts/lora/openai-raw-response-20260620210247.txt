@@ -1,0 +1,727 @@
+```json
+[
+  {
+    "TestName": "BRULE-15: Post Open Job Card - Valid ID",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data is correctly formatted and complete."
+      },
+      {
+        "StepName": "Send POST Request",
+        "Description": "Use POST method to open a job card with the specified ID.",
+        "Expected": "The job card status is updated to 'Open'."
+      }
+    ],
+    "Expected": "Job card has been opened successfully."
+  },
+  {
+    "TestName": "BRULE-15: Post Open Job Card - Invalid ID",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Boundary",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/jobcards/invalid/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data is correctly formatted and complete."
+      },
+      {
+        "StepName": "Send POST Request with Invalid ID",
+        "Description": "Use POST method to open a job card with an invalid ID.",
+        "Expected": "An error message or business-level failure response should be returned."
+      }
+    ],
+    "Expected": "Failed to open job card. Error: Invalid Job Card ID."
+  },
+  {
+    "TestName": "BRULE-15: GET All Job Cards - No Filter",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data is correctly formatted and complete."
+      },
+      {
+        "StepName": "Send GET Request with No Filter",
+        "Description": "Use GET method to retrieve all job cards.",
+        "Expected": "The response should contain all job cards within an array."
+      }
+    ],
+    "Expected": "Job cards are retrieved successfully."
+  },
+  {
+    "TestName": "BRULE-15: GET Job Card by ID - Valid ID",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data is correctly formatted and complete."
+      },
+      {
+        "StepName": "Send GET Request with Valid ID",
+        "Description": "Use GET method to retrieve a specific job card by its ID.",
+        "Expected": "The response should contain the job card details."
+      }
+    ],
+    "Expected": "Job card record retrieved successfully."
+  },
+  {
+    "TestName": "BRULE-15: GET Job Card by ID - Invalid ID",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Boundary",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/jobcards/invalid",
+    "HttpMethod": "GET",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data is correctly formatted and complete."
+      },
+      {
+        "StepName": "Send GET Request with Invalid ID",
+        "Description": "Use GET method to retrieve a specific job card by an invalid ID.",
+        "Expected": "An error message or business-level failure response should be returned."
+      }
+    ],
+    "Expected": "Failed to retrieve job card. Error: Invalid Job Card ID."
+  },
+  {
+    "TestName": "BRULE-15: PUT Update Job Card - Valid ID",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100",
+    "HttpMethod": "PUT",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data is correctly formatted and complete."
+      },
+      {
+        "StepName": "Create new Job Card Record",
+        "Description": "Send POST request to create a new job card record.",
+        "Expected": "Job card has been created successfully. "
+      },
+      {
+        "StepName": "Use PUT Request to Update the Created Job Card",
+        "Description": "Send PUT method to update an existing job card with the specified ID.",
+        "Expected": "The jobcard status is updated."
+      }
+    ],
+    "Expected": "Job card record has been updated successfully."
+  },
+  {
+    "TestName": "BRULE-15: PUT Update Job Card - Invalid ID",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Boundary",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/jobcards/invalid",
+    "HttpMethod": "PUT",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data is correctly formatted and complete."
+      },
+      {
+        "StepName": "Create new Job Card Record",
+        "Description": "Send POST request to create a new job card record.",
+        "Expected": "Job card has been created successfully. "
+      },
+      {
+        "StepName": "Use PUT Request with Invalid ID",
+        "Description": "Send PUT method to update an existing job card with an invalid ID.",
+        "Expected": "An error message or business-level failure response should be returned."
+      }
+    ],
+    "Expected": "Failed to update job card. Error: Invalid Job Card ID."
+  },
+  {
+    "TestName": "BRULE-15: DELETE Delete Job Card - Valid ID",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100",
+    "HttpMethod": "DELETE",
+    "Preconditions": ["Job card record created before deleting it."],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data is correctly formatted and complete."
+      },
+      {
+        "StepName": "Create new Job Card Record",
+        "Description": "Send POST request to create a new job card record.",
+        "Expected": "Job card has been created successfully. "
+      },
+      {
+        "StepName": "Use DELETE Request to Delete the Created Job Card",
+        "Description": "Send DELETE method with valid ID to delete the job card.",
+        "Expected": "The jobcard record has been deleted successfully."
+      }
+    ],
+    "Expected": "Job card record has been deleted successfully."
+  },
+  {
+    "TestName": "BRULE-15: DELETE Delete Job Card - Invalid ID",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Boundary",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/jobcards/invalid",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data is correctly formatted and complete."
+      },
+      {
+        "StepName": "Create new Job Card Record",
+        "Description": "Send POST request to create a new job card record.",
+        "Expected": "Job card has been created successfully. "
+      },
+      {
+        "StepName": "Use DELETE Request with Invalid ID",
+        "Description": "Send DELETE method with invalid ID to delete the job card.",
+        "Expected": "An error message or business-level failure response should be returned."
+      }
+    ],
+    "Expected": "Failed to delete job card. Error: Invalid Job Card ID."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields."
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - All Fields",
+        "Description": "Send POST request to create a new job card record_missing all fields.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Empty Data - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields and contains no empty values."
+      },
+      {
+        "StepName": "Send POST Request with Empty Data - All Fields",
+        "Description": "Send POST request to create a new job card record with empty data.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields and contains incorrect data types."
+      },
+      {
+        "StepName": "Send POST Request with Incorrect Data Type - All Fields",
+        "Description": "Send POST request to create a new job card record with data type mismatch.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - ID Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes ID field but does not have any values."
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - ID Field",
+        "Description": "Send POST request to create a new job card record with a missing ID.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - ID Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes ID field but contains incorrect data type."
+      },
+      {
+        "StepName": "Send POST Request with Incorrect Data Type - ID Field",
+        "Description": "Send POST request to create a new job card record with incorrect type for ID.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - Status Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes Status field but does not have any values."
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - Status Field",
+        "Description": "Send POST request to create a new job card record with missing status.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - Status Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes Status field but contains incorrect data type."
+      },
+      {
+        "StepName": "Send POST Request with Incorrect Data Type - Status Field",
+        "Description": "Send POST request to create a new job card record with value other than 'Open' or 'Closed'.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields."
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - All Fields",
+        "Description": "Send POST request to create a new job card record missing all fields.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Empty Data - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields and contains no empty values."
+      },
+      {
+        "StepName": "Send POST Request with Empty Data - All Fields",
+        "Description": "Send POST request to create a new job card record with empty data.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields and contains incorrect data types."
+      },
+      {
+        "StepName": "Send POST Request with Incorrect Data Type - All Fields",
+        "Description": "Send POST request to create a new job card record with data type mismatch.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - ID Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes ID field but does not have any values."
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - ID Field",
+        "Description": "Send POST request to create a new job card record with a missing ID.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - ID Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes ID field but contains incorrect data type."
+      },
+      {
+        "StepName": "Send POST Request with Incorrect Data Type - ID Field",
+        "Description": "Send POST request to create a new job card record with value other than 'Open' or 'Closed'.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - Status Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes Status field but does not have any values."
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - Status Field",
+        "Description": "Send POST request to create a new job card record missing status.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - Status Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes Status field but contains incorrect data type."
+      },
+      {
+        "StepName": "Send POST Request with Incorrect Data Type - Status Field",
+        "Description": "Send POST request to create a new job card record with value other than 'Open' or 'Closed'.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields."
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - All Fields",
+        "Description": "Send POST request to create a new job card record missing all fields.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Empty Data - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields and contains no empty values."
+      },
+      {
+        "StepName": "Send POST Request with Empty Data - All Fields",
+        "Description": "Send POST request to create a new job card record with empty data.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields and contains incorrect data types.",
+      },
+      {
+        "StepName": "Send POST Request with Incorrect Data Type - All Fields",
+        "Description": "Send POST request to create a new job card record with data type mismatch.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - ID Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes ID field but does not have any values."
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - ID Field",
+        "Description": "Send POST request to create a new job card record with a missing ID.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - ID Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes ID field but contains incorrect data type."
+      },
+      {
+        "StepName": "Send POST Request with Incorrect Data Type - ID Field",
+        "Description": "Send POST request to create a new job card record with value other than 'Open' or 'Closed'.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - Status Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes Status field but does not have any values.",
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - Status Field",
+        "Description": "Send POST request to create a new job card record with empty data.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - Status Field",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes Status field but does not have any values.",
+      },
+      {
+        "StepName": "Send POST Request with Incorrect Data Type - ID Field",
+        "Description": "Send POST request to create a new job card record with value other than 'Open' or 'Closed'.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields."
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - All Fields",
+        "Description": "Send POST request to create a new job card record with empty data.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes Status field but does not have any values.",
+      },
+      {
+        "StepName": "Send POST Request with Incorrect Data Type - ID Field",
+        "Description": "Send POST request to create a new job card record with value other than 'Open' or 'Closed'.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Missing Data - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data has all required fields."
+      },
+      {
+        "StepName": "Send POST Request with Missing Data - All Fields",
+        "Description": "Send POST request to create a new job card record with empty data.",
+        "Expected": "An error message or business-level failure response should be returned. "
+      }
+    ],
+    "Expected": "Failed to create job card record."
+  },
+  {
+    "TestName": "BRULE-15: POST New Job Card with Incorrect Data Type - All Fields",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/100/open",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "StepName": "Validate Input Data",
+        "Action": "Ensure the input data includes Status field but does not have any

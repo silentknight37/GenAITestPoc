@@ -1,0 +1,93 @@
+[
+  {
+    "TestName": "Positive Close Job Card with Valid ID",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A job card exists with a valid ID"
+    ],
+    "Steps": [
+      "Send a POST request to /api/jobcards/123/close "
+    ],
+    "Expected": "The status of the job card is updated to 'Closed'.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Negative Close Job Card with Invalid ID (Non-existent)",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/999/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A job card does not exist with ID 999"
+    ],
+    "Steps": [
+      "Send a POST request to /api/jobcards/999/close "
+    ],
+    "Expected": "The system returns an appropriate error indicating the job card is not found.",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "Boundary Close Job Card with Existing ID",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Boundary",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A job card exists with an ID that is a valid positive integer (e.g., 0 or 99999)"
+    ],
+    "Steps": [
+      "Send a POST request to /api/jobcards/0/close" // Boundary case: zero
+    ],
+    "Expected": "The system handles the boundary value correctly. The status of the job card is updated to 'Closed'."
+  },
+  {
+    "TestName": "Validation Error - Attempting to Close an Already Closed Job Card",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Validation",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A job card already exists with a valid ID"
+    ],
+    "Steps": [
+      "Send an authenticated POST request to /api/jobcards/123/close "
+    ],
+    "Expected":
+```json
+{
+  "error": {
+    "message": "jobcard is already closed",
+    "code": "INVALID_REQUEST"
+  }
+}
+```
+,
+    "ExpectedStatusCode": 400
+```json
+}
+```
+  },
+  {
+    "TestName": "Null Response on Attempt to Close Job Card Without Existing ID",
+    "RelatedRequirement": "FR-11",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/jobcards/505/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "The server is set up to return a null response when handling invalid IDs"
+    ],
+    "Steps": [
+      "Send an POST request to /api/jobcards/505/close without a valid job card ID"
+    ],
+    "Expected": "",
+    "ExpectedStatusCode": 204
+  }
+]

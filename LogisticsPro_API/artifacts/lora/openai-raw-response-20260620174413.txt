@@ -1,0 +1,76 @@
+```json
+[
+    {
+        "TestName": "Receipt Creation Test",
+        "RelatedRequirement": "BR-12",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/receipts",
+        "HttpMethod": "POST",
+        "Preconditions": [("Customer is logged in", "User must be authenticated to create a receipt"), ("Invoice exists with a receipt limit", "The invoice should have a configured maximum receivable amount for receipts")],
+        "Steps": ["Create a new receipt object in the request body including valid customer ID and invoice ID"], 
+        "Expected": "A new receipt is created with an ID, and it is linked to the specified invoice.",
+        "ExpectedStatusCode": 201
+    },
+    {
+        "TestName": "Receipt Void Test",
+        "RelatedRequirement": "BR-12",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/payment-voucher-items/{id}",
+        "HttpMethod": "DELETE",
+        "Preconditions": [("Payment voucher exists", "The payment voucher must be assigned to a receipt"), ("Receipt is valid for voiding", "The receipt cannot be voided if it has already been voided or linked to an invoiced")],
+        "Steps": ["Send a DELETE request with the ID of the paymentvoucher item associated with the receipt"], 
+        "Expected": "The receipt status changes to 'void', and any related invoices are updated accordingly.",
+        "ExpectedStatusCode": 200
+    },
+    {
+        "TestName": "Receipt Link Test",
+        "RelatedRequirement": "BR-12",
+        "ScenarioType": "Positive",
+        "Priority": "High",
+        "ApiEndpoint": "/api/proforma-invoices/{id}/receipts",
+        "HttpMethod": "POST",
+        "Preconditions": [("Proforma invoice exists", "The proforma invoice must exist and have items to attach receipts to"), ("Receipt is valid for linking", "The receipt must be active and not linked to a different invoice")],
+        "Steps": ["Create a new receipt object in the request body including valid customer ID, vendor ID, amount, and other relevant details"], 
+        "Expected": "A new receipt is linked to the specified proforma invoice.",
+        "ExpectedStatusCode": 201
+    },
+    {
+        "TestName": "Receipt Amount Limit Exceeded Test",
+        "RelatedRequirement": "BRULE-52",
+        "ScenarioType": "Negative",
+        "Priority": "High",
+        "ApiEndpoint": "/api/proforma-invoice-receipts",
+        "HttpMethod": "POST",
+        "Preconditions": [("Proforma invoice exceeds the allowed receivable amount", "The total of receipts applied to the proforma invoice must not exceed its allowable receivable amount"), ("Receipt data is valid", "All required fields in a receipt object are correctly filled and within acceptable limits")],
+        "Steps": ["Attempt to add more receipts to an existing proforma invoice that has exceeded its allowed receivable amount"], 
+        "Expected": "The server responds with an error indicating that the total of receipts exceeds the allowed receivable amount.",
+        "ExpectedStatusCode": 400
+    },
+    {
+        "TestName": "Receipt Not Linked to Invoiced Data Test",
+        "RelatedRequirement": "BRULE-54",
+        "ScenarioType": "Negative",
+        "Priority": "High",
+        "ApiEndpoint": "/api/reports/uninvoiced",
+        "HttpMethod": "GET",
+        "Preconditions": [],
+        "Steps": ["Make a GET request to the receipt traceability report endpoint"], 
+        "Expected": "Receipt data is not linked to any invoices or financial documents, showing that the receipts are unlinked.",
+        "ExpectedStatusCode": 200
+    },
+    {
+        "TestName": "Invalid Receipt Void Test",
+        "RelatedRequirement": "BRULE-55",
+        "ScenarioType": "Negative",
+        "Priority": "High",
+        "ApiEndpoint": "/api/payment-voucher-items/{id}",
+        "HttpMethod": "DELETE",
+        "Preconditions": [("Receipt is already voided, but still linked to records", "The receipt should be voided before attempting to unlink or delete it"), ("Receipt data is valid", "All required fields in a receipt object are correctly filled and within acceptable limits")],
+        "Steps": ["Attempt to delete a payment voucher item associated with the receipt"], 
+        "Expected": "The server responds with an error indicating that the receipt cannot be voided because it is still linked to records.",
+        "ExpectedStatusCode": 400
+    }
+]
+```

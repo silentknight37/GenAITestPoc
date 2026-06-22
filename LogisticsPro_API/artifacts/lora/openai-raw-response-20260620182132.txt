@@ -1,0 +1,71 @@
+```json
+[
+  {
+    "TestName": "Create Valid Invoice",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Steps": [
+      "Ensure JSON payload includes necessary fields such as customer, details and amount.",
+      "Send POST request to create a new invoice."
+    ],
+    "Expected": "Invoice creation is successful with response status code 200.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Retrieve Valid Invoice",
+    "RelatedRequirement": "BR-10",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/invoices/12345",
+    "HttpMethod": "GET",
+    "Steps": "",
+    "Expected": "Invoice retrieval is successful.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Void A Valid Invoice",
+    "RelatedRequirement": "FR-19, BRULE-44, BRULE-45",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices/12345/void",
+    "HttpMethod": "POST",
+    "Steps": [
+      "Ensure API has the correct permissions and authentication methods set up.",
+      "Send POST request to void the invoice."
+    ],
+    "Expected": "Invoice deletion is successful with response status code 200.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Attempt Void An Non-Existing Invoice",
+    "RelatedRequirement": "FR-19, BRULE-43, BRULE-45",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/invoices/98765/void",
+    "HttpMethod": "POST",
+    "Steps": [
+      "Ensure valid credentials are provided.",
+      "Send POST request to attempt voiding the invoice that does not exist."
+    ],
+    "Expected": "Invoice deletion failure is indicated by response body: {\"error\": \"Invoice with id 98765 does not exist.\"}",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "Void A Voided Invoice",
+    "RelatedRequirement": "FR-19, BRULE-43, BRULE-45",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/invoices/12345/void",
+    "HttpMethod": "POST",
+    "Steps": [
+      "Ensure API has the correct permissions and authentication methods set up.",
+      "Send POST request to void the invoice that is already voided."
+    ],
+    "Expected": "Invoice deletion failure is indicated by response body: {\"error\": \"Invoice with id 12345 has already beenvoided.\"}",
+    "ExpectedStatusCode": 400
+  }
+]
+```

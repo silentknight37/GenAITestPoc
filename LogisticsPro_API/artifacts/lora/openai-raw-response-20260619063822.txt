@@ -1,0 +1,104 @@
+[
+  {
+    "TestName": "Validate PUT /api/service-costs before closing",
+    "RelatedRequirement": "BRULE-18",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "Preconditions": ["All necessary service costs are set"],
+    "Steps": [
+      "Arrange: User has a job card in 'open' state and some service costs are not set."
+      "Act: Send a PUT request to /api/service-costs with all service costs filled out."
+      "Assert: Job card's 'service_costs_updated_at' is updated, indicating successful PUT request."
+      "Expected: Response status code is 200."
+    ],
+    "Expected": "PUT request to /api/service-costs succeeds with 200 status, and job cards' 'service_costs_updated_at' timestamp is updated."
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Validate GET /api/reports/operational before closing",
+    "RelatedRequirement": "BRULE-18",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": ["All necessary operational reports are generated and available"],
+    "Steps": [
+      "Arrange: User has a job card in 'open' state."
+      "Act: Send a GET request to /api/reports/operational."
+      "Assert: Reports data is returned successfully."
+      "Expected: Response status code is 200."
+    ],
+    "Expected": "GET request to /api/reports/operational succeeds with 200 status, and operational reports are available to the user."
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Validate GET /api/jobcards/reference-data before closing",
+    "RelatedRequirement": "BRULE-18",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/reference-data",
+    "HttpMethod": "GET",
+    "Preconditions": ["All necessary reference data is fetched and available"],
+    "Steps": [
+      "Arrange: User has a job card in 'open' state."
+      "Act: Send a GET request to /api/jobcards/reference-data."
+      "Assert: Reference data related to the job card is returned successfully."
+      "Expected: Response status code is 200."
+    ],
+    "Expected": "GET request to /api/jobcards/reference-data succeeds with 200 status, and reference data is available for the user."
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Cannot close job card until operational data completed",
+    "RelatedRequirement": "BRULE-18",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": ["Only necessary operational report data is completed"],
+    "Steps": [
+      "Arrange: User tries to close a job card without all operational reports."
+      "Act: Send a POST request to /api/jobcards/{id}/close."
+      "Assert: The system does not accept the request and returns an error indicating missing operational data."
+      "Expected: Response status code is 400 or any other appropriate HTTP status that indicates an error."
+    ],
+    "Expected": "POST request to /api/jobcards/{id}/close fails, returning valid response."
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Cannot close job card until financial dependencies reviewed",
+    "RelatedRequirement": "BRULE-18",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": ["Some of the financial dependencies are not approved"],
+    "Steps": [
+      "Arrange: User tries to close a job card with some financial dependencies pending approval."
+      "Act: Send a POST request to /api/jobcards/{id}/close."
+      "Assert: The system does not accept the request and returns an error indicating incomplete financial data."
+      "Expected: Response status code is 400 or any other appropriate HTTP status that indicates an error."
+    ],
+    "Expected": "POST request to /api/jobcards/{id}/close fails, returning valid response."
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Cannot close job card until no invalid incomplete service lines",
+    "RelatedRequirement": "BRULE-18",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": ["Some of the service line items are invalid or incomplete"],
+    "Steps": [
+      "Arrange: User tries to close a job card with some invalid/incomplete service lines."
+      "Act: Send a POST request to /api/jobcards/{id}/close."
+      "Assert: The system does not accept the request and returns an error indicating invalid/uncompleted service lines."
+      "Expected: Response status code is 400 or any other appropriate HTTP status that indicates an error."
+    ],
+    "Expected": "POST request to /api/jobcards/{id}/close fails, returning valid response."
+    "ExpectedStatusCode": 400
+  }
+]

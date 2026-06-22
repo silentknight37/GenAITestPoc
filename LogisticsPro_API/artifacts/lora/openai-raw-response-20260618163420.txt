@@ -1,0 +1,127 @@
+[
+  {
+    "TestName": "Validate User Authentication for Valid Login",
+    "RelatedRequirement": "BRULE-14",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": ["User with valid credentials exists in the system"],
+    "Steps": [
+      {
+        "Action": "Post Request"
+      },
+      {
+        "Parameters": '{"username":"test_user", "password":"test_password"}'
+      }
+    ],
+    "Expected": "200 OK, a JSON response containing success message like 'Login successful' and JWT Token",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Validate User Authentication for Invalid Password (Negative)",
+    "RelatedRequirement": "BRULE-14",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": ["User exists in the system"],
+    "Steps": [
+      {
+        "Action": "Post Request"
+      },
+      {
+        "Parameters": '{"username":"test_user", "password":"invalid_password"}'
+      }
+    ],
+    "Expected": "200 OK, a JSON response containing error message 'Invalid password'",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "Validate Unauthorized Access (Negative)",
+    "RelatedRequirement": "BRULE-14",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Action": "Post Request"
+      },
+      {
+        "Parameters": '{}'
+      }
+    ],
+    "Expected": "401 Unauthorized, JSON response containing error message 'JWT token missing'",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "Validate Unique Job Card ID",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Boundary|Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": ["Authenticated user has necessary permissions"],
+    "Steps": [
+      {
+        "Action": "Create New Job Card",
+        "Parameters": '{"jobCardNumber":"UNIQUE_JOB_NUMBER"}'
+      }
+    ],
+    "Expected": "201 Created, a JSON response containing job card details including the unique identifier",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Validate Unique Job Card ID Exists (Negative)",
+    "RelatedRequirement": "BRULE-15",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": ["Authenticated user has necessary permissions"],
+    "Steps": [
+      {
+        "Action": "Create Duplicate Job Card",
+        "Parameters": '{"jobCardNumber":"UNIQUE_JOB_NUMBER"}'
+      }
+    ],
+    "Expected": "400 Bad Request, JSON response containing error message 'Job card number already exists'",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Validate Unique Transportation Service ID",
+    "RelatedRequirement": "BRULE-16",
+    "ScenarioType": "Boundary|Auth",
+    "Priority": "High",
+    "ApiEndpoint": "/api/transportation-services",
+    "HttpMethod": "POST",
+    "Preconditions": ["Authenticated user has necessary permissions"],
+    "Steps": [
+      {
+        "Action": "Create New Transportation Service",
+        "Parameters": '{"serviceTypeId":"UNIQUE_SERVICE_TYPE"}'
+      }
+    ],
+    "Expected": "201 Created, a JSON response containing transportation service details including the unique identifier",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Validate Unique Transportation Service ID Exists (Negative)",
+    "RelatedRequirement": "BRULE-16",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/transportation-services",
+    "HttpMethod": "POST",
+    "Preconditions": ["Authenticated user has necessary permissions"],
+    "Steps": [
+      {
+        "Action": "Create Duplicate Transportation Service",
+        "Parameters": '{"serviceTypeId":"UNIQUE_SERVICE_TYPE"}'
+      }
+    ],
+    "Expected": "400 Bad Request, JSON response containing error message 'Service type already exists'",
+    "ExpectedStatusCode": 400
+  },
+]

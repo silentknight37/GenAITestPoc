@@ -1,0 +1,80 @@
+[
+  {
+    "TestName": "Verify creation of a valid vendor",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Create a valid JSON payload for a vendor including the required fields: VendorName and ServiceType (e.g., 'Service Type 1')",
+      "Send a POST request to '/api/vendors' with the above JSON payload"
+    ],
+    "Expected": "A new vendor record is successfully created in the system. The response should include an updated list of vendors including the newly added vendor.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Verify creation of a vendor with missing required fields",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Create a JSON payload for a vendor omitting the required fields VendorName and ServiceType",
+      "Send a POST request to '/api/vendors' with the above JSON payload"
+    ],
+    "Expected": "The server should respond with an error indicating that the payload is missing required fields. The expected response body might include details about what fields are missing.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Verify creation of a vendor with duplicate VendorId",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Create a JSON payload for a vendor with the same VendorId used by another vendor in the system",
+      "Send a POST request to '/api/vendors' with the above JSON payload"
+    ],
+    "Expected": "The server should respond with an error indicating that the VendorId is already taken. The expected response body might include details about which VendorId conflicts.",
+    "ExpectedStatusCode": 409
+  },
+  {
+    "TestName": "Verify creation of a vendor with invalid ServiceType",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Create a JSON payload for a vendor with an invalid ServiceType (e.g., 'invalid-type')",
+      "Send a POST request to '/api/vendors' with the above JSON payload"
+    ],
+    "Expected": "The server should respond with an error indicating that the provided ServiceType is not valid. The expected response body might include details about valid service types.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Verify retrieval of vendor",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Positive",
+    "Priority": "Midium",
+    "ApiEndpoint": "/api/vendors/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "VendorId": "2345"
+      }
+    ],
+    "Steps": [
+      "Make a GET request to '/api/vendors/2345' with valid VendorId"
+    ],
+    "Expected": "The system should respond with the details of the vendor with VendorId 2345. The expected response body should contain all the fields of the vendor record.",
+    "ExpectedStatusCode": 200
+  }
+]

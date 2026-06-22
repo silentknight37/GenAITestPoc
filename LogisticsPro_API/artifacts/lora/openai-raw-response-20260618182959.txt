@@ -1,0 +1,77 @@
+```json
+[
+  {
+    "TestName": "FR-01",
+    "RelatedRequirement": "FR-01",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": null,
+    "Preconditions": ["Unauthenticated user"],
+    "Steps": [
+      "Post JSON body with username and password: {\"username\": \"invalidUser\",\"password\": \"invalidPassword\"}"
+    ],
+    "Expected": "",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "FR-01 Positive",
+    "RelatedRequirement": "FR-01",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": null,
+    "Preconditions": ["Unauthenticated user"],
+    "Steps": [
+      "Post JSON body with valid username and password:"
+        "{\"username\": \"user1\",\"password\": \"pass1\"}"
+    ],
+    "Expected": " Authentication token returned",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "FR-01 Invalid Credentials",
+    "RelatedRequirement": "FR-01",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": null,
+    "Preconditions": ["Unauthenticated user"],
+    "Steps": [
+      "Post JSON body with correct username and incorrect password:"
+        "{\"username\": \"user1\",\"password\": \"incorrectPass\"}"
+    ],
+    "Expected": "",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "FR-01 Expired Token",
+    "RelatedRequirement": "FR-01",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": null,
+    "Preconditions": ["Authenticated user with expired token"],
+    "Steps": [
+      "Request a new login and obtain the new token."
+    ],
+    "Expected": "",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "FR-01 Invalid Token",
+    "RelatedRequirement": "FR-01",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": null,
+    "Preconditions": ["Authenticated user with invalid token"],
+    "Steps": [
+      "Post JSON body with valid username and incorrect token:"
+        "{\"username\": \"user1\",\"token\": \"invalidToken\"}"
+    ],
+    "Expected": "",
+    "ExpectedStatusCode": 401
+  }
+]
+```

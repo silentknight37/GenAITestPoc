@@ -1,0 +1,102 @@
+[
+  {
+    "TestName": "FR-12_Positive_AddServiceItem",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A job with an ID exists."
+    ],
+    "Steps": [
+      "Send a POST request to /api/jobcards/{id}/close, where {id} is the ID of an existing job.",
+      "The request should include any necessary authentication headers or parameters required by the system."
+    ],
+    "Expected": [
+      "A JSON response with status code 200 and data indicating that the job has been closed successfully."
+    ],
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "FR-12_Negative_BadId",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "{id} is a non-existent job ID."
+    ],
+    "Steps": [
+      "Send a POST request to /api/jobcards/{id}/close, where {id} is the non-existent job ID.",
+      "The request should include any necessary authentication headers or parameters required by the system."
+    ],
+    "Expected": [
+      "A JSON response with status code 404 indicating that the job card does not exist."
+    ],
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "FR-12_Negative_InvalidCost",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/transportation-services/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Transportation service ID is valid.",
+      "Cost must be less than 0."
+    ],
+    "Steps": [
+      "Send a POST request to /api/transportation-services/{id}/close, where {id} is the ID of an existing transportation service.",
+      "The request should include any necessary authentication headers or parameters required by the system.",
+      "Set the cost in the payload JSON to -10."
+    ],
+    "Expected": [
+      "A JSON response with status code 422 and a response body indicating that cost must be non-negative."
+    ],
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "FR-12_Negative_DuplicateService",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/transportation-services/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Transportation service ID is valid.",
+      "Service details are already added as part of another transportation service."
+    ],
+    "Steps": [
+      "Send a POST request to /api/transportation-services/{id}/close, where {id} is the ID of an existing transportation service.",
+      "The request should include any necessary authentication headers or parameters required by the system.",
+      "Include additional transportation service details in the payload JSON."
+    ],
+    "Expected": [
+      "A JSON response with status code 422 and a response body indicating that duplicate service entries are not allowed"
+    ],
+    "ExpectedStatusCode": 422
+  },
+  {
+    "TestName": "FR-12_Negative_InvalidData",
+    "RelatedRequirement": "FR-12",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/transportation-services/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Transportation service ID is valid."
+    ],
+    "Steps": [
+      "Send a POST request to /api/transportation-services/{id}/close, where {id} is the ID of an existing transportation service.",
+      "The request should include any necessary authentication headers or parameters required by the system.",
+      "Include invalid data such as missing fields or using non-numeric values for cost in the payload JSON."
+    ],
+    "Expected": [
+      "A JSON response with status code 400 and a detailed error message indicating invalid input data"
+    ],
+    "ExpectedStatusCode": 400
+  }
+]

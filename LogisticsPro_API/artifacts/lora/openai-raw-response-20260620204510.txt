@@ -1,0 +1,718 @@
+```json
+[
+  {
+    "TestName": "IT01: Retrieve Historical Financial Records for an Audit Requirement",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": ["User has access to the historical financial records"],
+    "Steps": [
+      {
+        "Input": "Valid user credentials or invalid credentials with a wrong password.",
+        "Description": "Test the API endpoint with valid user credentials."
+      },
+      {
+        "Input": "Invalid user credentials using a wrong username and password.",
+        "Description": "Test the API endpoint with invalid user credentials (wrong username and password)."
+      }
+    ],
+    "Expected": "The system should return JSON content containing historical financial records of the audit requirement, if available.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "IT02: Retrieve Operational Records for an Audit Requirement",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": ["User has access to the operational records"],
+    "Steps": [
+      {
+        "Input": "Valid user credentials or invalid credentials with a wrong password.",
+        "Description": "Test the API endpoint with valid user credentials."
+      },
+      {
+        "Input": "Invalid user credentials using a wrong username and password.",
+        "Description": "Test the API endpoint with invalid user credentials (wrong username and password)."
+      }
+    ],
+    "Expected": "The system should return JSON content containing operational records of the audit requirement, if available.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "IT03: Retrieve Financial Records for a Specific Job Card's Finance section for an Audit Requirement",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": ["User has access to the financial records for a specific job card", "Job Card has finance section"],
+    "Steps": [
+      {
+        "Input": "Valid user credentials or invalid credentials with a wrong password.",
+        "Description": "Test the API endpoint with valid user credentials."
+      },
+      {
+        "Input": "Invalid user credentials using a wrong username and password.",
+        "Description": "Test the API endpoint with invalid user credentials (wrong username and password)."
+      }
+    ],
+    "Expected": "The system should return JSON content containing financial records for the specified job card's finance section, if available.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "IT04: Retrieve Financial Record Failure with Invalid User Credentials",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": ["User has access to the historical financial records"],
+    "Steps": [
+      {
+        "Input": "Invalid user credentials using a wrong username and password.",
+        "Description": "Test the API endpoint with invalid user credentials (wrong username and password)."
+      }
+    ],
+    "Expected": "The system should return an error message indicating unauthorized access or invalid credentials, if present.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "IT05: Retrieve Financial Record Failure with Expiry Token",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": ["User has access to the historical financial records"],
+    "Steps": [
+      {
+        "Input": "An expired JWT token used for authentication.",
+        "Description": "Test the API endpoint with an invalid JWT token."
+      }
+    ],
+    "Expected": "The system should return an error message indicating access token expiration, if present.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "IT06: Retrieve Financial Record Failure with Missing Authorization Header",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": ["User has access to the historical financial records", "No Authorization Header present"],
+    "Steps": [
+      {
+        "Input": "No authorization header in the HTTP request.",
+        "Description": "Test the API endpoint without an Authorization Header."
+      }
+    ],
+    "Expected": "The system should return an error message indicating missing or invalid authentication credentials, if present.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "IT07: Retrieve Financial Records Failure with Invalid JSON Body",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "POST",
+    "Preconditions": ["Valid JWT token used for authentication", "Valid content in the request body"],
+    "Steps": [
+      {
+        "Input": "Invalid JSON body in a POST request.",
+        "Description": "Test the API endpoint with an invalid JSON body (invalid content)."
+      }
+    ],
+    "Expected": "The system should return an error message indicating missing or invalid request payload, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT08: Retrieve Financial Records Failure without Authentication",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": ["Valid content in the request body"],
+    "Steps": [
+      {
+        "Input": "No valid JWT token used for authentication.",
+        "Description": "Test the API endpoint without an Authorization Header."
+      }
+    ],
+    "Expected": "The system should return an error message indicating missing or invalid authentication credentials, if present.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "IT09: Retrieve Financial Records Failure with Unauthorized Job Card",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": ["Valid authorization token used for authentication", "Job Card does not have a finance section"],
+    "Steps": [
+      {
+        "Input": "A valid user with access to the financial records.",
+        "Description": "Test the API endpoint when viewing finance records of an invalid job card."
+      }
+    ],
+    "Expected": "The system should return an empty data set, not any historical records, if present.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "IT10: Retrieve Financial Records Failure with Negative Job Card",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": ["Valid authorization token used for authentication", "Invalid job card ID"],
+    "Steps": [
+      {
+        "Input": "A valid user with access to the financial records.",
+        "Description": "Test the API endpoint when viewing finance records of an invalid job card."
+      }
+    ],
+    "Expected": "The system should return an empty data set, not any historical records, if present.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "IT11: Retrieve Financial Records Failure with Boundary Job Card",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": ["Valid authorization token used for authentication", "Job Card ID within boundary limits"],
+    "Steps": [
+      {
+        "Input": "A valid user with access to the financial records.",
+        "Description": "Test the API endpoint when viewing finance records of a job card within the defined boundaries."
+      }
+    ],
+    "Expected": "The system should return JSON content containing historical financial records of the specified job card, if available.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "IT12: Retrieve Financial Records Failure with Empty Financial Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": ["Valid user with access to the historical financial records", "There are no historical financial records in the system"],
+    "Steps": [
+      {
+        "Input": "A valid user with access to the historical financial records.",
+        "Description": "Test the API endpoint when viewing historical financial records of a job Card that contains no data.",
+      }
+    ],
+    "Expected": "The system should return an empty data set, not any historical records, if present.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "IT13: Void Financial Record for an Audit Requirement",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid user credentials or invalid credentials with a wrong password.", "Valid content in the request body. Also requires financial records available for voiding."],
+    "Steps": [
+      {
+        "Input": "Valid user credentials or invalid credentials with a wrong password.",
+        "Description": "Test the API endpoint with valid user credentials."
+      },
+      {
+        "Input": "Invalid user credentials using a wrong username and password.",
+        "Description": "Test the API endpoint with invalid user credentials (wrong username and password)."
+      }
+    ],
+    "Expected": "The system should return an update response indicating that the financial record has been voided, if successful.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "IT14: Void Financial Record Failure with Invalid Credentials",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Invalid user credentials used for authentication", "Missing or invalid content in the request body."],
+    "Steps": [
+      {
+        "Input": "An invalid JWT token.",
+        "Description": "Test the API endpoint with an invalid JWT token."
+      },
+      {
+        "Input": "A missing JSON body.",
+        "Description": "Test the API endpoint without a valid JSON body (missing content)."
+      }
+    ],
+    "Expected": "The system should return an error message indicating unauthorized access or invalid credentials, if present.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "IT15: Void Financial Record Failure with Expiry Token",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Missing or invalid content in the request body.", "Existing financial records available for voiding."],
+    "Steps": [
+      {
+        "Input": "An expired JWT token.",
+        "Description": "Test the API endpoint with an invalid JWT token."
+      }
+    ],
+    "Expected": "The system should return an error message indicating access token expiration, if present.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "IT16: Void Financial Record Failure with Missing Authorization Header",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Missing or invalid content in the request body."],
+    "Steps": [
+      {
+        "Input": "No valid JWT token.",
+        "Description": "Test the API endpoint without an Authorization Header."
+      }
+    ],
+    "Expected": "The system should return an error message indicating missing or invalid authentication credentials, if present.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "IT17: Void Financial Record with Missing Job Card ID",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Invalid content in the request body.", "Existing financial records available for voiding."],
+    "Steps": [
+      {
+        "Input": "A missing job card ID.",
+        "Description": "Test the API endpoint without providing a valid job card ID."
+      }
+    ],
+    "Expected": "The system should return an error message indicating missing or invalid data, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT18: Void Financial Record with Missing Financial Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Invalid job card ID."],
+    "Steps": [
+      {
+        "Input": "A missing financial record.",
+        "Description": "Test the API endpoint without providing any financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating that no existing records are available for voiding, if present.",
+    "ExpectedStatusCode": 409
+  },
+  {
+    "TestName": "IT19: Void Financial Record Failure with Invalid Payload",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing financial records available for voiding.", "Invalid content in the request body."],
+    "Steps": [
+      {
+        "Input": "An invalid payload that omits essential data.",
+        "Description": "Test the API endpoint with an incorrect or incomplete payload."
+      }
+    ],
+    "Expected": "The system should return an error message indicating missing or invalid data, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT20: Void Financial Record Failure with Successful Voiding of Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Financial records available for voiding."],
+    "Steps": [
+      {
+        "Input": "A fully valid payload of an existing record to be Voided.",
+        "Description": "Test the API endpoint when successfully voiding an existing record."
+      }
+    ],
+    "Expected": "The system should return an update response indicating that the financial record has been updated, if successful.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "IT21: Void Financial Record with Invalid Payload and Missing Data",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "An invalid payload that omits essential data, including the financial record.",
+        "Description": "Test the API endpoint with an incorrect or incomplete payload."
+      }
+    ],
+    "Expected": "The system should return an error message indicating missing or invalid data, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT22: Void Financial Record Failure with Incorrect JWT Token",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["An invalid JWT token.", "Existing content in the request body.", "Financial records available for voiding."],
+    "Steps": [
+      {
+        "Input": "A valid payload but using an incorrect (expired) JWT.",
+        "Description": "Test the API endpoint with an invalid JWT using an expired token."
+      }
+    ],
+    "Expected": "The system should return an error message indicating unauthenticated access or a changed expiration time, if present.",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "IT23: Void Financial Record Failure with Non-Existing Job Card",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Missing content in the request body.", "Non-existing job card."],
+    "Steps": [
+      {
+        "Input": "A payload without a valid job card ID.",
+        "Description": "Test the API endpoint using a non-valid job card ID."
+      }
+    ],
+    "Expected": "The system should return an error message indicating invalid data, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT24: Void Financial Record Failure with Invalid Job Card ID",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Missing content in the request body.", "Invalid job card ID."],
+    "Steps": [
+      {
+        "Input": "An invalid payload with a non-matching job card ID.",
+        "Description": "Test the API endpoint without specifying an existing job card ID."
+      }
+    ],
+    "Expected": "The system should return an error message indicating no matching job card IDs, if present.",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "IT25: Void Financial Record Failure with Invalid Payload and Missing Data",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Missing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "An invalid payload that omits essential data, including the financial record.",
+        "Description": "Test the API endpoint with an incorrect or incomplete payload."
+      }
+    ],
+    "Expected": "The system should return an error message indicating missing or invalid data, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT26: Void Financial Record Failure with Incorrect Job Card ID and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing job card ID, but incorrect information.",
+        "Description": "Test the API endpoint with an invalid payload that has been updated incorrectly."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed or incorrect update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT27: Void Financial Record Failure with Non-Matching Job Card ID",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with a non-existing job card ID, but incorrect information.",
+        "Description": "Test the API endpoint without specifying an existing job card ID."
+      }
+    ],
+    "Expected": "The system should return an error message indicating no matching job cards IDs, if present.",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "IT28: Void Financial Record Failure with Non-Matching Job Card ID and Incorrect Information",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with a non-existing job card ID, but incorrect information.",
+        "Description": "Test the API endpoint without specifying an existing job card ID."
+      }
+    ],
+    "Expected": "The system should return an error message indicating no matching job cards IDs and incorrect or inconsistent data, if present.",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "IT29: Void Financial Record Failure with Incorrect Job Card ID, Non-Matching Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing job card ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT30: Void Financial Record Failure with Invalid JWT Token and Non-Matching Information",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["An invalid JWT token.", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with inconsistent information but no existing job card ID.",
+        "Description": "Test the API endpoint without specifying an existing or incorrect job card ID."
+      }
+    ],
+    "Expected": "The system should return an error message indicating invalid data, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT31: Void Financial Record Failure with Non-Matching Job Card ID,Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing job card ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT32: Void Financial Record Failure with Non-Matching Job Card ID, Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing jobcard ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT33: Void Financial Record Failure with Non-Matching Job Card ID,Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing jobcard ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT34: Void Financial Record Failure with Non-Matching Job Card ID, Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing jobcard ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT35: Void Financial Record Failure with Non-Matching Job Card ID, Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing jobcard ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT36: Void Financial Record Failure with Non-Matching Job Card ID, Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing jobcard ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT37: Void Financial Record Failure with Non-Matching Job Card ID, Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing jobcard ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT38: Void Financial Record Failure with Non-Matching Job Card ID, Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing jobcard ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT39: Void Financial Record Failure with Non-Matching Job Card ID, Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing jobcard ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT40: Void Financial Record Failure with Non-Matching Job Card ID, Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing jobcard ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "IT41: Void Financial Record Failure with Non-Matching Job Card ID, Incorrect Information, and Existing Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/reports/void/finance",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid JWT token used for authentication", "Existing content in the request body.", "Error in financial record data."],
+    "Steps": [
+      {
+        "Input": "A valid payload with an existing jobcard ID, inconsistent information, and incorrect financial records.",
+        "Description": "Test the API endpoint with incorrect or updated outdated financial records."
+      }
+    ],
+    "Expected": "The system should return an error message indicating a changed update, if present.",
+    "ExpectedStatusCode": 400

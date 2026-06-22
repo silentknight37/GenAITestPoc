@@ -1,0 +1,91 @@
+```json
+[
+  {
+    "TestName": "Verify Financial Consistency Operational totals after creating a job card",
+    "RelatedRequirement": "BRULE-32",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "name": "Test for valid service cost entry in job card"
+      }
+    ],
+    "Steps": [
+      "Create a new job card with valid details and save it to the database",
+      "Save corresponding service costs for the job card to the database",
+      "Query the /api/jobcards/{id}/finance endpoint to retrieve the operational totals from system",
+      "Sum the financial values from all included services related to this job card"
+    ],
+    "Expected": "The operational totals retrieved from the //jobCards/id/finance should match the sum of financial values for all associated service costs.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Verify Financial Consistency Operational totals after updating job card status",
+    "RelatedRequirement": "BRULE-32",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/close",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "name": "Ensure job card exists and is open"
+      },
+      {
+        "name": "Test for valid update to job card status"
+      }
+    ],
+    "Steps": [
+      "Mark the job card as closed by sending a POST request to the /api/jobcards/{id}/close endpoint",
+      "Refresh the detailed information of the job card from the system using /api/jobcards/{id}",
+      "Query the /api/jobcards/{id}/finance endpoint to verify that operational totals are updated accordingly"
+    ],
+    "Expected": "The operational totals retrieved from the //jobCards/id/finance should reflect the latest financial values for all services in the closed job card.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Verify Financial Consistency Operational totals after updating service costs",
+    "RelatedRequirement": "BRULE-32",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/service-costs",
+    "HttpMethod": "PUT",
+    "Preconditions": [
+      {
+        "name": "Create a new service cost entry against job card"
+      }
+    ],
+    "Steps": [
+      "Update the service costs for a job card by sending a PUT request to /api/service-costs with the updated values",
+      "Fetch the details of the update using the GET endpoint corresponding to the updated service cost (e.g., /api/jobcards/{id}/finance)",
+      "Verify that the operational totals reflected on this response reflect all financial values including updated costs"
+    ],
+    "Expected": "The updated operational totals retrieved from the //jobCards/id/finance should include the newly calculated value of the added service cost.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Verify Financial Consistency Operational totals after reporting",
+    "RelatedRequirement": "BRULE-32",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "name": "Ensure job card exists and has financial updates"
+      },
+      {
+        "name": "Test for valid report generation"
+      }
+    ],
+    "Steps": [
+      "Get the operational totals in this job card by querying the /api/jobcards/{id}/finance endpoint",
+      "Verify that these totals are accurately included in the operational metrics reported via GET /api/reports/operational",
+      "Check if any updates in financials reflect changes reflected in future reports."
+    ],
+    "Expected": "The operational report generated from the //jobCards/id/finance should include all financial values related to the job card.",
+    "ExpectedStatusCode": 200
+  }
+]
+```

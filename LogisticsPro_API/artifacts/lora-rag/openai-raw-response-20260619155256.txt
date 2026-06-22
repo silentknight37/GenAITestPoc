@@ -1,0 +1,86 @@
+[
+  {
+    "TestName": "Positive: Payment Voucher Creation via Batch",
+    "RelatedRequirement": "BR-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches/1234", // Assuming a specific batch ID to create validation voucher
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Batch exists in /api/batches with ID 1234"
+    ],
+    "Steps": [
+      {
+        "Request": "POST: /api/payment-vouchers - Request body: {\"batchId\": \"1234\"}"
+      },
+      {
+        "Response": "Successfull creation of payment voucher."
+      }
+    ],
+    "Expected": "Payment voucher is successfully created and linked to batch ID 1234.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Negative: Payment Voucher Creation from Non-Existing Batch",
+    "RelatedRequirement": "BR-09",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/batches/5678", // Assuming a non-existent batch ID for error
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Batch does not exist in /api/batches with ID 5678"
+    ],
+    "Steps": [
+      {
+        "Request": "POST: /api/payment-vouchers - Request body: {\"batchId\": \"5678\"}"
+      },
+      {
+        "Response": "Error indicating that batch not found."
+      }
+    ],
+    "Expected": "An error message is returned indicating that the specified batch does not exist.",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "Boundary: Payment Voucher Creation for Partially Billed Items",
+    "RelatedRequirement": "BR-09",
+    "ScenarioType": "Positive|Validation|Boundary",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/batches/1234", // Assuming a batch with partially billed items
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Batch exists in /api/batches with ID 1234 containing both billed and un-billed items."
+    ],
+    "Steps": [
+      {
+        "Request": "POST: /api/payment-vouchers - Request body: {\"batchId\": \"1234\"}"
+      },
+      {
+        "Response": "Payment voucher linked to partially billed batch."
+      }
+    ],
+    "Expected": "Payment voucher is created and linked to the partial batch, reflecting billed items.",
+    "ExpectedStatusCode": 201
+  },
+  {
+    "TestName": "Auth: Unable to Create Payment Voucher with Invalid Credentials",
+    "RelatedRequirement": "BR-09",
+    "ScenarioType": "Authentication|Validation",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/batches/1234", // Assuming a valid batch ID
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Attempt to create payment voucher without proper authentication credentials"
+    ],
+    "Steps": [
+      {
+        "Request": "POST: /api/payment-vouchers - Request body: {\"batchId\": \"1234\", \"username\":\"testuser\", \"password\":\"wrongpwd\"}"
+      },
+      {
+        "Response": "Error response indicating authentication failure."
+      }
+    ],
+    "Expected": "Authentication fails, and a message is returned indicating invalid credentials.",
+    "ExpectedStatusCode": 401
+  }
+]

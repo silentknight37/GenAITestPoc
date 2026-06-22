@@ -82,6 +82,10 @@ if (isLora && string.IsNullOrWhiteSpace(loraModel))
 }
 
 var runModel = isLora ? loraModel! : baseModel;
+// LoRA targets a local OpenAI-compatible server (if configured); base-model runs can capture
+// (prompt → JSON) training pairs for fine-tuning via OPENAI_TRAINING_DATA.
+var runBaseUrl       = isLora ? Environment.GetEnvironmentVariable("OPENAI_LORA_BASE_URL") : null;
+var trainingDataPath = isLora ? null : Environment.GetEnvironmentVariable("OPENAI_TRAINING_DATA");
 var label    = normalizedMode.ToUpperInvariant();   // output folder + namespace suffix
 
 Console.WriteLine($"Running {label} pipeline (model: {runModel})...");
@@ -96,17 +100,28 @@ if (isRetrieval)
     var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
         ?? throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set.");
 
-    var embeddingService = new OpenAiEmbeddingService(apiKey);
-    var pdfExtractor     = new PdfDocumentExtractor();
+    // Persisted SQLite embedding cache so identical chunks/queries are embedded only once.
+    // Embeddings can be local (OPENAI_EMBED_BASE_URL/MODEL); vector store can be Qdrant (QDRANT_URL).
+    var embeddingCachePath = Path.Combine(outDir!, "artifacts", "embeddings-cache.sqlite");
+    var embeddingService   = new CachingEmbeddingService(
+        new OpenAiEmbeddingService(apiKey,
+            Environment.GetEnvironmentVariable("OPENAI_EMBED_BASE_URL"),
+            Environment.GetEnvironmentVariable("OPENAI_EMBED_MODEL")),
+        embeddingCachePath);
+    var pdfExtractor       = new PdfDocumentExtractor();
+    var qdrantUrl          = Environment.GetEnvironmentVariable("QDRANT_URL");
+    GenAITest.Engine.Abstractions.IRetriever retriever = string.IsNullOrWhiteSpace(qdrantUrl)
+        ? new CosineSimilarityRetriever(embeddingService)
+        : new QdrantRetriever(embeddingService, qdrantUrl);
 
     // Hybrid is differentiated inside the engine via request.ModelType == "hybrid".
     var ragEngine = new RagTestGenerationEngine(
         new PlainTextDocumentIngestor(pdfExtractor),
         new SimpleChunker(),
         embeddingService,
-        new CosineSimilarityRetriever(embeddingService),
+        retriever,
         new RagPromptBuilder(),
-        new OpenAiTestGenerator(runModel),
+        new OpenAiTestGenerator(runModel, runBaseUrl, trainingDataPath),
         new GeneratedTestJsonWriter(),
         pdfExtractor,
         new RequirementExtractor());
@@ -125,7 +140,7 @@ else // llm, lora — direct generation, no retrieval
         new RequirementExtractor(),
         new SmartRequirementGrouper(),
         new ContextBuilderFactory(),
-        new OpenAiTestGenerator(runModel),
+        new OpenAiTestGenerator(runModel, runBaseUrl, trainingDataPath),
         new GeneratedTestJsonWriter());
 
     var suite = await engine.GenerateAsync(request);

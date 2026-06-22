@@ -1,0 +1,55 @@
+```json
+[
+  {
+    "TestName": "Authentication Failure: Invalid Credentials",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Action": "Send incorrect username and password",
+        "Conditions": []
+      }
+    ],
+    "Expected": "HTTP Status Code 401 Unauthorized",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "Authentication Failure: Invalid Token",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/auth/login/refresh",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      {
+        "Action": "Send a valid token that is expired or has been forged",
+        "Conditions": []
+      }
+    ],
+    "Expected": "HTTP Status Code 401 Unauthorized",
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "Authentication Failure: Unauthorized Access",
+    "RelatedRequirement": "BR-01",
+    "ScenarioType": "Unauthorized",
+    "Priority": "High",
+    "ApiEndpoint": "/api/transportation-services/{id}",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "Action": "Send a token where user does not have the permission to access this resource",
+        "Conditions": []
+      }
+    ],
+    "Steps": [],
+    "Expected": "HTTP 403 Forbidden",
+    "ExpectedStatusCode": 403
+  }
+]
+```

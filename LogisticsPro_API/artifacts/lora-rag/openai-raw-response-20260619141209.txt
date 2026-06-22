@@ -1,0 +1,76 @@
+```json
+[
+  {
+    "TestName": "Update JobCard Service Item Positive",
+    "RelatedRequirement": "FR-13",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/service-items",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid job ID, existing service item ID, valid description"],
+    "Steps": [
+      "Prepare a request with a new description for the service item.",
+      "Send a PUT request to /api/jobcards/{id}/service-items/ {serviceItemId}",
+      "Body: { \"ServiceItem\": { \"Description\": \"" + new_description\" } }"
+    ],
+    "Expected": "The service item's description should be updated successfully.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Update JobCard Service Item Negative - Invalid ID",
+    "RelatedRequirement": "FR-13",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/invalidId/service-items/validId",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Invalid Job Card ID and Service Item ID"],
+    "Steps": [
+      "Attempt to update a service item with an invalid job card and service item IDs."
+    ],
+    "Expected": "A 400 error or similar status code indicating failed update due to incorrect IDs will be returned.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Update JobCard Service Item Negative - Missing Description",
+    "RelatedRequirement": "FR-13",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/service-items/validId",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid job ID and existing service item ID"],
+    "Steps": [
+      "Send a PUT request to /api/jobcards/{id}/service-items/ {serviceItemId} without providing a description."
+    ],
+    "Expected": "A 400 error or similar status code indicating failed update due to missing description will be returned.",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Update JobCard Service Item Boundary - Maximum Description Length (150 characters)",
+    "RelatedRequirement": "FR-13",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/service-items/validId",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid job ID, existing service item ID"],
+    "Steps": [
+      "Send a PUT request to /api/jobcards/{id}/service-items/ {serviceItemId} with a description up to 150 characters."
+    ],
+    "Expected": "The service item's description should be updated successfully without any issues.",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Update JobCard Service Item Boundary - Minimum Description Length (2 characters)",
+    "RelatedRequirement": "FR-13",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/service-items/validId",
+    "HttpMethod": "PUT",
+    "Preconditions": ["Valid job ID, existing service item ID"],
+    "Steps": [
+      "Send a PUT request to /api/jobcards/{id}/service-items/ {serviceItemId} with the minimum required 2 characters of description."
+    ],
+    "Expected": "The service item's description should be updated successfully without any issues.",
+    "ExpectedStatusCode": 200
+  }
+]
+```

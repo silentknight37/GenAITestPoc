@@ -1,0 +1,119 @@
+[
+  {
+    "TestName": "Audit Preservation for Financial Records",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "An API key is included in the request header."
+    ],
+    "Steps": [
+      "Generate a random jobcard ID and use it to fetch the finance data.",
+      "Validate that the HTTP status code is 200.",
+      "Validate that the response contains financial transaction records for the specified jobcard. This will require assertions specific to the structure of the response."
+    ],
+    "Expected": [
+      "The API endpoint returns a JSON object containing detailed financial information for the jobcard within a 200 HTTP status code."
+    ],
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Audit Preservation for Operational Actions",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/operational",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "An API key is included in the request header."
+    ],
+    "Steps": [
+      "Generate a random jobcard ID and use it to fetch operational reports.",
+      "Validate that the HTTP status code is 200.",
+      "Validate that the response contains detailed operating data for the specified jobcard. This will require assertions specific to the structure of the response."
+    ],
+    "Expected": [
+      "The API endpoint returns a JSON object containing comprehensive operational information for the jobcard within a 200 HTTP status code."
+    ],
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Audit Preservation for Transaction History",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "An API key is included in the request header."
+    ],
+    "Steps": [
+      "Generate a random jobcard ID and use it to fetch transaction history reports.",
+      "Validate that the HTTP status code is 200.",
+      "Validate that the response contains detailed transaction history data for the specified jobcard. This will require assertions specific to the structure of the response."
+    ],
+    "Expected": [
+      "The API endpoint returns a JSON object containing comprehensive transaction history records for the jobcard within a 200 HTTP status code."
+    ],
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Audit Preservation - Negative Case: Invalid Jobcard ID (GET /api/jobcards/{id}/finance)",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "An invalid jobcard ID is used in place of a valid one."
+    ],
+    "Steps": [
+      "Attempt to fetch financial data using an.invalid.jobcard.id.",
+      "Validate that the HTTP status code is 404 Not Found"
+    ],
+    "Expected": [
+      "The system returns an error response indicating an invalid jobcard ID within the 404 HTTP status code."
+    ],
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "Auth Preservation: Unauthorized Access (POST /api/reports/history)",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Auth",
+    "Priority": "Moderate",
+    "ApiEndpoint": "/api/reports/history",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "Attempt to authenticate using unauthorized credentials and attempt to fetch transaction history."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/reports/history endpoint with invalid username/password.",
+      "Validate that the HTTP status code is 401 Unauthorized"
+    ],
+    "Expected": [
+      "The system returns an error response indicating unauthorized access within the 401 HTTP status code."
+    ],
+    "ExpectedStatusCode": 401
+  },
+  {
+    "TestName": "Audit Preservation - Negative Case: Null Jobcard ID (GET /api/jobcards/{id}/finance)",
+    "RelatedRequirement": "BRULE-04",
+    "ScenarioType": "Negative",
+    "Priority": "Low",
+    "ApiEndpoint": "/api/jobcards/{id}/finance",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      "An null jobcard ID is used in place of a valid one."
+    ],
+    "Steps": [
+      "Attempt to fetch financial data using a null jobcard.id.",
+      "Validate that the HTTP status code is 400 Bad Request"
+    ],
+    "Expected": [
+      "The system returns an error response indicating an invalid format for the jobcard ID within the 400 HTTP status code."
+    ],
+    "ExpectedStatusCode": 400
+  }
+]

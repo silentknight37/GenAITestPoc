@@ -1,0 +1,60 @@
+```json
+[
+  {
+    "TestName": "Add New Hotel Service to Job Card",
+    "RelatedRequirement": "BR-06: Operational Service Management The system must support recording and management of service items associated with job cards.",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/123/hotel-services",
+    "HttpMethod": "POST",
+    "Preconditions": [],
+    "Steps": [
+      "Set the Request Body with proper data for a hotel service.",
+      "Send the POST request to /api/jobcards/123/hotel-services."
+    ],
+    "Expected": {
+      "id": 987654321,
+      "jobCardId": 123,
+      "type": "hotel",
+      // Add other necessary fields if required
+    },
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Update Existing Hotel Service in Job Card",
+    "RelatedRequirement": "BR-06: Operational Service Management The system must support recording and management of service items associated with job cards.",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/123/hotel-services/456789abc",
+    "HttpMethod": "PUT",
+    "Preconditions": [],
+    "Steps": [
+      "Set the Request Body with proper data for an updated hotel service.",
+      "Send the PUT request to /api/jobcards/123/hotel-services/456789abc."
+    ],
+    "Expected": {
+      "id": 987654321,
+      "jobCardId": 123,
+      "type": "hotel",
+      // Add other necessary fields if required
+    },
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Remove Existing Hotel Service from Job Card",
+    "RelatedRequirement": "BR-06: Operational Service Management The system must support recording and management of service items associated with job cards.",
+    "ScenarioType": "Positive",
+    "Priority": "Medium",
+    "ApiEndpoint": "/api/jobcards/123/hotel-services/456789abc",
+    "HttpMethod": "DELETE",
+    "Preconditions": [],
+    "Steps": [
+      "Send the DELETE request to /api/jobcards/123/hotel-services/456789abc."
+    ],
+    "Expected": {
+      // Add expected output for successful deletion, e.g., service record removed or no more entries in result set
+    },
+    "ExpectedStatusCode": 200
+  }
+]
+```

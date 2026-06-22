@@ -1,0 +1,179 @@
+```json
+[
+  {
+    "TestName": "Vendor creation and maintenance",
+    "RelatedRequirement": "BR-03, BRULE-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "step": "Verify that the vendor exists in the database"
+      },
+      {
+        "step": "Verify that the service type exists in the database"
+      }
+    ],
+    "Steps": [
+      {
+        "step": "Create a new vendor record with minimal information"
+      },
+      {
+        "step": "Assert that the vendor is correctly created in the database"
+      }
+    ],
+    "Expected": "Vendor is properly maintained and available for assignment in operational services",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Vendor creation with missing information",
+    "RelatedRequirement": "BRULE-09",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "step": "Verify that the vendor exists in the database if it already exists"
+      },
+      {
+        "step": "Verify that the service type exists in the database"
+      }
+    ],
+    "Steps": [
+      {
+        "step": "Attempt to create a new vendor record with missing name and service type"
+      }
+    ],
+    "Expected": "Validation error is returned",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Missing required fields in API response",
+    "RelatedRequirement": "BRULE-42",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "step": "Verify that the vendor record exists in the database"
+      }
+    ],
+    "Steps": [
+      {
+        "step": "Attempt to retrieve payable items for a missing vendor ID"
+      }
+    ],
+    "Expected": "Vendor not found error is returned",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Vendor record missing associated service type",
+    "RelatedRequirement": "BRULE-09",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "step": "Verify that the vendor record exists in the database without a service type"
+      }
+    ],
+    "Steps": [
+      {
+        "step": "Attempt to retrieve payable items for a vendor with no associated service type"
+      }
+    ],
+    "Expected": "Validation error is returned",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Invalid voucher vendor specific fields in API response",
+    "RelatedRequirement": "BRULE-42",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "step": "Verify that the vendor record exists in the database with a service type"
+      },
+      {
+        "step": "Create an voucher with a vendor specific field that doesn't match the vendorID of the vendor record"
+      }
+    ],
+    "Steps": [
+      {
+        "step": "Attempt to retrieve payable items for a vendor with invalid voucher specific fields"
+      }
+    ],
+    "Expected": "Invalid voucher error is returned",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Voucher not linked to correct vendor ID",
+    "RelatedRequirement": "BRULE-42",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors/{vendorId}/payable-items",
+    "HttpMethod": "GET",
+    "Preconditions": [
+      {
+        "step": "Verify that the vendor record exists in the database with a service type"
+      },
+      {
+        "step": "Create an voucher without specifying the appropriate vendor ID in the payload"
+      }
+    ],
+    "Steps": [
+      {
+        "step": "Attempt to retrieve payable items for a voucher not linked to correct vendor ID"
+      }
+    ],
+    "Expected": "Invalid request error is returned",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Missing required fields in API response when creating a new vendor record",
+    "RelatedRequirement": "BRULE-9",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "step": "Verify that the service type exists in the database"
+      }
+    ],
+    "Steps": [
+      {
+        "step": "Attempt to create a new vendor record with missing name and service type fields"
+      }
+    ],
+    "Expected": "Validation error is returned",
+    "ExpectedStatusCode": 400
+  },
+  {
+    "TestName": "Invalid request payload when creating a new vendor record",
+    "RelatedRequirement": "BRULE-9",
+    "ScenarioType": "Boundary",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      {
+        "step": "Verify that the service type exists in the database"
+      }
+    ],
+    "Steps": [
+      {
+        "step": "Attempt to create a new vendor record with invalid JSON payload structure"
+      }
+    ],
+    "Expected": "Validation error is returned",
+    "ExpectedStatusCode": 400
+  }
+]
+```

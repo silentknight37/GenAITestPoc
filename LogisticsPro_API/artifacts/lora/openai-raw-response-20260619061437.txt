@@ -1,0 +1,379 @@
+```json
+[
+  {
+    "TestName": "FR-03: Create Customer - Valid Input",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A customer creation object is prepared with a valid name and contact details."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/customers endpoint with the prepared customer object.",
+      "Verify that the response contains an HTTP status code of 201 (Created).",
+      "Check the response body for the customer's ID field, which should be generated and included."
+    ],
+    "Expected": "A new customer record is created successfully with a valid name and contact details."
+  },
+  {
+    "TestName": "FR-03: Create Customer - Invalid Input (Name Missing)",
+    "RelatedRequirement": "FR-03",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/customers",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A customer creation object is prepared but lacks a name."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/customers endpoint with the prepared customer object.",
+      "Verify that the response contains an HTTP status code of 400 (Bad Request).",
+      "Check for a validation error message indicating the name is mandatory."
+    ],
+    "Expected": "The system returns a validation error due to the missing name."
+  },
+  {
+    "TestName": "FR-06: Create Vendor - Valid Input",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A vendor creation object is prepared with a valid name and service type."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/vendors endpoint with the prepared vendor object.",
+      "Verify that the response contains an HTTP status code of 201 (Created).",
+      "Check the response body for the vendor's ID field, which should be generated and included."
+    ],
+    "Expected": "A new vendor record is created successfully with a valid name and service type."
+  },
+  {
+    "TestName": "FR-06: Create Vendor - Invalid Input (Name Missing)",
+    "RelatedRequirement": "FR-06",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/vendors",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A vendor creation object is prepared but lacks a name."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/vendors endpoint with the prepared vendor object.",
+      "Verify that the response contains an HTTP status code of 400 (Bad Request).",
+      "Check for a validation error message indicating the name is mandatory."
+    ],
+    "Expected": "The system returns a validation error due to the missing name."
+  },
+  {
+    "TestName": "FR-08: Create Event - Valid Input",
+    "RelatedRequirement": "FR-08",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An event creation object is prepared with a valid name, start date, and end date."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/events endpoint with the prepared event object.",
+      "Verify that the response contains an HTTP status code of 201 (Created).",
+      "Check the response body for the event's ID field, which should be generated and included."
+    ],
+    "Expected": "A new event record is created successfully with a valid name, start date, and end date."
+  },
+  {
+    "TestName": "FR-08: Create Event - End Date Before Start Date",
+    "RelatedRequirement": "FR-08",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/events",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An event creation object is prepared with a valid name, start date in the past, and end date before it."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/events endpoint with the prepared event object.",
+      "Verify that the response contains an HTTP status code of 400 (Bad Request).",
+      "Check for a validation error message indicating the end date must be greater than or equal to start date."
+    ],
+    "Expected": "The system returns a validation error due to the invalid end date logic."
+  },
+  {
+    "TestName": "FR-09: Create Job Card - Valid Input",
+    "RelatedRequirement": "FR-09",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A job card creation object is prepared with valid inputs: customer ID and event ID (optional)."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/jobcards endpoint with the prepared job card object.",
+      "Verify that the response contains an HTTP status code of 201 (Created).",
+      "Check the response body for the job card's ID field, which should be generated and included."
+    ],
+    "Expected": "A new job card is created successfully with valid inputs: customer ID and event ID."
+  },
+  {
+    "TestName": "FR-09: Create Job Card - Customer Does Not Exist",
+    "RelatedRequirement": "FR-09",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/jobcards",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A job card creation object is prepared with a non-existent customer ID."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/jobcards endpoint with the prepared job card object.",
+      "Verify that the response contains an HTTP status code of 400 (Bad Request).",
+      "Check for a validation error message indicating the customer does not exist."
+    ],
+    "Expected": "The system returns a validation error due to attempting to create services for a non-existent customer."
+  },
+  {
+    "TestName": "FR-16: Create Batch - Valid Input",
+    "RelatedRequirement": "FR-16",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A batch creation object is prepared with valid service items that are not duplicated."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/batches endpoint with the prepared batch item.",
+      "Verify that the response contains an HTTP status code of 201 (Created).",
+      "Check the response body for the batch ID field, which should be generated and included."
+    ],
+    "Expected": "A new batch record is created successfully with valid service items."
+  },
+  {
+    "TestName": "FR-16: Create Batch - Invalid Input (Duplicate Items)",
+    "RelatedRequirement": "FR-16",
+    "ScenarioType": "Negative",
+    "Priority": "High",
+    "ApiEndpoint": "/api/batches",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A batch creation object is prepared with duplicate service items."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/batches endpoint with the prepared batch item.",
+      "Verify that the response contains an HTTP status code of 400 (Bad Request).",
+      "Check for a validation error message indicating that items cannot be duplicated."
+    ],
+    "Expected": "The system returns a validation error due to attempting to create a batch with duplicate services."
+  },
+  {
+    "TestName": "FR-17: Create Payment Voucher - Valid Input",
+    "RelatedRequirement": "FR-17",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/payment-vouchers",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "A payment voucher creation object is prepared with valid batch ID."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/payment-vouchers endpoint with the prepared payment voucher object.",
+      "Verify that the response contains an HTTP status code of 201 (Created).",
+      "Check the payment voucher amount by retrieving it via /api/payment-vouchers/{id}."
+    ],
+    "Expected": "A new payment voucher is created successfully and its amount calculated."
+  },
+  {
+    "TestName": "FR-18: Create Invoice - Valid Input",
+    "RelatedRequirement": "FR-18",
+    "ScenarioType": "Positive",
+    "Priority": "High",
+    "ApiEndpoint": "/api/invoices",
+    "HttpMethod": "POST",
+    "Preconditions": [
+      "An invoice creation object is prepared with valid job ID."
+    ],
+    "Steps": [
+      "Send a POST request to the /api/invoices endpoint with the prepared invoice object.",
+      "Verify that the response contains an HTTP status code of 201 (Created).",
+      "Check invoice details by retrieving it via /api/invoices/{id}."
+    ],
+    "Expected": "A new invoice is created successfully for a valid job."
+  }
+] ``` ```python
+import requests
+
+def create_customer(data):
+    response = requests.post("https://api.example.com/customers", json=data)
+    return response.json()
+
+def create_vendor(data):
+    response = requests.post("https://api.example.com/vendors", json=data)
+    return response.json()
+
+def create_event(data):
+    response = requests.post("https://api.example.com/events", json=data)
+    return response.json()
+
+def create_job_card(data):
+    response = requests.post("https://api.example.com/jobcards", json=data)
+    return response.json()
+
+def create_batch(data):
+    response = requests.post("https://api.example.com/batches", json=data)
+    return response.json()
+
+def create_payment_voucher(data):
+    response = requests.post("https://api.example.com/payment-vouchers", json=data)
+    payment_voucher_id = response.headers["Location"].split("/")[-1]
+    return payment_voucher_id
+
+def create_invoice(data):
+    response = requests.post("https://api.example.com/invoices", json=data)
+    invoice_id = response.headers["Location"].split("/")[-1]
+    return invoice_id
+```
+
+### Testing Scripts (Python):
+
+```python
+import unittest
+from api_tests import create_customer, create_vendor, create_event, \
+                   create_job_card, create_batch, create_payment_voucher, create_invoice
+
+class TestAPICreation(unittest.TestCase):
+    def test_create_customer_valid_input(self):
+        data = {
+            "name": "John Doe",
+            "contact_details": "john.doe@example.com"
+        }
+        response = create_customer(data)
+        self.assertEqual(response.get("status_code"), 201, f"Expected 201 Created, but got {response['status_code']}")
+        self.assertIn("id", response)
+
+    def test_create_customer_invalid_input_no_name(self):
+        data = {
+            "contact_details": "john.doe@example.com"
+        }
+        response = create_customer(data)
+        self.assertEqual(response.get("status_code"), 400, f"Expected 400 Bad Request, but got {response['status_code']}")
+        self.assertIn("message", response)
+
+    def test_create_vendor_valid_input(self):
+        data = {
+            "name": "Tech Solutions",
+            "service_type": "Software Development"
+        }
+        response = create_vendor(data)
+        self.assertEqual(response.get("status_code"), 201, f"Expected 201 Created, but got {response['status_code']}")
+        self.assertIn("id", response)
+
+    def test_create_vendor_invalid_input_no_name(self):
+        data = {
+            "service_type": "Software Development"
+        }
+        response = create_vendor(data)
+        self.assertEqual(response.get("status_code"), 400, f"Expected 400 Bad Request, but got {response['status_code']}")
+        self.assertIn("message", response)
+
+    def test_create_event_valid_input(self):
+        data = {
+            "name": "Tech Conference",
+            "start_date": "2023-10-05",
+            "end_date": "2023-10-10"
+        }
+        response = create_event(data)
+        self.assertEqual(response.get("status_code"), 201, f"Expected 201 Created, but got {response['status_code']}")
+        self.assertIn("id", response)
+
+    def test_create_event_invalid_input_end_date_before_start(self):
+        data = {
+            "name": "Tech Conference",
+            "start_date": "2023-10-05",
+            "end_date": "2023-10-02"
+        }
+        response = create_event(data)
+        self.assertEqual(response.get("status_code"), 400, f"Expected 400 Bad Request, but got {response['status_code']}")
+        self.assertIn("message", response)
+
+    def test_create_job_card_valid_input(self):
+        data = {
+            "customer_id": "123",
+            "event_id": "456"
+        }
+        response = create_job_card(data)
+        self.assertEqual(response.get("status_code"), 201, f"Expected 201 Created, but got {response['status_code']}")
+        self.assertIn("id", response)
+
+    def test_create_job_card_invalid_input_customer_non_existent(self):
+        data = {
+            "customer_id": "987",
+            "event_id": "456"
+        }
+        response = create_job_card(data)
+        self.assertEqual(response.get("status_code"), 400, f"Expected 400 Bad Request, but got {response['status_code']}")
+        self.assertIn("message", response)
+
+    def test_create_batch_valid_input(self):
+        data = {
+            "services": [
+                {
+                    "service_id": "1",
+                    "quantity": 2
+                },
+                {
+                    "service_id": "2",
+                    "quantity": 3
+                }
+            ]
+        }
+        response = create_batch(data)
+        self.assertEqual(response.get("status_code"), 201, f"Expected 201 Created, but got {response['status_code']}")
+        self.assertIn("id", response)
+
+    def test_create_batch_invalid_input_duplicate_services(self):
+        data = {
+            "services": [
+                {
+                    "service_id": "1",
+                    "quantity": 2
+                },
+                {
+                    "service_id": "1",
+                    "quantity": 3
+                }
+            ]
+        }
+        response = create_batch(data)
+        self.assertEqual(response.get("status_code"), 400, f"Expected 400 Bad Request, but got {response['status_code']}")
+        self.assertIn("message", response)
+
+    def test_create_payment_voucher_valid_input(self):
+        data = {
+            "batch_id": "789"
+        }
+        payment_voucher_id = create_payment_voucher(data)
+        self.assertEqual(payment_voucher_id, "abc123")
+
+    def test_create_invoice_valid_input(self):
+        data = {
+            "job_id": "456"
+        }
+        invoice_id = create_invoice(data)
+        self.assertEqual(invoice_id, "def456")
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+### Explanation:
+
+- **API Methods**: Each test corresponds to a specific API endpoint and a set of expected conditions for a successful response.
+- **Error Conditions**: Negative scenarios cover invalid inputs that should return error messages or HTTP status codes indicating bad request.
+- **Testing Framework**: The `unittest` framework is used to manage these tests, allowing for systematic verification of the API's functionality across various test cases.
+
+This setup ensures comprehensive testing of each endpoint and its expected behavior under different conditions. ```

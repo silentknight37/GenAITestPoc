@@ -1,0 +1,52 @@
+```json
+[
+  {
+    "TestName": "Update Customer Scenario",
+    "RelatedRequirement": "FR-04",
+    "ScenarioType": "positive",
+    "Priority": "High",
+    "ApiEndpoint": null,
+    "HttpMethod": "PUT",
+    "Preconditions": ["customer-id"],
+    "Steps": [
+      "GET /api/customers/{customerId}/billable-items"
+    ],
+    "Expected": "Updated customer",
+    "ExpectedStatusCode": 200
+  },
+  {
+    "TestName": "Update Customer Scenario (Customer doesn't exist)",
+    "RelatedRequirement": "FR-04",
+    "ScenarioType": "negative",
+    "Priority": "Low",
+    "ApiEndpoint": null,
+    "HttpMethod": "PUT",
+    "Preconditions": ["customerId"],
+    "Steps": [
+      "GET /api/customers/{customerId}/billable-items"
+    ],
+    "Expected": "Failed to update customer",
+    "ExpectedStatusCode": 404
+  },
+  {
+    "TestName": "Update Customer Scenario (Validation Error)",
+    "RelatedRequirement": "FR-04",
+    "ScenarioType": "validation",
+    "Priority": "Low",
+    "ApiEndpoint": null,
+    "HttpMethod": "PUT",
+    "Preconditions": ["customer-id"],
+    "Steps": [
+      "GET /api/customers/{customerId}/billable-items",
+      "POST /api/customers",
+      {
+        "Body": {
+          "id": "invalid-ID"
+        }
+      }
+    ],
+    "Expected": "Failed to update customer due to validation error",
+    "ExpectedStatusCode": 400
+  },
+...
+```
