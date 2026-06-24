@@ -395,14 +395,14 @@
         }
       },
       "coverlet.collector/6.0.0": {},
-      "GenAITest.AspNetCore/2.72.0": {
+      "GenAITest.AspNetCore/2.76.0": {
         "dependencies": {
           "GenAITest.Engine": "1.0.70"
         },
         "runtime": {
           "lib/net8.0/GenAITest.AspNetCore.dll": {
-            "assemblyVersion": "2.72.0.0",
-            "fileVersion": "2.72.0.0"
+            "assemblyVersion": "2.76.0.0",
+            "fileVersion": "2.76.0.0"
           }
         },
         "compile": {
@@ -2187,7 +2187,7 @@
       "xunit.runner.visualstudio/2.5.7": {},
       "LogisticsPro_API/1.0.0": {
         "dependencies": {
-          "GenAITest.AspNetCore": "2.72.0",
+          "GenAITest.AspNetCore": "2.76.0",
           "LogisticsPro_Manager": "1.0.0",
           "MediatR": "12.0.1",
           "MediatR.Extensions.Microsoft.DependencyInjection": "11.0.0",
@@ -4022,12 +4022,12 @@
       "path": "coverlet.collector/6.0.0",
       "hashPath": "coverlet.collector.6.0.0.nupkg.sha512"
     },
-    "GenAITest.AspNetCore/2.72.0": {
+    "GenAITest.AspNetCore/2.76.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-TnKe00rxgRLw5n7IKB20FCVQ6vYuW4xUXHp6AspxyZ/f4OMhfnHQupGjGqPAWC+v3kMWjHzEj4+oFzyu7W6eTA==",
-      "path": "genaitest.aspnetcore/2.72.0",
-      "hashPath": "genaitest.aspnetcore.2.72.0.nupkg.sha512"
+      "sha512": "sha512-feumU7S1mKZTO2b7wpth0TS2WNKIB3bLWrvXumpVRpf69+Zcdg0Vv3YFrtl+qMKpJ9wxE1RrlAe6VJvTKPDWhg==",
+      "path": "genaitest.aspnetcore/2.76.0",
+      "hashPath": "genaitest.aspnetcore.2.76.0.nupkg.sha512"
     },
     "GenAITest.Engine/1.0.70": {
       "type": "package",

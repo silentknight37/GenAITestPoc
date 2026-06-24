@@ -68,7 +68,7 @@
           "build/netstandard1.0/coverlet.collector.targets": {}
         }
       },
-      "GenAITest.AspNetCore/2.72.0": {
+      "GenAITest.AspNetCore/2.77.0": {
         "type": "package",
         "dependencies": {
           "GenAITest.Engine": "1.0.70"
@@ -2681,7 +2681,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "GenAITest.AspNetCore": "2.72.0",
+          "GenAITest.AspNetCore": "2.77.0",
           "LogisticsPro_Manager": "1.0.0",
           "MediatR": "12.0.1",
           "MediatR.Extensions.Microsoft.DependencyInjection": "11.0.0",
@@ -2861,13 +2861,13 @@
         "coverlet.collector.nuspec"
       ]
     },
-    "GenAITest.AspNetCore/2.72.0": {
-      "sha512": "TnKe00rxgRLw5n7IKB20FCVQ6vYuW4xUXHp6AspxyZ/f4OMhfnHQupGjGqPAWC+v3kMWjHzEj4+oFzyu7W6eTA==",
+    "GenAITest.AspNetCore/2.77.0": {
+      "sha512": "hCLKtrfGt9aEQ0Y2phmsAolYgGWasZw0YZMtYDl9LxoTdn/5UmvEOffc3NXeNRoc/PMY1BxLns/zC94x7gCIEw==",
       "type": "package",
-      "path": "genaitest.aspnetcore/2.72.0",
+      "path": "genaitest.aspnetcore/2.77.0",
       "files": [
         ".nupkg.metadata",
-        "genaitest.aspnetcore.2.72.0.nupkg.sha512",
+        "genaitest.aspnetcore.2.77.0.nupkg.sha512",
         "genaitest.aspnetcore.nuspec",
         "lib/net8.0/GenAITest.AspNetCore.dll"
       ]

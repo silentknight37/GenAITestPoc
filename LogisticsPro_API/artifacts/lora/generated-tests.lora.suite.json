@@ -2,12 +2,12 @@
   "ProjectName": "LogisticsPro_API",
   "PipelineName": "lora",
   "SourceDocument": "C:\\GIT\\GenAITestPoc_GIT\\BA Document\\LOGISTICSPRO - BUSINESS ANALYSIS DOCUMENT.pdf",
-  "GeneratedAtUtc": "2026-06-22T14:29:06.8876610Z",
+  "GeneratedAtUtc": "2026-06-22T18:41:35.0138190Z",
   "CorpusVersion": null,
   "PromptVersion": "v1",
   "TestCases": [
     {
-      "TestName": "Valid Login Credentials",
+      "TestName": "Valid Login",
       "RelatedRequirement": "BR-01",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -16,19 +16,19 @@
       "ControllerName": "Master",
       "ActionMethod": "LoginUser",
       "Preconditions": [
-        "User exists in the system"
+        "User has valid credentials"
       ],
       "Steps": [
-        "Send a POST request with valid username and password"
+        "Send POST request with valid username and password"
       ],
-      "Expected": "Authentication token is returned",
+      "Expected": "Authentication token returned",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Invalid Login Credentials",
+      "TestName": "Invalid Login",
       "RelatedRequirement": "BR-01",
       "ScenarioType": "Negative",
       "Priority": "High",
@@ -37,61 +37,61 @@
       "ControllerName": "Master",
       "ActionMethod": "LoginUser",
       "Preconditions": [
-        "User exists in the system"
+        "User has invalid credentials"
       ],
       "Steps": [
-        "Send a POST request with invalid username and password"
+        "Send POST request with invalid username and password"
       ],
-      "Expected": "Unauthorized response is returned",
+      "Expected": "Unauthorized response",
       "ExpectedStatusCode": 401,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Missing Login Credentials",
+      "TestName": "Missing Credentials",
       "RelatedRequirement": "BR-01",
       "ScenarioType": "Negative",
-      "Priority": "High",
+      "Priority": "Medium",
       "ApiEndpoint": "/api/auth/login",
       "HttpMethod": "POST",
       "ControllerName": "Master",
       "ActionMethod": "LoginUser",
       "Preconditions": [
-        "User exists in the system"
+        "User has no credentials"
       ],
       "Steps": [
-        "Send a POST request with missing username and password"
+        "Send POST request with missing username and password"
       ],
-      "Expected": "Unauthorized response is returned",
+      "Expected": "Unauthorized response",
       "ExpectedStatusCode": 401,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Malformed Login Credentials",
+      "TestName": "Malformed Credentials",
       "RelatedRequirement": "BR-01",
       "ScenarioType": "Negative",
-      "Priority": "High",
+      "Priority": "Medium",
       "ApiEndpoint": "/api/auth/login",
       "HttpMethod": "POST",
       "ControllerName": "Master",
       "ActionMethod": "LoginUser",
       "Preconditions": [
-        "User exists in the system"
+        "User has malformed credentials"
       ],
       "Steps": [
-        "Send a POST request with malformed username and password"
+        "Send POST request with malformed username and password"
       ],
-      "Expected": "Unauthorized response is returned",
+      "Expected": "Unauthorized response",
       "ExpectedStatusCode": 401,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Valid Token Authentication",
+      "TestName": "Valid Token",
       "RelatedRequirement": "BR-01",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -100,12 +100,12 @@
       "ControllerName": "Master",
       "ActionMethod": "LoginUser",
       "Preconditions": [
-        "User is authenticated and has a valid token"
+        "User has valid token"
       ],
       "Steps": [
-        "Send a GET request with a valid token"
+        "Send GET request with valid token"
       ],
-      "Expected": "Protected resource is returned",
+      "Expected": "Access granted to protected endpoint",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -252,7 +252,7 @@
       "Steps": [
         "Send POST request with invalid vendor data (missing name)"
       ],
-      "Expected": "Error response with missing name error message",
+      "Expected": "Error response with message \u0027Vendor name is required\u0027",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -273,7 +273,7 @@
       "Steps": [
         "Send POST request with invalid vendor data (invalid service type)"
       ],
-      "Expected": "Error response with invalid service type error message",
+      "Expected": "Error response with message \u0027Invalid service type\u0027",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -315,7 +315,7 @@
       "Steps": [
         "Send GET request with invalid vendor ID"
       ],
-      "Expected": "Error response with not found error message",
+      "Expected": "Error response with message \u0027Vendor not found\u0027",
       "ExpectedStatusCode": 404,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -357,7 +357,7 @@
       "Steps": [
         "Send POST request to /api/events with invalid event data"
       ],
-      "Expected": "Event creation fails with error message",
+      "Expected": "Error response with validation errors",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -401,7 +401,7 @@
       "Steps": [
         "Send PUT request to /api/events with invalid event data"
       ],
-      "Expected": "Event update fails with error message",
+      "Expected": "Error response with validation errors",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -423,7 +423,7 @@
       "Steps": [
         "Send GET request to /api/events"
       ],
-      "Expected": "Event is retrieved successfully",
+      "Expected": "Event data is returned successfully",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -442,7 +442,7 @@
         "Customer exists"
       ],
       "Steps": [
-        "Create job card with valid customer ID"
+        "Send POST request with valid customer ID"
       ],
       "Expected": "Job card created successfully",
       "ExpectedStatusCode": 201,
@@ -463,7 +463,7 @@
         "Customer does not exist"
       ],
       "Steps": [
-        "Create job card with invalid customer ID"
+        "Send POST request with invalid customer ID"
       ],
       "Expected": "Error message indicating customer not found",
       "ExpectedStatusCode": 404,
@@ -484,7 +484,7 @@
         "Job card exists"
       ],
       "Steps": [
-        "Update job card details"
+        "Send PUT request with updated job card details"
       ],
       "Expected": "Job card details updated successfully",
       "ExpectedStatusCode": 200,
@@ -505,7 +505,7 @@
         "Job card does not exist"
       ],
       "Steps": [
-        "Update job card with invalid ID"
+        "Send PUT request with invalid job card ID"
       ],
       "Expected": "Error message indicating job card not found",
       "ExpectedStatusCode": 404,
@@ -526,7 +526,7 @@
         "Job card exists"
       ],
       "Steps": [
-        "Retrieve job card"
+        "Send GET request with valid job card ID"
       ],
       "Expected": "Job card retrieved successfully",
       "ExpectedStatusCode": 200,
@@ -549,7 +549,7 @@
       "Steps": [
         "Send POST request with valid service item data"
       ],
-      "Expected": "Service item added to job card",
+      "Expected": "Service item is added to job card",
       "ExpectedStatusCode": 201,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -570,7 +570,7 @@
       "Steps": [
         "Send PUT request with updated service item data"
       ],
-      "Expected": "Service item updated",
+      "Expected": "Service item is updated",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -591,7 +591,7 @@
       "Steps": [
         "Send DELETE request"
       ],
-      "Expected": "Service item removed",
+      "Expected": "Service item is removed",
       "ExpectedStatusCode": 204,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -612,14 +612,14 @@
       "Steps": [
         "Send GET request"
       ],
-      "Expected": "List of service items for job card",
+      "Expected": "List of service items for job card is returned",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Get Service Item",
+      "TestName": "Get Service Item By Id",
       "RelatedRequirement": "BR-06",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -633,7 +633,7 @@
       "Steps": [
         "Send GET request"
       ],
-      "Expected": "Service item details",
+      "Expected": "Service item is returned",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -856,7 +856,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Create Invoice Success",
+      "TestName": "Create Invoice Positive Test",
       "RelatedRequirement": "BR-10",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -865,64 +865,42 @@
       "ControllerName": "Logistics",
       "ActionMethod": "SaveInvoice",
       "Preconditions": [
-        "Valid customer data",
-        "Valid invoice data"
+        "Customer exists",
+        "Invoice data is valid"
       ],
       "Steps": [
-        "Send POST request to /api/invoices with valid invoice data"
+        "Send POST request to create invoice"
       ],
-      "Expected": "Invoice created successfully",
+      "Expected": "Invoice is created successfully",
       "ExpectedStatusCode": 201,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Create Invoice Failure Invalid Customer",
+      "TestName": "Create Invoice Negative Test",
       "RelatedRequirement": "BR-10",
       "ScenarioType": "Negative",
-      "Priority": "Medium",
+      "Priority": "High",
       "ApiEndpoint": "/api/invoices",
       "HttpMethod": "POST",
       "ControllerName": "Logistics",
       "ActionMethod": "SaveInvoice",
       "Preconditions": [
-        "Invalid customer data",
-        "Valid invoice data"
+        "Customer does not exist",
+        "Invoice data is invalid"
       ],
       "Steps": [
-        "Send POST request to /api/invoices with invalid customer data"
+        "Send POST request to create invoice"
       ],
-      "Expected": "Error message indicating invalid customer data",
+      "Expected": "Invoice creation fails with error message",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Create Invoice Failure Invalid Invoice Data",
-      "RelatedRequirement": "BR-10",
-      "ScenarioType": "Negative",
-      "Priority": "Medium",
-      "ApiEndpoint": "/api/invoices",
-      "HttpMethod": "POST",
-      "ControllerName": "Logistics",
-      "ActionMethod": "SaveInvoice",
-      "Preconditions": [
-        "Valid customer data",
-        "Invalid invoice data"
-      ],
-      "Steps": [
-        "Send POST request to /api/invoices with invalid invoice data"
-      ],
-      "Expected": "Error message indicating invalid invoice data",
-      "ExpectedStatusCode": 400,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Get Invoice Success",
+      "TestName": "Retrieve Invoice Positive Test",
       "RelatedRequirement": "BR-10",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -931,34 +909,56 @@
       "ControllerName": "Logistics",
       "ActionMethod": "GetInvoice",
       "Preconditions": [
-        "Valid invoice ID"
+        "Invoice exists"
       ],
       "Steps": [
-        "Send GET request to /api/invoices/{id} with valid invoice ID"
+        "Send GET request to retrieve invoice"
       ],
-      "Expected": "Invoice data retrieved successfully",
+      "Expected": "Invoice is retrieved successfully",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Get Invoice Failure Invalid ID",
+      "TestName": "Retrieve Invoice Negative Test",
       "RelatedRequirement": "BR-10",
       "ScenarioType": "Negative",
-      "Priority": "Medium",
+      "Priority": "High",
       "ApiEndpoint": "/api/invoices/{id}",
       "HttpMethod": "GET",
       "ControllerName": "Logistics",
       "ActionMethod": "GetInvoice",
       "Preconditions": [
-        "Invalid invoice ID"
+        "Invoice does not exist"
       ],
       "Steps": [
-        "Send GET request to /api/invoices/{id} with invalid invoice ID"
+        "Send GET request to retrieve invoice"
       ],
-      "Expected": "Error message indicating invalid invoice ID",
+      "Expected": "Invoice retrieval fails with error message",
       "ExpectedStatusCode": 404,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Void Invoice Positive Test",
+      "RelatedRequirement": "BR-10",
+      "ScenarioType": "Positive",
+      "Priority": "High",
+      "ApiEndpoint": "/api/invoices/{id}/void",
+      "HttpMethod": "POST",
+      "ControllerName": "Logistics",
+      "ActionMethod": "VoidInvoice",
+      "Preconditions": [
+        "Invoice exists",
+        "Invoice is not already voided"
+      ],
+      "Steps": [
+        "Send POST request to void invoice"
+      ],
+      "Expected": "Invoice is voided successfully",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -985,49 +985,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Get Proforma Invoice",
-      "RelatedRequirement": "BR-11",
-      "ScenarioType": "Positive",
-      "Priority": "High",
-      "ApiEndpoint": "/api/invoices/{id}",
-      "HttpMethod": "GET",
-      "ControllerName": "Logistics",
-      "ActionMethod": "GetInvoice",
-      "Preconditions": [
-        "Proforma invoice exists"
-      ],
-      "Steps": [
-        "Send GET request to /api/invoices/{id} with valid invoice ID"
-      ],
-      "Expected": "Proforma invoice is retrieved successfully",
-      "ExpectedStatusCode": 200,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Void Proforma Invoice",
-      "RelatedRequirement": "BR-11",
-      "ScenarioType": "Positive",
-      "Priority": "High",
-      "ApiEndpoint": "/api/invoices/{id}/void",
-      "HttpMethod": "POST",
-      "ControllerName": "Logistics",
-      "ActionMethod": "VoidInvoice",
-      "Preconditions": [
-        "Proforma invoice exists"
-      ],
-      "Steps": [
-        "Send POST request to /api/invoices/{id}/void with valid invoice ID"
-      ],
-      "Expected": "Proforma invoice is voided successfully",
-      "ExpectedStatusCode": 200,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Create Proforma Invoice with Invalid Data",
+      "TestName": "Create Proforma Invoice With Invalid Data",
       "RelatedRequirement": "BR-11",
       "ScenarioType": "Negative",
       "Priority": "Medium",
@@ -1048,6 +1006,27 @@
       "ExpectedErrorMessageContains": null
     },
     {
+      "TestName": "Get Proforma Invoice",
+      "RelatedRequirement": "BR-11",
+      "ScenarioType": "Positive",
+      "Priority": "High",
+      "ApiEndpoint": "/api/invoices/{id}",
+      "HttpMethod": "GET",
+      "ControllerName": "Logistics",
+      "ActionMethod": "GetInvoice",
+      "Preconditions": [
+        "Proforma invoice exists"
+      ],
+      "Steps": [
+        "Send GET request to /api/invoices/{id}"
+      ],
+      "Expected": "Proforma invoice is returned successfully",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
       "TestName": "Get Non-Existent Proforma Invoice",
       "RelatedRequirement": "BR-11",
       "ScenarioType": "Negative",
@@ -1060,10 +1039,31 @@
         "Proforma invoice does not exist"
       ],
       "Steps": [
-        "Send GET request to /api/invoices/{id} with invalid invoice ID"
+        "Send GET request to /api/invoices/{id}"
       ],
-      "Expected": "Error response with not found error",
+      "Expected": "Error response with 404 status code",
       "ExpectedStatusCode": 404,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Void Proforma Invoice",
+      "RelatedRequirement": "BR-11",
+      "ScenarioType": "Positive",
+      "Priority": "High",
+      "ApiEndpoint": "/api/invoices/{id}/void",
+      "HttpMethod": "POST",
+      "ControllerName": "Logistics",
+      "ActionMethod": "VoidInvoice",
+      "Preconditions": [
+        "Proforma invoice exists"
+      ],
+      "Steps": [
+        "Send POST request to /api/invoices/{id}/void"
+      ],
+      "Expected": "Proforma invoice is voided successfully",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -1099,14 +1099,13 @@
       "ControllerName": "Logistics",
       "ActionMethod": "GetProformaInvoiceReceipts",
       "Preconditions": [
-        "Proforma invoice exists",
-        "Receipt exists"
+        "Proforma invoice and receipt exist"
       ],
       "Steps": [
         "Link the receipt to the proforma invoice"
       ],
       "Expected": "Receipt is linked to the proforma invoice",
-      "ExpectedStatusCode": 201,
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -1168,7 +1167,7 @@
       "Steps": [
         "Get finance for the jobcard"
       ],
-      "Expected": "Finance information for the jobcard is returned",
+      "Expected": "Finance for the jobcard is returned",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -1331,7 +1330,7 @@
       "ControllerName": "Master",
       "ActionMethod": "LoginUser",
       "Preconditions": [
-        "User has expired token"
+        "User has expired credentials"
       ],
       "Steps": [
         "Send POST request with expired JWT token"
@@ -1352,7 +1351,7 @@
       "ControllerName": "Master",
       "ActionMethod": "LoginUser",
       "Preconditions": [
-        "User has no token"
+        "User has no credentials"
       ],
       "Steps": [
         "Send POST request with no JWT token"
@@ -1373,7 +1372,7 @@
       "ControllerName": "Master",
       "ActionMethod": "LoginUser",
       "Preconditions": [
-        "User has valid token"
+        "User has valid credentials"
       ],
       "Steps": [
         "Send POST request with valid JWT token"
@@ -1429,6 +1428,28 @@
       "ExpectedErrorMessageContains": null
     },
     {
+      "TestName": "Create Customer Failure - Missing Name",
+      "RelatedRequirement": "FR-03",
+      "ScenarioType": "Negative",
+      "Priority": "Medium",
+      "ApiEndpoint": "/api/customers",
+      "HttpMethod": "POST",
+      "ControllerName": "Master",
+      "ActionMethod": "SaveCustomer",
+      "Preconditions": [
+        "Missing customer name",
+        "Valid contact details"
+      ],
+      "Steps": [
+        "Send POST request with missing customer data"
+      ],
+      "Expected": "Validation error",
+      "ExpectedStatusCode": 400,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
       "TestName": "Create Customer Failure - Duplicate Entry",
       "RelatedRequirement": "FR-03",
       "ScenarioType": "Negative",
@@ -1438,8 +1459,7 @@
       "ControllerName": "Master",
       "ActionMethod": "SaveCustomer",
       "Preconditions": [
-        "Existing customer name",
-        "Valid contact details"
+        "Duplicate customer data"
       ],
       "Steps": [
         "Send POST request with duplicate customer data"
@@ -1468,28 +1488,6 @@
       ],
       "Expected": "Vendor created",
       "ExpectedStatusCode": 201,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Create Vendor Failure - Invalid Name",
-      "RelatedRequirement": "FR-06",
-      "ScenarioType": "Negative",
-      "Priority": "Medium",
-      "ApiEndpoint": "/api/vendors",
-      "HttpMethod": "POST",
-      "ControllerName": "Master",
-      "ActionMethod": "SaveVendor",
-      "Preconditions": [
-        "Invalid vendor name",
-        "Valid service type"
-      ],
-      "Steps": [
-        "Send POST request with invalid vendor data"
-      ],
-      "Expected": "Validation error",
-      "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -1558,10 +1556,10 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Update Customer With Valid ID",
+      "TestName": "Update Customer Boundary Input",
       "RelatedRequirement": "FR-04",
-      "ScenarioType": "Positive",
-      "Priority": "High",
+      "ScenarioType": "Boundary",
+      "Priority": "Low",
       "ApiEndpoint": "/api/service-costs",
       "HttpMethod": "PUT",
       "ControllerName": "Job",
@@ -1570,7 +1568,7 @@
         "Customer exists"
       ],
       "Steps": [
-        "Update customer details with valid ID"
+        "Update customer details with boundary input"
       ],
       "Expected": "Updated customer",
       "ExpectedStatusCode": 200,
@@ -1579,7 +1577,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Update Customer With Invalid ID",
+      "TestName": "Update Customer Missing Input",
       "RelatedRequirement": "FR-04",
       "ScenarioType": "Negative",
       "Priority": "Medium",
@@ -1588,13 +1586,13 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Customer does not exist"
+        "Customer exists"
       ],
       "Steps": [
-        "Update customer details with invalid ID"
+        "Update customer details with missing input"
       ],
-      "Expected": "Not found error",
-      "ExpectedStatusCode": 404,
+      "Expected": "Validation error",
+      "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -1621,7 +1619,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Retrieve Customer Not Found",
+      "TestName": "Retrieve Customer Failure Not Found",
       "RelatedRequirement": "FR-05",
       "ScenarioType": "Negative",
       "Priority": "Medium",
@@ -1635,14 +1633,14 @@
       "Steps": [
         "Send GET request with invalid customer ID"
       ],
-      "Expected": "Not found response",
+      "Expected": "Not found error returned",
       "ExpectedStatusCode": 404,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Retrieve Customer Invalid ID",
+      "TestName": "Retrieve Customer Validation Error",
       "RelatedRequirement": "FR-05",
       "ScenarioType": "Validation",
       "Priority": "Low",
@@ -1651,40 +1649,19 @@
       "ControllerName": "Logistics",
       "ActionMethod": "GetJobCardItemsByCustomerId",
       "Preconditions": [
-        "Customer ID is invalid"
+        "Customer ID is malformed"
       ],
       "Steps": [
         "Send GET request with malformed customer ID"
       ],
-      "Expected": "Error response",
+      "Expected": "Validation error returned",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Retrieve Customer Missing ID",
-      "RelatedRequirement": "FR-05",
-      "ScenarioType": "Validation",
-      "Priority": "Low",
-      "ApiEndpoint": "/api/customers/{customerId}/billable-items",
-      "HttpMethod": "GET",
-      "ControllerName": "Logistics",
-      "ActionMethod": "GetJobCardItemsByCustomerId",
-      "Preconditions": [
-        "Customer ID is missing"
-      ],
-      "Steps": [
-        "Send GET request without customer ID"
-      ],
-      "Expected": "Error response",
-      "ExpectedStatusCode": 400,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Retrieve Customer Boundary ID",
+      "TestName": "Retrieve Customer Boundary Test",
       "RelatedRequirement": "FR-05",
       "ScenarioType": "Boundary",
       "Priority": "Low",
@@ -1693,10 +1670,31 @@
       "ControllerName": "Logistics",
       "ActionMethod": "GetJobCardItemsByCustomerId",
       "Preconditions": [
-        "Customer ID is at boundary value"
+        "Customer ID is at maximum length"
       ],
       "Steps": [
-        "Send GET request with boundary customer ID"
+        "Send GET request with customer ID at maximum length"
+      ],
+      "Expected": "Customer details returned",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Retrieve Customer Auth Test",
+      "RelatedRequirement": "FR-05",
+      "ScenarioType": "Auth",
+      "Priority": "High",
+      "ApiEndpoint": "/api/customers/{customerId}/billable-items",
+      "HttpMethod": "GET",
+      "ControllerName": "Logistics",
+      "ActionMethod": "GetJobCardItemsByCustomerId",
+      "Preconditions": [
+        "User is authenticated"
+      ],
+      "Steps": [
+        "Send GET request with valid authentication"
       ],
       "Expected": "Customer details returned",
       "ExpectedStatusCode": 200,
@@ -1937,7 +1935,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Remove Service Item That Is Already Invoiced",
+      "TestName": "Remove Service Item Failure - Already Invoiced",
       "RelatedRequirement": "FR-14",
       "ScenarioType": "Negative",
       "Priority": "High",
@@ -1951,14 +1949,14 @@
       "Steps": [
         "Send DELETE request to /api/batch-items/{id}"
       ],
-      "Expected": "Error message indicating that the service item cannot be removed because it is already invoiced",
+      "Expected": "Error message indicating service item cannot be removed",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Remove Service Item With Invalid ID",
+      "TestName": "Remove Service Item Failure - Invalid ID",
       "RelatedRequirement": "FR-14",
       "ScenarioType": "Negative",
       "Priority": "Medium",
@@ -1972,14 +1970,14 @@
       "Steps": [
         "Send DELETE request to /api/batch-items/{id}"
       ],
-      "Expected": "Error message indicating that the service item does not exist",
+      "Expected": "Error message indicating service item not found",
       "ExpectedStatusCode": 404,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Remove Service Item With Missing ID",
+      "TestName": "Remove Service Item Failure - Missing ID",
       "RelatedRequirement": "FR-14",
       "ScenarioType": "Negative",
       "Priority": "Medium",
@@ -1988,19 +1986,19 @@
       "ControllerName": "Logistics",
       "ActionMethod": "RemoveBatchItemFromList",
       "Preconditions": [
-        "ID is missing"
+        "Service item exists"
       ],
       "Steps": [
         "Send DELETE request to /api/batch-items/"
       ],
-      "Expected": "Error message indicating that the ID is required",
+      "Expected": "Error message indicating ID is required",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Remove Service Item With Malformed ID",
+      "TestName": "Remove Service Item Failure - Malformed ID",
       "RelatedRequirement": "FR-14",
       "ScenarioType": "Negative",
       "Priority": "Medium",
@@ -2009,12 +2007,12 @@
       "ControllerName": "Logistics",
       "ActionMethod": "RemoveBatchItemFromList",
       "Preconditions": [
-        "ID is malformed"
+        "Service item exists"
       ],
       "Steps": [
-        "Send DELETE request to /api/batch-items/malformed-id"
+        "Send DELETE request to /api/batch-items/abc"
       ],
-      "Expected": "Error message indicating that the ID is invalid",
+      "Expected": "Error message indicating ID is invalid",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -2232,7 +2230,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-01_Mandatory_Data_Integrity_Preserve_Referential_Integrity",
+      "TestName": "BRULE-01_PreserveReferentialIntegrity_CreateJobcard",
       "RelatedRequirement": "BRULE-01",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -2241,97 +2239,100 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Jobcard exists with valid finance data"
+        "Jobcard exists"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards/{id}/finance"
+        "Create jobcard",
+        "Get finance details"
       ],
-      "Expected": "Finance data is returned with valid referential integrity",
+      "Expected": "Finance details returned",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-01_Mandatory_Data_Integrity_Preserve_Transactional_Integrity",
+      "TestName": "BRULE-01_PreserveReferentialIntegrity_UpdateJobcard",
       "RelatedRequirement": "BRULE-01",
       "ScenarioType": "Positive",
       "Priority": "High",
-      "ApiEndpoint": "/api/jobcards/{id}/finance",
-      "HttpMethod": "GET",
+      "ApiEndpoint": "/api/service-costs",
+      "HttpMethod": "PUT",
       "ControllerName": "Job",
-      "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
+      "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Jobcard exists with valid finance data"
+        "Jobcard exists"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards/{id}/finance"
+        "Update jobcard",
+        "Get finance details"
       ],
-      "Expected": "Finance data is returned with valid transactional integrity",
+      "Expected": "Finance details returned",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-01_Mandatory_Data_Integrity_Orphaned_Records",
+      "TestName": "BRULE-01_PreserveReferentialIntegrity_DeleteBatchItem",
       "RelatedRequirement": "BRULE-01",
       "ScenarioType": "Negative",
-      "Priority": "High",
+      "Priority": "Medium",
       "ApiEndpoint": "/api/batch-items/{id}",
       "HttpMethod": "DELETE",
       "ControllerName": "Logistics",
       "ActionMethod": "RemoveBatchItemFromList",
       "Preconditions": [
-        "Batch item exists with related jobcard"
+        "Batch item exists"
       ],
       "Steps": [
-        "Send DELETE request to /api/batch-items/{id}"
+        "Delete batch item"
       ],
-      "Expected": "Related jobcard is not deleted",
+      "Expected": "Referential integrity preserved",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-01_Mandatory_Data_Integrity_Broken_References",
+      "TestName": "BRULE-01_PreserveReferentialIntegrity_DeletePaymentVoucherItem",
       "RelatedRequirement": "BRULE-01",
       "ScenarioType": "Negative",
-      "Priority": "High",
+      "Priority": "Medium",
       "ApiEndpoint": "/api/payment-voucher-items/{id}",
       "HttpMethod": "DELETE",
       "ControllerName": "Logistics",
       "ActionMethod": "RemovePaymentVoucherItemFromList",
       "Preconditions": [
-        "Payment voucher item exists with related jobcard"
+        "Payment voucher item exists"
       ],
       "Steps": [
-        "Send DELETE request to /api/payment-voucher-items/{id}"
+        "Delete payment voucher item"
       ],
-      "Expected": "Related jobcard is not deleted",
+      "Expected": "Referential integrity preserved",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-01_Mandatory_Data_Integrity_Inconsistent_Cross_Module_Updates",
+      "TestName": "BRULE-01_PreserveReferentialIntegrity_OrphanedRecord",
       "RelatedRequirement": "BRULE-01",
       "ScenarioType": "Negative",
-      "Priority": "High",
+      "Priority": "Low",
       "ApiEndpoint": "/api/jobcards/{id}/finance",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Jobcard exists with valid finance data"
+        "Jobcard exists",
+        "Finance details exist"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards/{id}/finance"
+        "Delete finance details"
       ],
-      "Expected": "Finance data is returned with consistent cross-module updates",
-      "ExpectedStatusCode": 200,
+      "Expected": "Orphaned record not allowed",
+      "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -2628,7 +2629,7 @@
       "Steps": [
         "Send GET request to /api/reports/operational with destructive processing"
       ],
-      "Expected": "Transaction history is not deleted",
+      "Expected": "Transaction history is not removed",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -2650,7 +2651,7 @@
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance with destructive processing"
       ],
-      "Expected": "Transaction history is not deleted",
+      "Expected": "Transaction history is not removed",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -2669,7 +2670,7 @@
         "User has valid credentials"
       ],
       "Steps": [
-        "Send POST request with valid username and password"
+        "Send POST request to /api/auth/login with valid credentials"
       ],
       "Expected": "Successful login response with token",
       "ExpectedStatusCode": 200,
@@ -2690,7 +2691,7 @@
         "User has invalid credentials"
       ],
       "Steps": [
-        "Send POST request with invalid username and password"
+        "Send POST request to /api/auth/login with invalid credentials"
       ],
       "Expected": "Error response with invalid credentials message",
       "ExpectedStatusCode": 401,
@@ -2711,7 +2712,7 @@
         "User has no credentials"
       ],
       "Steps": [
-        "Send POST request with no username and password"
+        "Send POST request to /api/auth/login with no credentials"
       ],
       "Expected": "Error response with missing credentials message",
       "ExpectedStatusCode": 401,
@@ -2732,7 +2733,7 @@
         "User has malformed credentials"
       ],
       "Steps": [
-        "Send POST request with malformed username and password"
+        "Send POST request to /api/auth/login with malformed credentials"
       ],
       "Expected": "Error response with malformed credentials message",
       "ExpectedStatusCode": 401,
@@ -2741,7 +2742,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Valid Token Authentication",
+      "TestName": "Valid Token",
       "RelatedRequirement": "BRULE-05",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -2753,7 +2754,7 @@
         "User has valid token"
       ],
       "Steps": [
-        "Send DELETE request with valid token"
+        "Send DELETE request to /api/batch-items/{id} with valid token"
       ],
       "Expected": "Successful deletion response",
       "ExpectedStatusCode": 200,
@@ -2855,7 +2856,7 @@
       "ControllerName": "Logistics",
       "ActionMethod": "SavePaymentVouchers",
       "Preconditions": [
-        "User is authenticated"
+        "User is authenticated and has a valid token"
       ],
       "Steps": [
         "Send a POST request to /api/payment-vouchers with a valid token"
@@ -2888,7 +2889,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-11: Delete Vendor With Payable Items",
+      "TestName": "BRULE-11: Delete Vendor With References",
       "RelatedRequirement": "BRULE-11",
       "ScenarioType": "Negative",
       "Priority": "High",
@@ -2902,7 +2903,7 @@
       "Steps": [
         "Send DELETE request to /api/vendors/{id}"
       ],
-      "Expected": "Error: Cannot delete vendor with payable items",
+      "Expected": "Error: Cannot delete vendor with active references",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -3017,60 +3018,60 @@
       "TestName": "Active Usage Constraint Valid Jobcard Reference Data",
       "RelatedRequirement": "BRULE-12",
       "ScenarioType": "Positive",
-      "Priority": "Medium",
+      "Priority": "High",
       "ApiEndpoint": "/api/jobcards/reference-data",
       "HttpMethod": "GET",
       "ControllerName": "Master",
       "ActionMethod": "GetJobCardReferanceData",
       "Preconditions": [
-        "Jobcard reference data is valid"
+        "Jobcard reference data is active"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/reference-data"
       ],
-      "Expected": "List of valid jobcard reference data",
+      "Expected": "List of active jobcard reference data",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Active Usage Constraint Invalid Jobcard Reference Data",
+      "TestName": "Active Usage Constraint Inactive Jobcard Reference Data",
       "RelatedRequirement": "BRULE-12",
       "ScenarioType": "Negative",
-      "Priority": "Medium",
+      "Priority": "High",
       "ApiEndpoint": "/api/jobcards/reference-data",
       "HttpMethod": "GET",
       "ControllerName": "Master",
       "ActionMethod": "GetJobCardReferanceData",
       "Preconditions": [
-        "Jobcard reference data is invalid"
+        "Jobcard reference data is inactive"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/reference-data"
       ],
-      "Expected": "Error message indicating invalid jobcard reference data",
-      "ExpectedStatusCode": 400,
+      "Expected": "List of active jobcard reference data, excluding inactive record",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Active Usage Constraint Batch Eligible Items",
+      "TestName": "Active Usage Constraint Valid Batch Eligible Items",
       "RelatedRequirement": "BRULE-12",
       "ScenarioType": "Positive",
-      "Priority": "Low",
+      "Priority": "High",
       "ApiEndpoint": "/api/batch-eligible-items",
       "HttpMethod": "GET",
       "ControllerName": "Logistics",
       "ActionMethod": "GetBatchItems",
       "Preconditions": [
-        "Batch eligible items are available"
+        "Batch eligible items are active"
       ],
       "Steps": [
         "Send GET request to /api/batch-eligible-items"
       ],
-      "Expected": "List of batch eligible items",
+      "Expected": "List of active batch eligible items",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -3090,7 +3091,7 @@
         "Job card is closed"
       ],
       "Steps": [
-        "Send POST request to /api/jobcards/{id}/open"
+        "Send POST request to open job card"
       ],
       "Expected": "Job card is opened",
       "ExpectedStatusCode": 200,
@@ -3111,7 +3112,7 @@
         "Job card does not exist"
       ],
       "Steps": [
-        "Send POST request to /api/jobcards/{id}/open with invalid ID"
+        "Send POST request to open job card with invalid ID"
       ],
       "Expected": "Error message indicating job card not found",
       "ExpectedStatusCode": 404,
@@ -3132,9 +3133,30 @@
         "Job cards exist"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards"
+        "Send GET request to retrieve all job cards"
       ],
       "Expected": "List of job cards",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Get All Job Cards Failure - No Job Cards",
+      "RelatedRequirement": "BRULE-15",
+      "ScenarioType": "Negative",
+      "Priority": "Medium",
+      "ApiEndpoint": "/api/jobcards",
+      "HttpMethod": "GET",
+      "ControllerName": "Job",
+      "ActionMethod": "GetJobs",
+      "Preconditions": [
+        "No job cards exist"
+      ],
+      "Steps": [
+        "Send GET request to retrieve all job cards"
+      ],
+      "Expected": "Empty list",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -3153,7 +3175,7 @@
         "Job card exists"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards/{id}"
+        "Send GET request to retrieve job card"
       ],
       "Expected": "Job card details",
       "ExpectedStatusCode": 200,
@@ -3162,30 +3184,9 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Get Job Card Failure - Invalid ID",
-      "RelatedRequirement": "BRULE-15",
-      "ScenarioType": "Negative",
-      "Priority": "Medium",
-      "ApiEndpoint": "/api/jobcards",
-      "HttpMethod": "GET",
-      "ControllerName": "Job",
-      "ActionMethod": "GetJobs",
-      "Preconditions": [
-        "Job card does not exist"
-      ],
-      "Steps": [
-        "Send GET request to /api/jobcards/{id} with invalid ID"
-      ],
-      "Expected": "Error message indicating job card not found",
-      "ExpectedStatusCode": 404,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Closed Job Restriction - New Operational Service Item Rejection",
+      "TestName": "Closed Job Restriction - Positive Test",
       "RelatedRequirement": "BRULE-17",
-      "ScenarioType": "Negative",
+      "ScenarioType": "Positive",
       "Priority": "High",
       "ApiEndpoint": "/api/reports/operational",
       "HttpMethod": "GET",
@@ -3195,40 +3196,19 @@
         "Job card is closed"
       ],
       "Steps": [
-        "Attempt to add new operational service item to closed job card"
+        "Send GET request to /api/reports/operational"
       ],
-      "Expected": "Error message indicating new operational service items are not allowed for closed job cards",
-      "ExpectedStatusCode": 400,
+      "Expected": "No new operational service items are returned",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Closed Job Restriction - Unrestricted Modification Rejection",
+      "TestName": "Closed Job Restriction - Negative Test",
       "RelatedRequirement": "BRULE-17",
       "ScenarioType": "Negative",
       "Priority": "High",
-      "ApiEndpoint": "/api/job-line-items",
-      "HttpMethod": "GET",
-      "ControllerName": "Job",
-      "ActionMethod": "GetJobLineItems",
-      "Preconditions": [
-        "Job card is closed"
-      ],
-      "Steps": [
-        "Attempt to modify existing service item on closed job card without restriction"
-      ],
-      "Expected": "Error message indicating unrestricted modifications are not allowed for closed job cards",
-      "ExpectedStatusCode": 400,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "Closed Job Restriction - New Operational Service Item Acceptance Before Closure",
-      "RelatedRequirement": "BRULE-17",
-      "ScenarioType": "Positive",
-      "Priority": "Medium",
       "ApiEndpoint": "/api/reports/operational",
       "HttpMethod": "GET",
       "ControllerName": "Job",
@@ -3237,52 +3217,73 @@
         "Job card is open"
       ],
       "Steps": [
-        "Add new operational service item to open job card"
+        "Send GET request to /api/reports/operational"
       ],
-      "Expected": "New operational service item is successfully added to job card",
+      "Expected": "New operational service items are returned",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Closed Job Restriction - Unrestricted Modification Acceptance Before Closure",
+      "TestName": "Closed Job Restriction - Validation Test",
       "RelatedRequirement": "BRULE-17",
-      "ScenarioType": "Positive",
+      "ScenarioType": "Validation",
       "Priority": "Medium",
       "ApiEndpoint": "/api/job-line-items",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetJobLineItems",
       "Preconditions": [
-        "Job card is open"
+        "Job card is closed"
       ],
       "Steps": [
-        "Modify existing service item on open job card without restriction"
+        "Send PUT request to /api/job-line-items with new service item"
       ],
-      "Expected": "Service item is successfully modified on job card",
-      "ExpectedStatusCode": 200,
+      "Expected": "Error message indicating job card is closed",
+      "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Closed Job Restriction - Invalid Job Card ID",
+      "TestName": "Closed Job Restriction - Boundary Test",
       "RelatedRequirement": "BRULE-17",
-      "ScenarioType": "Negative",
+      "ScenarioType": "Boundary",
       "Priority": "Low",
       "ApiEndpoint": "/api/reports/operational",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetReportItems",
       "Preconditions": [
-        "Invalid job card ID provided"
+        "Job card is closed"
       ],
       "Steps": [
-        "Attempt to retrieve operational service items for invalid job card ID"
+        "Send GET request to /api/reports/operational with invalid parameters"
       ],
-      "Expected": "Error message indicating job card ID is invalid",
-      "ExpectedStatusCode": 404,
+      "Expected": "Error message indicating invalid parameters",
+      "ExpectedStatusCode": 400,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "Closed Job Restriction - Auth Test",
+      "RelatedRequirement": "BRULE-17",
+      "ScenarioType": "Auth",
+      "Priority": "High",
+      "ApiEndpoint": "/api/reports/operational",
+      "HttpMethod": "GET",
+      "ControllerName": "Job",
+      "ActionMethod": "GetReportItems",
+      "Preconditions": [
+        "Invalid credentials"
+      ],
+      "Steps": [
+        "Send GET request to /api/reports/operational"
+      ],
+      "Expected": "Error message indicating unauthorized access",
+      "ExpectedStatusCode": 401,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -3309,7 +3310,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-18 Negative Job Closure Without Completed Operational Data",
+      "TestName": "BRULE-18 Negative Job Closure With Incomplete Operational Data",
       "RelatedRequirement": "BRULE-18",
       "ScenarioType": "Negative",
       "Priority": "High",
@@ -3321,7 +3322,7 @@
         "Operational data not completed"
       ],
       "Steps": [
-        "Send PUT request to /api/service-costs without completed operational data"
+        "Send PUT request to /api/service-costs with incomplete operational data"
       ],
       "Expected": "Job card closure failed due to incomplete operational data",
       "ExpectedStatusCode": 400,
@@ -3330,31 +3331,31 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-18 Validation Job Closure With Invalid Service Lines",
+      "TestName": "BRULE-18 Positive Job Closure With Reviewed Financial Dependencies",
       "RelatedRequirement": "BRULE-18",
-      "ScenarioType": "Validation",
-      "Priority": "Medium",
-      "ApiEndpoint": "/api/service-costs",
-      "HttpMethod": "PUT",
+      "ScenarioType": "Positive",
+      "Priority": "High",
+      "ApiEndpoint": "/api/reports/operational",
+      "HttpMethod": "GET",
       "ControllerName": "Job",
-      "ActionMethod": "UpdateCost",
+      "ActionMethod": "GetReportItems",
       "Preconditions": [
-        "Invalid service lines"
+        "Financial dependencies reviewed"
       ],
       "Steps": [
-        "Send PUT request to /api/service-costs with invalid service lines"
+        "Send GET request to /api/reports/operational with reviewed financial dependencies"
       ],
-      "Expected": "Job card closure failed due to invalid service lines",
-      "ExpectedStatusCode": 400,
+      "Expected": "Job card closed successfully",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-18 Boundary Job Closure With Missing Financial Dependencies",
+      "TestName": "BRULE-18 Negative Job Closure With Unreviewed Financial Dependencies",
       "RelatedRequirement": "BRULE-18",
-      "ScenarioType": "Boundary",
-      "Priority": "Low",
+      "ScenarioType": "Negative",
+      "Priority": "High",
       "ApiEndpoint": "/api/reports/operational",
       "HttpMethod": "GET",
       "ControllerName": "Job",
@@ -3363,37 +3364,37 @@
         "Financial dependencies not reviewed"
       ],
       "Steps": [
-        "Send GET request to /api/reports/operational with missing financial dependencies"
+        "Send GET request to /api/reports/operational with unreviewed financial dependencies"
       ],
-      "Expected": "Job card closure failed due to missing financial dependencies",
+      "Expected": "Job card closure failed due to unreviewed financial dependencies",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-18 Auth Job Closure With Invalid Credentials",
+      "TestName": "BRULE-18 Positive Job Closure With No Invalid Incomplete Service Lines",
       "RelatedRequirement": "BRULE-18",
-      "ScenarioType": "Auth",
+      "ScenarioType": "Positive",
       "Priority": "High",
-      "ApiEndpoint": "/api/service-costs",
-      "HttpMethod": "PUT",
-      "ControllerName": "Job",
-      "ActionMethod": "UpdateCost",
+      "ApiEndpoint": "/api/jobcards/reference-data",
+      "HttpMethod": "GET",
+      "ControllerName": "Master",
+      "ActionMethod": "GetJobCardReferanceData",
       "Preconditions": [
-        "Invalid credentials"
+        "No invalid incomplete service lines"
       ],
       "Steps": [
-        "Send PUT request to /api/service-costs with invalid credentials"
+        "Send GET request to /api/jobcards/reference-data with no invalid incomplete service lines"
       ],
-      "Expected": "Job card closure failed due to invalid credentials",
-      "ExpectedStatusCode": 401,
+      "Expected": "Job card closed successfully",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-19: Deletion Restriction for Financially Used Jobs - Positive Scenario",
+      "TestName": "BRULE-19 Deletion Restriction for Financially Used Jobs Positive Test",
       "RelatedRequirement": "BRULE-19",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -3402,7 +3403,6 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobs",
       "Preconditions": [
-        "Job card exists",
         "Job card has contributed to invoices"
       ],
       "Steps": [
@@ -3415,7 +3415,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-19: Deletion Restriction for Financially Used Jobs - Negative Scenario",
+      "TestName": "BRULE-19 Deletion Restriction for Financially Used Jobs Negative Test",
       "RelatedRequirement": "BRULE-19",
       "ScenarioType": "Negative",
       "Priority": "High",
@@ -3424,20 +3424,19 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobs",
       "Preconditions": [
-        "Job card exists",
-        "Job card has contributed to invoices"
+        "Job card has not contributed to invoices"
       ],
       "Steps": [
-        "Send DELETE request to /api/jobcards/{id}"
+        "Send GET request to /api/jobcards"
       ],
-      "Expected": "Job card is not deleted, error message is returned",
-      "ExpectedStatusCode": 400,
+      "Expected": "Job card is deleted",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-19: Deletion Restriction for Financially Used Jobs - Validation Scenario",
+      "TestName": "BRULE-19 Deletion Restriction for Financially Used Jobs Validation Test",
       "RelatedRequirement": "BRULE-19",
       "ScenarioType": "Validation",
       "Priority": "Medium",
@@ -3446,19 +3445,19 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobs",
       "Preconditions": [
-        "Job card does not exist"
+        "Job card has invalid data"
       ],
       "Steps": [
-        "Send POST request to /api/jobcards with invalid data"
+        "Send GET request to /api/jobcards"
       ],
-      "Expected": "Error message is returned, job card is not created",
+      "Expected": "Error message is returned",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-19: Deletion Restriction for Financially Used Jobs - Boundary Scenario",
+      "TestName": "BRULE-19 Deletion Restriction for Financially Used Jobs Boundary Test",
       "RelatedRequirement": "BRULE-19",
       "ScenarioType": "Boundary",
       "Priority": "Low",
@@ -3467,20 +3466,19 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobs",
       "Preconditions": [
-        "Job card exists",
-        "Job card has contributed to invoices"
+        "Job card has maximum allowed data"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards with invalid parameters"
+        "Send GET request to /api/jobcards"
       ],
-      "Expected": "Error message is returned, job card is not retrieved",
-      "ExpectedStatusCode": 400,
+      "Expected": "Job card is not deleted",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-19: Deletion Restriction for Financially Used Jobs - Auth Scenario",
+      "TestName": "BRULE-19 Deletion Restriction for Financially Used Jobs Auth Test",
       "RelatedRequirement": "BRULE-19",
       "ScenarioType": "Auth",
       "Priority": "High",
@@ -3489,12 +3487,12 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobs",
       "Preconditions": [
-        "User is not authenticated"
+        "Invalid credentials"
       ],
       "Steps": [
         "Send GET request to /api/jobcards"
       ],
-      "Expected": "Error message is returned, job card is not retrieved",
+      "Expected": "Error message is returned",
       "ExpectedStatusCode": 401,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -3682,12 +3680,13 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobHotelsByJobCardId",
       "Preconditions": [
-        "User is authenticated"
+        "User is logged in",
+        "Hotel service is available"
       ],
       "Steps": [
-        "Send a POST request with valid check-in and check-out dates"
+        "Send POST request with valid check-in and check-out dates"
       ],
-      "Expected": "Hotel stay is created successfully",
+      "Expected": "Hotel service is created with valid stay duration",
       "ExpectedStatusCode": 201,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -3703,10 +3702,11 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobHotelsByJobCardId",
       "Preconditions": [
-        "User is authenticated"
+        "User is logged in",
+        "Hotel service is available"
       ],
       "Steps": [
-        "Send a POST request with invalid check-in and check-out dates"
+        "Send POST request with invalid check-in and check-out dates"
       ],
       "Expected": "Error message indicating invalid stay duration",
       "ExpectedStatusCode": 400,
@@ -3715,49 +3715,51 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Check-out Date Before Check-in Date",
+      "TestName": "Missing Check-in Date",
       "RelatedRequirement": "BRULE-26",
-      "ScenarioType": "Negative",
+      "ScenarioType": "Validation",
       "Priority": "Medium",
       "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetJobHotelsByJobCardId",
       "Preconditions": [
-        "User is authenticated"
+        "User is logged in",
+        "Hotel service is available"
       ],
       "Steps": [
-        "Send a POST request with check-out date before check-in date"
+        "Send POST request with missing check-in date"
       ],
-      "Expected": "Error message indicating invalid stay duration",
+      "Expected": "Error message indicating missing check-in date",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Check-out Date Equal to Check-in Date",
+      "TestName": "Missing Check-out Date",
       "RelatedRequirement": "BRULE-26",
-      "ScenarioType": "Positive",
+      "ScenarioType": "Validation",
       "Priority": "Medium",
       "ApiEndpoint": "/api/jobcards/{id}/hotel-services",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetJobHotelsByJobCardId",
       "Preconditions": [
-        "User is authenticated"
+        "User is logged in",
+        "Hotel service is available"
       ],
       "Steps": [
-        "Send a POST request with check-out date equal to check-in date"
+        "Send POST request with missing check-out date"
       ],
-      "Expected": "Hotel stay is created successfully",
-      "ExpectedStatusCode": 201,
+      "Expected": "Error message indicating missing check-out date",
+      "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-28_Miscellaneous_Service_Clarity_Valid_Description",
+      "TestName": "BRULE-28 PUT Valid Service Cost",
       "RelatedRequirement": "BRULE-28",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -3766,10 +3768,10 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Valid authentication token"
+        "Valid service cost data"
       ],
       "Steps": [
-        "Send PUT request with valid description and cost"
+        "Send PUT request with valid service cost data"
       ],
       "Expected": "Service cost updated successfully",
       "ExpectedStatusCode": 200,
@@ -3778,7 +3780,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-28_Miscellaneous_Service_Clarity_Invalid_Description",
+      "TestName": "BRULE-28 PUT Invalid Service Cost",
       "RelatedRequirement": "BRULE-28",
       "ScenarioType": "Negative",
       "Priority": "High",
@@ -3787,40 +3789,19 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Valid authentication token"
+        "Invalid service cost data"
       ],
       "Steps": [
-        "Send PUT request with empty description and valid cost"
+        "Send PUT request with invalid service cost data"
       ],
-      "Expected": "Error: Description must not be empty",
+      "Expected": "Error message indicating invalid service cost data",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-28_Miscellaneous_Service_Clarity_Valid_Cost",
-      "RelatedRequirement": "BRULE-28",
-      "ScenarioType": "Positive",
-      "Priority": "High",
-      "ApiEndpoint": "/api/service-costs",
-      "HttpMethod": "PUT",
-      "ControllerName": "Job",
-      "ActionMethod": "UpdateCost",
-      "Preconditions": [
-        "Valid authentication token"
-      ],
-      "Steps": [
-        "Send PUT request with valid description and valid cost"
-      ],
-      "Expected": "Service cost updated successfully",
-      "ExpectedStatusCode": 200,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "BRULE-28_Miscellaneous_Service_Clarity_Invalid_Cost",
+      "TestName": "BRULE-28 PUT Missing Service Cost",
       "RelatedRequirement": "BRULE-28",
       "ScenarioType": "Negative",
       "Priority": "High",
@@ -3829,19 +3810,40 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Valid authentication token"
+        "Missing service cost data"
       ],
       "Steps": [
-        "Send PUT request with valid description and invalid cost"
+        "Send PUT request with missing service cost data"
       ],
-      "Expected": "Error: Cost must be valid",
+      "Expected": "Error message indicating missing service cost data",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-29 Positive Test: Non-Negative Cost",
+      "TestName": "BRULE-28 PUT Malformed Service Cost",
+      "RelatedRequirement": "BRULE-28",
+      "ScenarioType": "Negative",
+      "Priority": "High",
+      "ApiEndpoint": "/api/service-costs",
+      "HttpMethod": "PUT",
+      "ControllerName": "Job",
+      "ActionMethod": "UpdateCost",
+      "Preconditions": [
+        "Malformed service cost data"
+      ],
+      "Steps": [
+        "Send PUT request with malformed service cost data"
+      ],
+      "Expected": "Error message indicating malformed service cost data",
+      "ExpectedStatusCode": 400,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "BRULE-29 Positive Test - Valid Non-Negative Cost",
       "RelatedRequirement": "BRULE-29",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -3850,10 +3852,10 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Valid service cost entry"
+        "Service cost entry exists"
       ],
       "Steps": [
-        "Send PUT request with non-negative cost amount"
+        "Update service cost entry with non-negative amount"
       ],
       "Expected": "Service cost entry updated successfully",
       "ExpectedStatusCode": 200,
@@ -3862,7 +3864,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-29 Negative Test: Negative Cost",
+      "TestName": "BRULE-29 Negative Test - Negative Cost",
       "RelatedRequirement": "BRULE-29",
       "ScenarioType": "Negative",
       "Priority": "High",
@@ -3871,143 +3873,139 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Valid service cost entry"
+        "Service cost entry exists"
       ],
       "Steps": [
-        "Send PUT request with negative cost amount"
+        "Update service cost entry with negative amount"
       ],
-      "Expected": "Error response with non-negative cost rule violation",
+      "Expected": "Error message indicating non-negative cost required",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-29 Boundary Test: Zero Cost",
+      "TestName": "BRULE-29 Validation Test - Missing Cost",
+      "RelatedRequirement": "BRULE-29",
+      "ScenarioType": "Validation",
+      "Priority": "Medium",
+      "ApiEndpoint": "/api/service-costs",
+      "HttpMethod": "PUT",
+      "ControllerName": "Job",
+      "ActionMethod": "UpdateCost",
+      "Preconditions": [
+        "Service cost entry exists"
+      ],
+      "Steps": [
+        "Update service cost entry with missing amount"
+      ],
+      "Expected": "Error message indicating cost is required",
+      "ExpectedStatusCode": 400,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "BRULE-29 Boundary Test - Zero Cost",
       "RelatedRequirement": "BRULE-29",
       "ScenarioType": "Boundary",
-      "Priority": "Medium",
-      "ApiEndpoint": "/api/service-costs",
-      "HttpMethod": "PUT",
-      "ControllerName": "Job",
-      "ActionMethod": "UpdateCost",
-      "Preconditions": [
-        "Valid service cost entry"
-      ],
-      "Steps": [
-        "Send PUT request with zero cost amount"
-      ],
-      "Expected": "Service cost entry updated successfully",
-      "ExpectedStatusCode": 200,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "BRULE-29 Validation Test: Missing Cost",
-      "RelatedRequirement": "BRULE-29",
-      "ScenarioType": "Validation",
-      "Priority": "Medium",
-      "ApiEndpoint": "/api/service-costs",
-      "HttpMethod": "PUT",
-      "ControllerName": "Job",
-      "ActionMethod": "UpdateCost",
-      "Preconditions": [
-        "Valid service cost entry"
-      ],
-      "Steps": [
-        "Send PUT request with missing cost amount"
-      ],
-      "Expected": "Error response with missing cost field",
-      "ExpectedStatusCode": 400,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "BRULE-30 Recalculation On Change Positive Test",
-      "RelatedRequirement": "BRULE-30",
-      "ScenarioType": "Positive",
-      "Priority": "High",
-      "ApiEndpoint": "/api/service-costs",
-      "HttpMethod": "PUT",
-      "ControllerName": "Job",
-      "ActionMethod": "UpdateCost",
-      "Preconditions": [
-        "Cost-bearing service item exists"
-      ],
-      "Steps": [
-        "Update cost-bearing service item",
-        "Verify total cost recalculation"
-      ],
-      "Expected": "Total cost of job card is recalculated",
-      "ExpectedStatusCode": 200,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "BRULE-30 Recalculation On Change Negative Test",
-      "RelatedRequirement": "BRULE-30",
-      "ScenarioType": "Negative",
-      "Priority": "Medium",
-      "ApiEndpoint": "/api/service-costs",
-      "HttpMethod": "PUT",
-      "ControllerName": "Job",
-      "ActionMethod": "UpdateCost",
-      "Preconditions": [
-        "Cost-bearing service item does not exist"
-      ],
-      "Steps": [
-        "Update non-existent cost-bearing service item",
-        "Verify total cost not recalculated"
-      ],
-      "Expected": "Total cost of job card is not recalculated",
-      "ExpectedStatusCode": 404,
-      "ExpectedCreated": null,
-      "ExpectErrorObject": null,
-      "ExpectedErrorMessageContains": null
-    },
-    {
-      "TestName": "BRULE-30 Recalculation On Change Validation Test",
-      "RelatedRequirement": "BRULE-30",
-      "ScenarioType": "Validation",
       "Priority": "Low",
       "ApiEndpoint": "/api/service-costs",
       "HttpMethod": "PUT",
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Invalid cost-bearing service item data"
+        "Service cost entry exists"
       ],
       "Steps": [
-        "Update cost-bearing service item with invalid data",
-        "Verify total cost not recalculated"
+        "Update service cost entry with zero amount"
       ],
-      "Expected": "Total cost of job card is not recalculated",
-      "ExpectedStatusCode": 400,
+      "Expected": "Service cost entry updated successfully",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-30 Recalculation On Change Boundary Test",
+      "TestName": "BRULE-30 Recalculation On Change Valid Service Item Added",
       "RelatedRequirement": "BRULE-30",
-      "ScenarioType": "Boundary",
+      "ScenarioType": "Positive",
+      "Priority": "High",
+      "ApiEndpoint": "/api/service-costs",
+      "HttpMethod": "PUT",
+      "ControllerName": "Job",
+      "ActionMethod": "UpdateCost",
+      "Preconditions": [
+        "Valid service item exists"
+      ],
+      "Steps": [
+        "Add a new cost-bearing service item to a job card"
+      ],
+      "Expected": "Total cost of the job card is recalculated and updated",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "BRULE-30 Recalculation On Change Valid Service Item Updated",
+      "RelatedRequirement": "BRULE-30",
+      "ScenarioType": "Positive",
+      "Priority": "High",
+      "ApiEndpoint": "/api/service-costs",
+      "HttpMethod": "PUT",
+      "ControllerName": "Job",
+      "ActionMethod": "UpdateCost",
+      "Preconditions": [
+        "Valid service item exists"
+      ],
+      "Steps": [
+        "Update a cost-bearing service item of a job card"
+      ],
+      "Expected": "Total cost of the job card is recalculated and updated",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "BRULE-30 Recalculation On Change Valid Service Item Removed",
+      "RelatedRequirement": "BRULE-30",
+      "ScenarioType": "Positive",
+      "Priority": "High",
+      "ApiEndpoint": "/api/service-costs",
+      "HttpMethod": "PUT",
+      "ControllerName": "Job",
+      "ActionMethod": "UpdateCost",
+      "Preconditions": [
+        "Valid service item exists"
+      ],
+      "Steps": [
+        "Remove a cost-bearing service item from a job card"
+      ],
+      "Expected": "Total cost of the job card is recalculated and updated",
+      "ExpectedStatusCode": 200,
+      "ExpectedCreated": null,
+      "ExpectErrorObject": null,
+      "ExpectedErrorMessageContains": null
+    },
+    {
+      "TestName": "BRULE-30 Recalculation On Change Invalid Service Item Added",
+      "RelatedRequirement": "BRULE-30",
+      "ScenarioType": "Negative",
       "Priority": "Medium",
       "ApiEndpoint": "/api/service-costs",
       "HttpMethod": "PUT",
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Cost-bearing service item with maximum allowed value"
+        "Invalid service item exists"
       ],
       "Steps": [
-        "Update cost-bearing service item with maximum allowed value",
-        "Verify total cost recalculation"
+        "Add a new invalid cost-bearing service item to a job card"
       ],
-      "Expected": "Total cost of job card is recalculated",
-      "ExpectedStatusCode": 200,
+      "Expected": "Error message indicating invalid service item",
+      "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -4114,10 +4112,9 @@
         "Existing financial records"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards/{id}/finance",
-        "Verify response contains operational totals"
+        "Send GET request to /api/jobcards/{id}/finance"
       ],
-      "Expected": "Operational totals match financial records",
+      "Expected": "Operational totals match financial values",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4137,10 +4134,9 @@
         "Non-existent financial records"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards/{id}/finance",
-        "Verify response contains error message"
+        "Send GET request to /api/jobcards/{id}/finance"
       ],
-      "Expected": "Error message indicating invalid jobcard ID or non-existent financial records",
+      "Expected": "Error response with message \u0027Jobcard not found\u0027 or \u0027Financial records not found\u0027",
       "ExpectedStatusCode": 404,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4160,10 +4156,9 @@
         "Invalid financial records"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards/{id}/finance",
-        "Verify response contains error message"
+        "Send GET request to /api/jobcards/{id}/finance"
       ],
-      "Expected": "Error message indicating invalid financial records",
+      "Expected": "Error response with message \u0027Invalid financial records\u0027",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4183,10 +4178,9 @@
         "Financial records with boundary values"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards/{id}/finance",
-        "Verify response contains operational totals"
+        "Send GET request to /api/jobcards/{id}/finance"
       ],
-      "Expected": "Operational totals match financial records with boundary values",
+      "Expected": "Operational totals match financial values with boundary values",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4202,12 +4196,12 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Valid authentication token"
+        "User is authenticated"
       ],
       "Steps": [
-        "Send PUT request with non-numeric cost value"
+        "Send PUT request with non-numeric cost"
       ],
-      "Expected": "Error response with invalid numeric value message",
+      "Expected": "Error message indicating invalid numeric value",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4223,12 +4217,12 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Valid authentication token"
+        "User is authenticated"
       ],
       "Steps": [
-        "Send PUT request with malformed decimal cost value"
+        "Send PUT request with malformed decimal cost"
       ],
-      "Expected": "Error response with invalid numeric value message",
+      "Expected": "Error message indicating invalid numeric value",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4244,12 +4238,12 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Valid authentication token"
+        "User is authenticated"
       ],
       "Steps": [
-        "Send PUT request with cost value outside supported limits"
+        "Send PUT request with cost outside supported limits"
       ],
-      "Expected": "Error response with invalid numeric value message",
+      "Expected": "Error message indicating invalid numeric value",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4265,12 +4259,12 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Valid authentication token"
+        "User is authenticated"
       ],
       "Steps": [
-        "Send PUT request with valid numeric cost value"
+        "Send PUT request with valid numeric cost"
       ],
-      "Expected": "Success response with updated cost value",
+      "Expected": "Success message indicating valid numeric value",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4287,10 +4281,12 @@
       "ActionMethod": "GetBatchItems",
       "Preconditions": [
         "Item exists",
-        "Item is valid"
+        "Item is valid",
+        "Item is not already processed"
       ],
       "Steps": [
-        "Add eligible item to batch"
+        "Create a new batch",
+        "Add an eligible item to the batch"
       ],
       "Expected": "Batch created with eligible item",
       "ExpectedStatusCode": 201,
@@ -4308,11 +4304,13 @@
       "ControllerName": "Logistics",
       "ActionMethod": "GetBatchItems",
       "Preconditions": [
-        "Item does not exist",
-        "Item is invalid"
+        "Item exists",
+        "Item is invalid",
+        "Item is not already processed"
       ],
       "Steps": [
-        "Add ineligible item to batch"
+        "Create a new batch",
+        "Add an ineligible item to the batch"
       ],
       "Expected": "Batch not created with ineligible item",
       "ExpectedStatusCode": 400,
@@ -4331,10 +4329,11 @@
       "ActionMethod": "GetBatchItems",
       "Preconditions": [
         "Items exist",
-        "Items are valid"
+        "Items are valid",
+        "Items are not already processed"
       ],
       "Steps": [
-        "Get eligible items for batching"
+        "Retrieve eligible items for batching"
       ],
       "Expected": "List of eligible items returned",
       "ExpectedStatusCode": 200,
@@ -4352,10 +4351,11 @@
       "ControllerName": "Logistics",
       "ActionMethod": "RemoveBatchItemFromList",
       "Preconditions": [
-        "Batch item exists"
+        "Batch item exists",
+        "Batch item is valid"
       ],
       "Steps": [
-        "Delete batch item"
+        "Delete a batch item"
       ],
       "Expected": "Batch item deleted",
       "ExpectedStatusCode": 204,
@@ -4466,7 +4466,7 @@
       "Steps": [
         "Create a new batch with a valid item"
       ],
-      "Expected": "Batch created successfully with at least one valid item",
+      "Expected": "Batch created successfully",
       "ExpectedStatusCode": 201,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4487,7 +4487,7 @@
       "Steps": [
         "Create a new batch with no items"
       ],
-      "Expected": "Batch creation fails with error message",
+      "Expected": "Batch creation failed due to empty batch",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4508,7 +4508,7 @@
       "Steps": [
         "Create a new batch with an invalid item"
       ],
-      "Expected": "Batch creation fails with validation error",
+      "Expected": "Batch creation failed due to invalid item",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4527,9 +4527,9 @@
         "One valid batch item exists"
       ],
       "Steps": [
-        "Create a new batch with one valid item"
+        "Create a new batch with one item"
       ],
-      "Expected": "Batch created successfully with one valid item",
+      "Expected": "Batch created successfully",
       "ExpectedStatusCode": 201,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4570,7 +4570,7 @@
         "Batch has already been processed"
       ],
       "Steps": [
-        "Try to edit or replace an item in the batch"
+        "Try to edit or replace items in the batch"
       ],
       "Expected": "Editing or item replacement is not allowed",
       "ExpectedStatusCode": 403,
@@ -4583,18 +4583,18 @@
       "RelatedRequirement": "BRULE-38",
       "ScenarioType": "Validation",
       "Priority": "Medium",
-      "ApiEndpoint": "/api/batch-eligible-items",
-      "HttpMethod": "GET",
+      "ApiEndpoint": "/api/batches",
+      "HttpMethod": "POST",
       "ControllerName": "Logistics",
-      "ActionMethod": "GetBatchItems",
+      "ActionMethod": "SavetBatchItems",
       "Preconditions": [
-        "Batch has not been processed"
+        "Batch has invalid data"
       ],
       "Steps": [
-        "Get eligible items for the batch"
+        "Try to process the batch into downstream financial transactions"
       ],
-      "Expected": "Eligible items are returned",
-      "ExpectedStatusCode": 200,
+      "Expected": "Batch processing fails due to invalid data",
+      "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -4604,24 +4604,24 @@
       "RelatedRequirement": "BRULE-38",
       "ScenarioType": "Boundary",
       "Priority": "Low",
-      "ApiEndpoint": "/api/batch-items/{id}",
-      "HttpMethod": "DELETE",
+      "ApiEndpoint": "/api/batches",
+      "HttpMethod": "POST",
       "ControllerName": "Logistics",
-      "ActionMethod": "RemoveBatchItemFromList",
+      "ActionMethod": "SavetBatchItems",
       "Preconditions": [
-        "Batch has not been processed"
+        "Batch has maximum allowed items"
       ],
       "Steps": [
-        "Delete an item from the batch"
+        "Try to add more items to the batch"
       ],
-      "Expected": "Item is successfully deleted",
-      "ExpectedStatusCode": 200,
+      "Expected": "Adding more items to the batch is not allowed",
+      "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Voucher Amount Accuracy Positive Test",
+      "TestName": "BRULE-40 Voucher Amount Accuracy Positive Test",
       "RelatedRequirement": "BRULE-40",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -4642,7 +4642,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Voucher Amount Accuracy Negative Test",
+      "TestName": "BRULE-40 Voucher Amount Accuracy Negative Test",
       "RelatedRequirement": "BRULE-40",
       "ScenarioType": "Negative",
       "Priority": "High",
@@ -4663,7 +4663,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Voucher Amount Accuracy Boundary Test",
+      "TestName": "BRULE-40 Voucher Amount Accuracy Boundary Test",
       "RelatedRequirement": "BRULE-40",
       "ScenarioType": "Boundary",
       "Priority": "Medium",
@@ -4684,7 +4684,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Voucher Amount Accuracy Validation Test",
+      "TestName": "BRULE-40 Voucher Amount Accuracy Validation Test",
       "RelatedRequirement": "BRULE-40",
       "ScenarioType": "Validation",
       "Priority": "Medium",
@@ -4714,10 +4714,10 @@
       "ControllerName": "Logistics",
       "ActionMethod": "SavePaymentVouchers",
       "Preconditions": [
-        "Valid payable business content"
+        "Valid payment voucher data"
       ],
       "Steps": [
-        "Create a new payment voucher with valid payable business content"
+        "Create a new payment voucher with valid data"
       ],
       "Expected": "Payment voucher created successfully",
       "ExpectedStatusCode": 201,
@@ -4735,10 +4735,10 @@
       "ControllerName": "Logistics",
       "ActionMethod": "SavePaymentVouchers",
       "Preconditions": [
-        "Existing payment voucher with same payable business content"
+        "Duplicate payment voucher data"
       ],
       "Steps": [
-        "Create a new payment voucher with same payable business content"
+        "Create a new payment voucher with duplicate data"
       ],
       "Expected": "Error: Duplicate payment voucher",
       "ExpectedStatusCode": 400,
@@ -4756,12 +4756,12 @@
       "ControllerName": "Logistics",
       "ActionMethod": "SavePaymentVouchers",
       "Preconditions": [
-        "Invalid payable business content"
+        "Invalid payment voucher data"
       ],
       "Steps": [
-        "Create a new payment voucher with invalid payable business content"
+        "Create a new payment voucher with invalid data"
       ],
-      "Expected": "Error: Invalid payable business content",
+      "Expected": "Error: Invalid payment voucher data",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4777,10 +4777,10 @@
       "ControllerName": "Logistics",
       "ActionMethod": "SavePaymentVouchers",
       "Preconditions": [
-        "Payable business content with maximum allowed characters"
+        "Payment voucher data with maximum allowed characters"
       ],
       "Steps": [
-        "Create a new payment voucher with payable business content with maximum allowed characters"
+        "Create a new payment voucher with maximum allowed characters"
       ],
       "Expected": "Payment voucher created successfully",
       "ExpectedStatusCode": 201,
@@ -4798,12 +4798,13 @@
       "ControllerName": "Logistics",
       "ActionMethod": "SaveInvoice",
       "Preconditions": [
-        "Invoice is finalized"
+        "Invoice is not finalized"
       ],
       "Steps": [
-        "Send GET request to retrieve invoice"
+        "Create a new invoice",
+        "Finalize the invoice"
       ],
-      "Expected": "Invoice is returned with finalized status",
+      "Expected": "Invoice is successfully finalized and cannot be modified",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -4822,52 +4823,52 @@
         "Invoice is finalized"
       ],
       "Steps": [
-        "Send POST request to modify invoice"
+        "Attempt to modify the finalized invoice"
       ],
-      "Expected": "Error response indicating invoice cannot be modified",
+      "Expected": "Modification is rejected with an error message",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Void Finalized Invoice Test",
+      "TestName": "Get Uninvoiced Reports Test",
       "RelatedRequirement": "BRULE-46",
       "ScenarioType": "Positive",
       "Priority": "Medium",
-      "ApiEndpoint": "/api/invoices/{id}/void",
-      "HttpMethod": "POST",
-      "ControllerName": "Logistics",
-      "ActionMethod": "VoidInvoice",
+      "ApiEndpoint": "/api/reports/uninvoiced",
+      "HttpMethod": "GET",
+      "ControllerName": "Job",
+      "ActionMethod": "GetUnInvoiceReportItems",
       "Preconditions": [
-        "Invoice is finalized"
+        "There are uninvoiced reports"
       ],
       "Steps": [
-        "Send POST request to void invoice"
+        "Retrieve the uninvoiced reports"
       ],
-      "Expected": "Invoice is voided and updated",
+      "Expected": "Uninvoiced reports are successfully retrieved",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Issue Replacement Record Test",
+      "TestName": "Get Finalized Invoice Test",
       "RelatedRequirement": "BRULE-46",
       "ScenarioType": "Positive",
       "Priority": "Medium",
-      "ApiEndpoint": "/api/invoices",
-      "HttpMethod": "POST",
+      "ApiEndpoint": "/api/invoices/{id}",
+      "HttpMethod": "GET",
       "ControllerName": "Logistics",
-      "ActionMethod": "SaveInvoice",
+      "ActionMethod": "GetInvoice",
       "Preconditions": [
         "Invoice is finalized"
       ],
       "Steps": [
-        "Send POST request to issue replacement record"
+        "Retrieve the finalized invoice"
       ],
-      "Expected": "New invoice is created and returned",
-      "ExpectedStatusCode": 201,
+      "Expected": "Finalized invoice is successfully retrieved",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -4955,7 +4956,7 @@
         "Invoice data is invalid"
       ],
       "Steps": [
-        "Create a new invoice with missing required fields",
+        "Create a new invoice with invalid data",
         "Void the invoice"
       ],
       "Expected": "Invoice record is not preserved and historical relationship is not maintained",
@@ -4965,49 +4966,49 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-57 Profit and Loss Consistency Valid Revenue",
+      "TestName": "BRULE-57 Profit and Loss Report Valid Request",
       "RelatedRequirement": "BRULE-57",
       "ScenarioType": "Positive",
       "Priority": "High",
-      "ApiEndpoint": "/api/reports/profit-and-loss",
+      "ApiEndpoint": "/api/reports/operational",
       "HttpMethod": "GET",
-      "ControllerName": "Logistics",
-      "ActionMethod": "GetPnL",
+      "ControllerName": "Job",
+      "ActionMethod": "GetReportItems",
       "Preconditions": [
         "Valid business records exist"
       ],
       "Steps": [
         "Send GET request to /api/reports/profit-and-loss"
       ],
-      "Expected": "Profit and loss report with accurate revenue figures",
+      "Expected": "Profit and loss report with accurate revenue and cost figures",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-57 Profit and Loss Consistency Invalid Revenue",
+      "TestName": "BRULE-57 Profit and Loss Report Invalid Request",
       "RelatedRequirement": "BRULE-57",
       "ScenarioType": "Negative",
       "Priority": "Medium",
-      "ApiEndpoint": "/api/reports/profit-and-loss",
+      "ApiEndpoint": "/api/reports/operational",
       "HttpMethod": "GET",
-      "ControllerName": "Logistics",
-      "ActionMethod": "GetPnL",
+      "ControllerName": "Job",
+      "ActionMethod": "GetReportItems",
       "Preconditions": [
-        "Invalid business records exist"
+        "No valid business records exist"
       ],
       "Steps": [
         "Send GET request to /api/reports/profit-and-loss"
       ],
-      "Expected": "Error message indicating invalid revenue figures",
-      "ExpectedStatusCode": 400,
+      "Expected": "Error message indicating no valid business records",
+      "ExpectedStatusCode": 404,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-57 Profit and Loss Consistency Valid Cost",
+      "TestName": "BRULE-57 Jobcard Finance Valid Request",
       "RelatedRequirement": "BRULE-57",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -5016,19 +5017,19 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Valid business records exist"
+        "Valid jobcard ID exists"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance"
       ],
-      "Expected": "Profit and loss report with accurate cost figures",
+      "Expected": "Jobcard finance details with accurate revenue and cost figures",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-57 Profit and Loss Consistency Invalid Cost",
+      "TestName": "BRULE-57 Jobcard Finance Invalid Request",
       "RelatedRequirement": "BRULE-57",
       "ScenarioType": "Negative",
       "Priority": "Medium",
@@ -5037,13 +5038,13 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Invalid business records exist"
+        "Invalid jobcard ID"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance"
       ],
-      "Expected": "Error message indicating invalid cost figures",
-      "ExpectedStatusCode": 400,
+      "Expected": "Error message indicating invalid jobcard ID",
+      "ExpectedStatusCode": 404,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -5058,13 +5059,12 @@
       "ControllerName": "Job",
       "ActionMethod": "GetReportItems",
       "Preconditions": [
-        "User is authenticated",
         "Financial records exist"
       ],
       "Steps": [
         "Send GET request to /api/reports/profit-and-loss"
       ],
-      "Expected": "Profit and loss report is returned with historical data",
+      "Expected": "Profit and loss report is returned with accurate historical data",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -5080,14 +5080,12 @@
       "ControllerName": "Job",
       "ActionMethod": "GetReportItems",
       "Preconditions": [
-        "User is authenticated",
-        "Jobcard with id exists",
-        "Financial records exist"
+        "Jobcard with financial records exists"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance"
       ],
-      "Expected": "Jobcard finance report is returned with historical data",
+      "Expected": "Jobcard finance report is returned with accurate historical data",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -5103,20 +5101,19 @@
       "ControllerName": "Job",
       "ActionMethod": "GetReportItems",
       "Preconditions": [
-        "User is authenticated",
         "Operational records exist"
       ],
       "Steps": [
         "Send GET request to /api/reports/operational"
       ],
-      "Expected": "Operational report is returned with historical data",
+      "Expected": "Operational report is returned with accurate historical data",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Historical Integrity Profit And Loss Report With No Financial Records",
+      "TestName": "Historical Integrity Profit And Loss Report With Deleted Records",
       "RelatedRequirement": "BRULE-58",
       "ScenarioType": "Negative",
       "Priority": "Medium",
@@ -5125,13 +5122,12 @@
       "ControllerName": "Job",
       "ActionMethod": "GetReportItems",
       "Preconditions": [
-        "User is authenticated",
-        "No financial records exist"
+        "Financial records exist and some are deleted"
       ],
       "Steps": [
         "Send GET request to /api/reports/profit-and-loss"
       ],
-      "Expected": "Profit and loss report is returned with no data",
+      "Expected": "Profit and loss report is returned with accurate historical data, including deleted records",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -5148,7 +5144,7 @@
       "ActionMethod": "GetUnInvoiceReportItems",
       "Preconditions": [
         "Valid business content exists",
-        "Billing rules are configured"
+        "Content has not been invoiced"
       ],
       "Steps": [
         "Send GET request to /api/reports/uninvoiced"
@@ -5170,7 +5166,7 @@
       "ActionMethod": "GetUnInvoiceReportItems",
       "Preconditions": [
         "Invalid business content exists",
-        "Billing rules are configured"
+        "Content has not been invoiced"
       ],
       "Steps": [
         "Send GET request to /api/reports/uninvoiced"
@@ -5191,8 +5187,7 @@
       "ControllerName": "Job",
       "ActionMethod": "GetUnInvoiceReportItems",
       "Preconditions": [
-        "No business content exists",
-        "Billing rules are configured"
+        "No business content exists"
       ],
       "Steps": [
         "Send GET request to /api/reports/uninvoiced"
@@ -5213,8 +5208,7 @@
       "ControllerName": "Job",
       "ActionMethod": "GetUnInvoiceReportItems",
       "Preconditions": [
-        "Malformed business content exists",
-        "Billing rules are configured"
+        "Malformed business content exists"
       ],
       "Steps": [
         "Send GET request to /api/reports/uninvoiced"
@@ -5226,7 +5220,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-60_InvoiceCreation_Auditability",
+      "TestName": "BRULE-60_Auditability_InvoiceCreation",
       "RelatedRequirement": "BRULE-60",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -5247,7 +5241,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-60_InvoiceVoiding_Auditability",
+      "TestName": "BRULE-60_Auditability_InvoiceVoiding",
       "RelatedRequirement": "BRULE-60",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -5269,7 +5263,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-60_ReceiptRecording_Auditability",
+      "TestName": "BRULE-60_Auditability_ReceiptRecording",
       "RelatedRequirement": "BRULE-60",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -5290,7 +5284,7 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-60_VoucherCreation_Auditability",
+      "TestName": "BRULE-60_Auditability_VoucherCreation",
       "RelatedRequirement": "BRULE-60",
       "ScenarioType": "Positive",
       "Priority": "High",
@@ -5320,7 +5314,7 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Valid id provided"
+        "Valid jobcard id"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance"
@@ -5332,16 +5326,16 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-61 Invalid Request",
+      "TestName": "BRULE-61 Invalid Jobcard Id",
       "RelatedRequirement": "BRULE-61",
       "ScenarioType": "Negative",
-      "Priority": "High",
+      "Priority": "Medium",
       "ApiEndpoint": "/api/jobcards/{id}/finance",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Invalid id provided"
+        "Invalid jobcard id"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance"
@@ -5353,16 +5347,16 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-61 Missing Id",
+      "TestName": "BRULE-61 Missing Jobcard Id",
       "RelatedRequirement": "BRULE-61",
       "ScenarioType": "Negative",
-      "Priority": "High",
+      "Priority": "Medium",
       "ApiEndpoint": "/api/jobcards/{id}/finance",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "No id provided"
+        "Missing jobcard id"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance"
@@ -5374,22 +5368,22 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-61 Malformed Id",
+      "TestName": "BRULE-61 Valid Request To Reports",
       "RelatedRequirement": "BRULE-61",
-      "ScenarioType": "Negative",
+      "ScenarioType": "Positive",
       "Priority": "High",
-      "ApiEndpoint": "/api/jobcards/{id}/finance",
+      "ApiEndpoint": "/api/reports/profit-and-loss",
       "HttpMethod": "GET",
-      "ControllerName": "Job",
-      "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
+      "ControllerName": "Logistics",
+      "ActionMethod": "GetPnL",
       "Preconditions": [
-        "Malformed id provided"
+        "Valid report parameters"
       ],
       "Steps": [
-        "Send GET request to /api/jobcards/{id}/finance"
+        "Send GET request to /api/reports/profit-and-loss"
       ],
-      "Expected": "Error response with clear validation feedback",
-      "ExpectedStatusCode": 400,
+      "Expected": "Successful response with report data",
+      "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
@@ -5397,7 +5391,7 @@
     {
       "TestName": "BRULE-62 Consistent Error Handling Validation Failure",
       "RelatedRequirement": "BRULE-62",
-      "ScenarioType": "Negative",
+      "ScenarioType": "Validation",
       "Priority": "High",
       "ApiEndpoint": "/api/jobcards/{id}/finance",
       "HttpMethod": "GET",
@@ -5407,51 +5401,51 @@
         "Valid jobcard id"
       ],
       "Steps": [
-        "Send GET request with invalid finance data"
+        "Send GET request with valid jobcard id and invalid finance data"
       ],
-      "Expected": "Error message indicating validation failure",
+      "Expected": "Error response with validation failure message",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-62 Consistent Error Handling Missing References",
+      "TestName": "BRULE-62 Consistent Error Handling Missing Reference",
       "RelatedRequirement": "BRULE-62",
       "ScenarioType": "Negative",
-      "Priority": "High",
+      "Priority": "Medium",
       "ApiEndpoint": "/api/jobcards/{id}/finance",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Valid jobcard id"
+        "Invalid jobcard id"
       ],
       "Steps": [
-        "Send GET request with missing reference data"
+        "Send GET request with invalid jobcard id"
       ],
-      "Expected": "Error message indicating missing references",
-      "ExpectedStatusCode": 400,
+      "Expected": "Error response with missing reference message",
+      "ExpectedStatusCode": 404,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "BRULE-62 Consistent Error Handling State Violations",
+      "TestName": "BRULE-62 Consistent Error Handling State Violation",
       "RelatedRequirement": "BRULE-62",
       "ScenarioType": "Negative",
       "Priority": "High",
-      "ApiEndpoint": "/api/jobcards/{id}/finance",
+      "ApiEndpoint": "/api/reports/profit-and-loss",
       "HttpMethod": "GET",
-      "ControllerName": "Job",
-      "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
+      "ControllerName": "Logistics",
+      "ActionMethod": "GetPnL",
       "Preconditions": [
-        "Valid jobcard id"
+        "Invalid report state"
       ],
       "Steps": [
-        "Send GET request with state violation data"
+        "Send GET request with invalid report state"
       ],
-      "Expected": "Error message indicating state violation",
+      "Expected": "Error response with state violation message",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -5470,9 +5464,9 @@
         "Invalid user credentials"
       ],
       "Steps": [
-        "Send GET request with unauthorized access"
+        "Send GET request with invalid user credentials"
       ],
-      "Expected": "Error message indicating unauthorized access",
+      "Expected": "Error response with unauthorized access message",
       "ExpectedStatusCode": 401,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -5488,13 +5482,12 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Record exists",
-        "Downstream processing completed"
+        "Record exists with completed downstream processing"
       ],
       "Steps": [
         "Update record with valid changes"
       ],
-      "Expected": "Record updated successfully",
+      "Expected": "Record updated successfully without invalidating downstream processing",
       "ExpectedStatusCode": 200,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -5510,13 +5503,12 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Record exists",
-        "Downstream processing completed"
+        "Record exists with completed downstream processing"
       ],
       "Steps": [
-        "Update record with invalid changes"
+        "Update record with invalid changes that would invalidate downstream processing"
       ],
-      "Expected": "Update failed with error message",
+      "Expected": "Update rejected with error message indicating downstream dependency protection",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -5532,12 +5524,10 @@
       "ControllerName": "Job",
       "ActionMethod": "UpdateCost",
       "Preconditions": [
-        "Record exists",
-        "Downstream processing completed",
-        "Reversal logic exists"
+        "Record exists with completed downstream processing and reversal logic exists"
       ],
       "Steps": [
-        "Update record with changes that require reversal"
+        "Update record with changes that would normally invalidate downstream processing but are allowed due to reversal logic"
       ],
       "Expected": "Record updated successfully with reversal logic applied",
       "ExpectedStatusCode": 200,
@@ -5546,23 +5536,21 @@
       "ExpectedErrorMessageContains": null
     },
     {
-      "TestName": "Downstream Dependency Protection Update Without Reversal Logic",
+      "TestName": "Downstream Dependency Protection Missing Reversal Logic",
       "RelatedRequirement": "BRULE-63",
       "ScenarioType": "Negative",
       "Priority": "Medium",
-      "ApiEndpoint": "/api/service-costs",
-      "HttpMethod": "PUT",
-      "ControllerName": "Job",
-      "ActionMethod": "UpdateCost",
+      "ApiEndpoint": null,
+      "HttpMethod": null,
+      "ControllerName": null,
+      "ActionMethod": null,
       "Preconditions": [
-        "Record exists",
-        "Downstream processing completed",
-        "No reversal logic exists"
+        "Record exists with completed downstream processing but no reversal logic exists"
       ],
       "Steps": [
-        "Update record with changes that require reversal"
+        "Update record with changes that would invalidate downstream processing"
       ],
-      "Expected": "Update failed with error message",
+      "Expected": "Update rejected with error message indicating missing reversal logic",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -5578,7 +5566,7 @@
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Valid jobcard id"
+        "Valid jobcard ID"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance"
@@ -5593,18 +5581,18 @@
       "TestName": "BRULE-64 Operational-to-Financial Continuity Negative Test",
       "RelatedRequirement": "BRULE-64",
       "ScenarioType": "Negative",
-      "Priority": "High",
+      "Priority": "Medium",
       "ApiEndpoint": "/api/jobcards/{id}/finance",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Invalid jobcard id"
+        "Invalid jobcard ID"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance"
       ],
-      "Expected": "Error message indicating invalid jobcard id",
+      "Expected": "Error message indicating invalid jobcard ID",
       "ExpectedStatusCode": 404,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -5614,18 +5602,18 @@
       "TestName": "BRULE-64 Operational-to-Financial Continuity Validation Test",
       "RelatedRequirement": "BRULE-64",
       "ScenarioType": "Validation",
-      "Priority": "Medium",
+      "Priority": "Low",
       "ApiEndpoint": "/api/jobcards/{id}/finance",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Missing jobcard id"
+        "Missing jobcard ID"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance"
       ],
-      "Expected": "Error message indicating missing jobcard id",
+      "Expected": "Error message indicating missing jobcard ID",
       "ExpectedStatusCode": 400,
       "ExpectedCreated": null,
       "ExpectErrorObject": null,
@@ -5635,13 +5623,13 @@
       "TestName": "BRULE-64 Operational-to-Financial Continuity Boundary Test",
       "RelatedRequirement": "BRULE-64",
       "ScenarioType": "Boundary",
-      "Priority": "Low",
+      "Priority": "Medium",
       "ApiEndpoint": "/api/jobcards/{id}/finance",
       "HttpMethod": "GET",
       "ControllerName": "Job",
       "ActionMethod": "GetJobFinancRreceiptAndPaymentsJobCardById",
       "Preconditions": [
-        "Jobcard id with maximum allowed length"
+        "Jobcard ID with maximum allowed length"
       ],
       "Steps": [
         "Send GET request to /api/jobcards/{id}/finance"

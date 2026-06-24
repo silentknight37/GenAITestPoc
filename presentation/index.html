@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generative AI-Augmented Testing Framework — MSc Defence</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css" id="theme">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink:#1f2a44; --ink2:#4a5670; --muted:#7c889f; --line:#e4e8f0;
+      --bg:#ffffff; --soft:#f5f7fc;
+      --accent:#2f5fe0; --accent-soft:#eaf0ff;
+      --teal:#12b3a0; --amber:#f2a431; --violet:#8a6cf0; --rose:#f0608a;
+      --c-llm:#2f5fe0; --c-rag:#12b3a0; --c-hyb:#f2a431; --c-lora:#8a6cf0; --c-lr:#f0608a;
+    }
+    .reveal{ font-family:'Inter',sans-serif; color:var(--ink); font-weight:400; }
+    .reveal .slides{ text-align:left; }
+    .reveal h1,.reveal h2,.reveal h3{ font-family:'Inter',sans-serif; color:var(--ink);
+      font-weight:800; letter-spacing:-.4px; text-transform:none; line-height:1.08; }
+    .reveal h1{ font-size:2.4em; } .reveal h2{ font-size:1.55em; } .reveal h3{ font-size:1.02em; }
+    .reveal p,.reveal li{ font-weight:400; color:var(--ink2); }
+    .reveal strong{ color:var(--ink); font-weight:700; }
+    .reveal section{ background:transparent; }
+    .reveal::after{ content:''; position:fixed; inset:0; z-index:-3; background:var(--bg); }
+
+    /* soft abstract motif behind every slide */
+    .reveal::before{ content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+      background:
+        radial-gradient(520px 360px at 92% -8%, rgba(47,95,224,.07), transparent 60%),
+        radial-gradient(480px 360px at -6% 108%, rgba(18,179,160,.08), transparent 60%);
+    }
+
+    /* ---- section divider ---- */
+    .divider{ text-align:center !important; }
+    .divider .wrap{ position:relative; padding:30px 0; }
+    .divider .kick{ font-family:'JetBrains Mono',monospace; font-size:.42em; letter-spacing:3px;
+      color:var(--accent); text-transform:uppercase; font-weight:600; }
+    .divider h1{ font-size:2.7em; margin:.2em 0 .25em; }
+    .divider .rule{ width:120px; height:5px; border-radius:6px; margin:0 auto;
+      background:linear-gradient(90deg,var(--accent),var(--teal)); }
+    .divider .sub{ color:var(--muted); font-size:.7em; margin-top:.7em; }
+    .blob{ position:absolute; border-radius:50%; filter:blur(2px); opacity:.5; z-index:-1; }
+    .b1{ width:120px; height:120px; left:8%; top:6%; background:radial-gradient(circle,#dbe6ff,transparent 70%); }
+    .b2{ width:170px; height:170px; right:7%; bottom:0; background:radial-gradient(circle,#d3f4ee,transparent 70%); }
+    .ring{ position:absolute; border-radius:50%; border:2px dashed #dfe6f4; z-index:-1; }
+    .r1{ width:90px; height:90px; right:14%; top:12%; } .r2{ width:54px; height:54px; left:13%; bottom:10%; }
+
+    /* ---- chips / kickers ---- */
+    .chip{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:.4em; font-weight:600;
+      letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); background:var(--accent-soft);
+      border:1px solid #d6e1ff; border-radius:999px; padding:.35em .8em; }
+    .h-rule{ width:64px; height:4px; border-radius:4px; background:var(--accent); margin:.5em 0 .7em; }
+
+    /* ---- layout ---- */
+    .two{ display:grid; grid-template-columns:1.05fr .95fr; gap:34px; align-items:center; margin-top:6px; }
+    .two.top{ align-items:start; }
+    .grid{ display:grid; gap:16px; } .g2{ grid-template-columns:1fr 1fr; } .g3{ grid-template-columns:repeat(3,1fr); }
+    .small{ font-size:.66em; } .xs{ font-size:.56em; } .lead{ font-size:.82em; color:var(--ink2); }
+
+    .blk{ margin-bottom:14px; }
+    .blk h3{ color:var(--ink); margin:0 0 .25em; font-size:.82em; }
+    .ul{ list-style:none; margin:0; padding:0; }
+    .ul li{ position:relative; padding-left:20px; margin:.28em 0; font-size:.64em; line-height:1.4; color:var(--ink2); }
+    .ul li::before{ content:''; position:absolute; left:0; top:.5em; width:8px; height:8px; border-radius:3px;
+      background:var(--accent); }
+    .ul.teal li::before{ background:var(--teal); } .ul.amber li::before{ background:var(--amber); }
+    .ul.rose li::before{ background:var(--rose); }
+
+    .card{ background:var(--bg); border:1px solid var(--line); border-radius:16px; padding:16px 18px;
+      box-shadow:0 8px 24px rgba(31,42,68,.05); }
+    .card h3{ margin:0 0 .3em; font-size:.78em; }
+    .card p{ margin:0; font-size:.58em; line-height:1.45; color:var(--ink2); }
+
+    /* ---- vertical flow ---- */
+    .vflow{ display:flex; flex-direction:column; gap:8px; }
+    .node{ display:flex; align-items:center; gap:12px; border-radius:14px; padding:12px 16px;
+      border:1px solid var(--line); background:var(--bg); box-shadow:0 6px 16px rgba(31,42,68,.05); }
+    .node .dot{ width:30px; height:30px; border-radius:9px; flex:0 0 30px; display:grid; place-items:center;
+      font-weight:700; font-size:.6em; color:#fff; }
+    .node .t{ font-size:.62em; font-weight:600; color:var(--ink); }
+    .node .s{ font-size:.5em; color:var(--muted); }
+    .arrow{ text-align:center; color:#c4cde0; font-size:.7em; line-height:.4; }
+    .n1 .dot{ background:var(--accent); } .n2 .dot{ background:var(--teal); }
+    .n3 .dot{ background:var(--amber); } .n4 .dot{ background:var(--violet); } .n5 .dot{ background:var(--rose); }
+
+    /* ---- horizontal pipeline ---- */
+    .pipe{ display:flex; align-items:stretch; gap:8px; flex-wrap:wrap; justify-content:center; }
+    .step{ flex:1 1 0; min-width:120px; border:1px solid var(--line); border-radius:14px; padding:12px;
+      background:var(--bg); box-shadow:0 6px 16px rgba(31,42,68,.05); text-align:center; }
+    .step .n{ font-family:'JetBrains Mono',monospace; font-size:.5em; color:var(--accent); font-weight:600; }
+    .step .ti{ font-size:.6em; font-weight:700; color:var(--ink); margin:.2em 0; }
+    .step .de{ font-size:.5em; color:var(--muted); line-height:1.35; }
+    .pa{ align-self:center; color:#c4cde0; font-size:1em; }
+
+    /* ---- tables ---- */
+    .reveal table{ font-size:.62em; border-collapse:separate; border-spacing:0; width:100%;
+      border-radius:12px; overflow:hidden; box-shadow:0 8px 22px rgba(31,42,68,.06); }
+    .reveal table th{ background:var(--soft); color:var(--ink); font-weight:700; }
+    .reveal table th,.reveal table td{ border-bottom:1px solid var(--line); padding:.5em .75em; text-align:left; color:var(--ink2); }
+    .reveal table tr:last-child td{ border-bottom:none; }
+    .mode{ font-family:'JetBrains Mono',monospace; font-weight:600; color:var(--ink); }
+    .best td{ background:#eafaf6 !important; }
+    .best .mode{ color:var(--teal); }
+
+    /* ---- KPI ---- */
+    .kpi{ text-align:center; } .kpi .num{ font-size:1.7em; font-weight:800; color:var(--accent); }
+    .kpi .num.t{ color:var(--teal); } .kpi .num.a{ color:var(--amber); }
+    .kpi .lbl{ font-size:.48em; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; }
+
+    /* ---- mode badges ---- */
+    .badges{ display:flex; gap:8px; flex-wrap:wrap; }
+    .badges span{ font-family:'JetBrains Mono',monospace; font-size:.46em; font-weight:600; padding:.4em .7em;
+      border-radius:8px; border:1px solid; }
+    .bl{ color:var(--c-llm); border-color:#c4d3ff; background:#eef3ff; }
+    .br{ color:var(--c-rag); border-color:#bfeee7; background:#eafaf6; }
+    .bh{ color:#c97f12; border-color:#fbe3bd; background:#fff5e6; }
+    .bo{ color:var(--c-lora); border-color:#ddd2fb; background:#f3eefe; }
+    .bx{ color:var(--c-lr); border-color:#fbcdda; background:#fdeef3; }
+
+    canvas{ background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:8px;
+      box-shadow:0 8px 22px rgba(31,42,68,.05); }
+
+    .reveal .footer{ position:fixed; bottom:14px; left:26px; font-size:12px; color:var(--muted); z-index:6; }
+    .reveal .pageno{ position:fixed; bottom:14px; right:26px; font-size:12px; color:var(--muted);
+      font-family:'JetBrains Mono',monospace; z-index:6; }
+    .reveal .progress{ color:var(--accent); height:3px; }
+    .qstmt{ background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:10px;
+      padding:12px 16px; font-size:.66em; color:var(--ink); margin-top:8px; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="footer">Generative AI-Augmented Testing Framework · SLIIT MSc (EAD)</div>
+  <div class="pageno"></div>
+  <div class="slides">
+
+    <!-- 1 · COVER -->
+    <section class="divider">
+      <div class="wrap">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="ring r1"></span><span class="ring r2"></span>
+        <span class="kick">MSc Research Defence · May 2026</span>
+        <h1>Generative AI-Augmented<br>Testing Framework</h1>
+        <div class="rule"></div>
+        <p class="sub">for Enterprise Backend Systems — Design, Implementation &amp; Evaluation</p>
+        <div class="badges" style="justify-content:center; margin-top:20px">
+          <span class="bl">LLM</span><span class="br">RAG</span><span class="bh">HYBRID</span>
+          <span class="bo">LoRA</span><span class="bx">LoRA + RAG</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 · RESEARCHER -->
+    <section>
+      <span class="chip">Researcher</span>
+      <div class="h-rule"></div>
+      <div class="two top">
+        <div>
+          <h2 style="font-size:1.5em">Kariyawasam Ketangodage<br>Shanaka Madhusanka</h2>
+          <p class="lead" style="margin-top:.3em">Reg. No. <strong>MS24901062</strong></p>
+          <ul class="ul" style="margin-top:8px">
+            <li>MSc in Information Technology — Enterprise Application Development</li>
+            <li>Faculty of Computing, SLIIT</li>
+            <li>Module: <strong>IT6010 — Research Project</strong></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Supervisor</h3>
+          <p style="font-size:.7em; margin-top:.3em"><strong>Dr. Dinuka R. Wijendra</strong></p>
+          <p style="margin-top:.35em">PhD, University of Colombo School of Computing<br>Senior Lecturer (Higher Grade)<br>Faculty of Computing | Information Technology, SLIIT</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · DIVIDER: Introduction -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b1"></span><span class="blob b2"></span><span class="ring r1"></span>
+      <span class="kick">Part 01</span><h1>Introduction &amp; Motivation</h1><div class="rule"></div>
+    </div></section>
+
+    <!-- 4 · Motivation -->
+    <section>
+      <span class="chip">Background</span><div class="h-rule"></div>
+      <div class="two top">
+        <div>
+          <div class="blk"><h3>The setting</h3><ul class="ul">
+            <li>Enterprise backends run <strong>complex business rules</strong>, distributed services &amp; heavy API traffic.</li>
+            <li>Agile / DevOps means <strong>constant change</strong> — test suites fall behind.</li></ul></div>
+          <div class="blk"><h3>The opportunity</h3><ul class="ul teal">
+            <li>LLMs can read natural-language requirements &amp; emit <strong>structured tests</strong>.</li>
+            <li>Potential to cut manual effort &amp; surface hidden scenarios.</li></ul></div>
+          <div class="blk"><h3>The catch</h3><ul class="ul amber">
+            <li>Standalone LLMs lack <strong>system context</strong> → incomplete / unrealistic tests.</li></ul></div>
+        </div>
+        <div class="vflow">
+          <div class="node n1"><div class="dot">📄</div><div><div class="t">BA / requirement documents</div><div class="s">workflows · tables · rules</div></div></div>
+          <div class="arrow">▼</div>
+          <div class="node n2"><div class="dot">🤖</div><div><div class="t">Generative AI</div><div class="s">comprehend &amp; generate</div></div></div>
+          <div class="arrow">▼</div>
+          <div class="node n3"><div class="dot">✓</div><div><div class="t">Structured test cases</div><div class="s">faster, broader coverage</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 · DIVIDER: Problem -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b2"></span><span class="ring r2"></span>
+      <span class="kick">Part 02</span><h1>Research Problem</h1><div class="rule"></div>
+    </div></section>
+
+    <!-- 6 · Problem -->
+    <section>
+      <span class="chip">Problem Statement</span><div class="h-rule"></div>
+      <div class="two top">
+        <div>
+          <div class="blk"><h3>Manual test design doesn't scale</h3><ul class="ul">
+            <li>Decoding long, intricate requirement artefacts is <strong>slow &amp; expertise-heavy</strong>.</li>
+            <li>Leads to <strong>inconsistency &amp; test-incompleteness</strong>.</li></ul></div>
+          <div class="blk"><h3>LLMs not yet proven for enterprise testing</h3><ul class="ul amber">
+            <li>Most work uses <strong>toy inputs</strong> (user stories, snippets).</li>
+            <li>No <strong>like-for-like comparison</strong> of AI architectures.</li></ul></div>
+          <div class="qstmt"><strong>How can complex enterprise requirement artefacts be transformed into reliable, structured, executable test cases — and which AI architecture does it best?</strong></div>
+        </div>
+        <div class="vflow">
+          <div class="node n2"><div class="dot">1</div><div class="t">Requirement artefacts (complex)</div></div>
+          <div class="arrow">▼</div>
+          <div class="node n3"><div class="dot">2</div><div class="t">Manual interpretation</div></div>
+          <div class="arrow">▼</div>
+          <div class="node n4"><div class="dot">3</div><div class="t">Inconsistent / incomplete tests</div></div>
+          <div class="arrow">▼</div>
+          <div class="node n5"><div class="dot">4</div><div class="t">Reduced confidence in quality</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · DIVIDER: Literature -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b1"></span><span class="ring r1"></span>
+      <span class="kick">Part 03</span><h1>Literature Review</h1><div class="rule"></div>
+    </div></section>
+
+    <!-- 8 · Lit themes -->
+    <section>
+      <span class="chip">Themes</span><div class="h-rule"></div>
+      <div class="two top">
+        <div>
+          <div class="blk"><h3>AI-augmented test generation</h3><ul class="ul">
+            <li>LLMs reason over docs/APIs to produce structured tests.</li>
+            <li>Move beyond rule-/search-based generation.</li></ul></div>
+          <div class="blk"><h3>Retrieval-Augmented Generation</h3><ul class="ul teal">
+            <li>Grounds models in <strong>up-to-date documentation</strong>.</li></ul></div>
+          <div class="blk"><h3>LoRA &amp; Hybrid architectures</h3><ul class="ul">
+            <li>Parameter-efficient <strong>domain adaptation</strong>.</li>
+            <li>Generation + <strong>rule-based validation</strong> for reliability.</li></ul></div>
+        </div>
+        <div class="vflow">
+          <div class="node n1"><div class="dot">①</div><div class="t">AI-augmented test generation</div></div>
+          <div class="arrow">＋</div>
+          <div class="node n2"><div class="dot">②</div><div class="t">Retrieval-Augmented Generation</div></div>
+          <div class="arrow">＋</div>
+          <div class="node n4"><div class="dot">③</div><div class="t">LoRA fine-tuning</div></div>
+          <div class="arrow">＋</div>
+          <div class="node n3"><div class="dot">④</div><div class="t">Hybrid validation</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9 · Existing tools comparison -->
+    <section>
+      <span class="chip">Existing Systems Comparison</span><div class="h-rule"></div>
+      <table>
+        <thead><tr><th>Tool</th><th>Primary focus</th><th>Limitation</th></tr></thead>
+        <tbody>
+          <tr><td class="mode">Postman</td><td>API testing</td><td>No requirement understanding · no AI generation</td></tr>
+          <tr><td class="mode">ReadyAPI</td><td>API automation</td><td>Rule-based, not AI-driven</td></tr>
+          <tr><td class="mode">SonarQube</td><td>Code analysis</td><td>Quality only — no test generation</td></tr>
+          <tr><td class="mode">GitHub Copilot</td><td>Code assistance</td><td>Assists code, does not execute tests</td></tr>
+          <tr><td class="mode">Diffblue Cover</td><td>Unit-test generation</td><td>Java only · no business-requirement mapping</td></tr>
+          <tr class="best"><td class="mode">Proposed Framework</td><td>End-to-end AI backend test generation</td><td>Requirement-driven, executed &amp; evaluated</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 10 · DIVIDER: Gap -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b2"></span><span class="ring r2"></span>
+      <span class="kick">Research Gap</span><h1>Research Gap</h1><div class="rule"></div>
+    </div></section>
+
+    <!-- 11 · Gap -->
+    <section>
+      <span class="chip">What's missing</span><div class="h-rule"></div>
+      <div class="two top">
+        <div>
+          <ul class="ul amber">
+            <li>Little focus on <strong>enterprise backend</strong> systems.</li>
+            <li>Few handle <strong>complex BA documents</strong>.</li>
+            <li>Weak <strong>contextual grounding</strong> of models.</li>
+            <li>No <strong>like-for-like architecture comparison</strong>.</li>
+            <li>Coverage-only evaluation — <strong>shallow</strong>.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--teal)">This study delivers</h3>
+          <ul class="ul teal" style="margin-top:6px">
+            <li>A modular framework ingesting real BA documents.</li>
+            <li>Five AI configurations under identical conditions.</li>
+            <li>Coverage + <strong>mutation</strong> + <strong>execution validity</strong>.</li>
+            <li>A working .NET prototype with CI/CD execution.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12 · DIVIDER: Objectives -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b1"></span><span class="ring r1"></span>
+      <span class="kick">Part 04</span><h1>Objectives &amp; Questions</h1><div class="rule"></div>
+    </div></section>
+
+    <!-- 13 · Objectives -->
+    <section>
+      <span class="chip">Objectives</span><div class="h-rule"></div>
+      <div class="two top">
+        <div>
+          <div class="blk"><h3>Main objective</h3>
+            <p class="small">Design, build &amp; evaluate a Generative AI-augmented framework that automatically produces structured test cases for enterprise backends from requirement artefacts.</p></div>
+          <div class="blk"><h3>Supporting objectives</h3><ul class="ul">
+            <li>Review AI-assisted testing &amp; identify constraints.</li>
+            <li>Build a generative framework over enterprise artefacts.</li>
+            <li>Implement a prototype with multiple AI methods.</li>
+            <li>Evaluate relevance, coverage, accuracy &amp; efficiency.</li></ul></div>
+        </div>
+        <div class="vflow">
+          <div class="node n1"><div class="dot">🔍</div><div class="t">Identify</div></div><div class="arrow">▼</div>
+          <div class="node n2"><div class="dot">✎</div><div class="t">Design</div></div><div class="arrow">▼</div>
+          <div class="node n3"><div class="dot">🛡</div><div class="t">Build &amp; Validate</div></div><div class="arrow">▼</div>
+          <div class="node n4"><div class="dot">📊</div><div class="t">Evaluate</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14 · RQs -->
+    <section>
+      <span class="chip">Research Questions</span><div class="h-rule"></div>
+      <div class="grid g2" style="margin-top:6px">
+        <div class="card xs"><strong style="color:var(--accent)">RQ1</strong> — How can Generative AI integrate into backend testing &amp; CI/CD pipelines?</div>
+        <div class="card xs"><strong style="color:var(--accent)">RQ2</strong> — Do AI tests improve coverage &amp; defect detection vs. traditional automation?</div>
+        <div class="card xs"><strong style="color:var(--accent)">RQ3</strong> — Can it reduce manual effort &amp; maintenance in evolving systems?</div>
+        <div class="card xs"><strong style="color:var(--accent)">RQ4</strong> — Can tests respect business rules &amp; structured data formats?</div>
+        <div class="card xs" style="grid-column:span 2"><strong style="color:var(--accent)">RQ5</strong> — What best practices emerge for organisations adopting Generative AI backend testing?</div>
+      </div>
+    </section>
+
+    <!-- 15 · DIVIDER: Methodology -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b2"></span><span class="ring r2"></span>
+      <span class="kick">Part 05</span><h1>Research Methodology</h1><div class="rule"></div>
+    </div></section>
+
+    <!-- 16 · DSR -->
+    <section>
+      <span class="chip">Design Science Research</span><div class="h-rule"></div>
+      <div class="pipe" style="margin-top:8px">
+        <div class="step"><div class="n">01</div><div class="ti">Problem</div><div class="de">Manual, slow backend test design</div></div>
+        <div class="pa">→</div>
+        <div class="step"><div class="n">02</div><div class="ti">Objectives</div><div class="de">From literature &amp; practice</div></div>
+        <div class="pa">→</div>
+        <div class="step"><div class="n">03</div><div class="ti">Artefact</div><div class="de">5-mode framework</div></div>
+        <div class="pa">→</div>
+        <div class="step"><div class="n">04</div><div class="ti">Demonstrate</div><div class="de">.NET prototype</div></div>
+        <div class="pa">→</div>
+        <div class="step"><div class="n">05</div><div class="ti">Evaluate</div><div class="de">Controlled experiment</div></div>
+      </div>
+      <div class="grid g2" style="margin-top:18px">
+        <div class="card"><h3>Controlled variables</h3><p>Same BA document, same target backend, same templates &amp; environment, same metrics.</p></div>
+        <div class="card"><h3>Independent vs. dependent</h3><p><strong>IV:</strong> AI architecture. &nbsp; <strong>DV:</strong> coverage, validity, mutation detection, generation time, success rate.</p></div>
+      </div>
+    </section>
+
+    <!-- 17 · DIVIDER: Framework -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b1"></span><span class="ring r1"></span>
+      <span class="kick">Part 06</span><h1>Proposed Framework</h1><div class="rule"></div>
+    </div></section>
+
+    <!-- 18 · Five configs -->
+    <section>
+      <span class="chip">Five AI Configurations</span><div class="h-rule"></div>
+      <div class="grid g2">
+        <div class="card"><h3 style="color:var(--c-llm)">LLM — Baseline</h3><p>Direct generation from requirements. No retrieval, no adaptation.</p></div>
+        <div class="card"><h3 style="color:var(--c-rag)">RAG</h3><p>Retrieves relevant document segments as grounded context.</p></div>
+        <div class="card"><h3 style="color:#c97f12">Hybrid</h3><p>RAG + static code analysis + rule-based validation.</p></div>
+        <div class="card"><h3 style="color:var(--c-lora)">LoRA</h3><p>Parameter-efficient fine-tuning to the testing domain.</p></div>
+        <div class="card" style="grid-column:span 2"><h3 style="color:var(--c-lr)">LoRA + RAG</h3><p>Domain-adapted model <strong>and</strong> contextual retrieval — the strongest configuration.</p></div>
+      </div>
+    </section>
+
+    <!-- 19 · Architecture pipeline -->
+    <section>
+      <span class="chip">End-to-End Architecture</span><div class="h-rule"></div>
+      <div class="pipe">
+        <div class="step"><div class="n">1</div><div class="ti">BA Document</div><div class="de">PDF upload</div></div><div class="pa">→</div>
+        <div class="step"><div class="n">2</div><div class="ti">Ingest &amp; Extract</div><div class="de">endpoints · rules · schemas</div></div><div class="pa">→</div>
+        <div class="step"><div class="n">3</div><div class="ti">AI Generation Engine</div><div class="de">5 pipelines</div></div><div class="pa">→</div>
+        <div class="step"><div class="n">4</div><div class="ti">Structured Tests</div><div class="de">de-dup · rule validation</div></div>
+      </div>
+      <div class="pipe" style="margin-top:10px">
+        <div class="step"><div class="n">5</div><div class="ti">CI/CD Execute</div><div class="de">xUnit run</div></div><div class="pa">→</div>
+        <div class="step"><div class="ti">Coverage</div></div><div class="pa">·</div>
+        <div class="step"><div class="ti">Mutation</div></div><div class="pa">·</div>
+        <div class="step"><div class="ti">Execution Validity</div></div>
+      </div>
+    </section>
+
+    <!-- 20 · Implementation -->
+    <section>
+      <span class="chip">System Design &amp; Implementation</span><div class="h-rule"></div>
+      <div class="two top">
+        <div>
+          <div class="blk"><h3>Technology stack</h3>
+            <div class="badges" style="margin-top:6px">
+              <span class="bl">.NET / ASP.NET Core</span><span class="br">xUnit</span><span class="bh">Coverlet</span>
+              <span class="bo">Stryker.NET</span><span class="bx">OpenAI / Together</span><span class="bl">Qdrant + SQLite</span>
+              <span class="br">PEFT / LoRA</span><span class="bh">GitHub Actions</span></div></div>
+          <div class="blk"><h3>Engineering highlights</h3><ul class="ul">
+            <li><strong>Swagger-style embeddable UI</strong> — one NuGet package adds <code>/genai-tests</code> to any API.</li>
+            <li><strong>Clean architecture</strong> — Api / Application / Domain / Infrastructure.</li>
+            <li>Real <strong>endpoint discovery</strong> via static analysis; parallel, budgeted generation.</li></ul></div>
+        </div>
+        <div class="vflow">
+          <div class="node n1"><div class="dot">C</div><div><div class="t">Api layer</div><div class="s">endpoints · request binding</div></div></div>
+          <div class="arrow">▼</div>
+          <div class="node n2"><div class="dot">A</div><div><div class="t">Application</div><div class="s">generation · run · mutation</div></div></div>
+          <div class="arrow">▼</div>
+          <div class="node n4"><div class="dot">D</div><div><div class="t">Domain</div><div class="s">metrics · modes · rules</div></div></div>
+          <div class="arrow">▼</div>
+          <div class="node n3"><div class="dot">I</div><div><div class="t">Infrastructure</div><div class="s">engines · readers · scaffolding</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 21 · DIVIDER: Evaluation -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b2"></span><span class="ring r2"></span>
+      <span class="kick">Part 07</span><h1>Evaluation &amp; Results</h1><div class="rule"></div>
+    </div></section>
+
+    <!-- 22 · Evaluation design -->
+    <section>
+      <span class="chip">Evaluation Design</span><div class="h-rule"></div>
+      <div class="grid g3">
+        <div class="card"><h3 style="color:var(--accent)">Coverage</h3><p>Line, branch &amp; endpoint coverage of the API under test.</p></div>
+        <div class="card"><h3 style="color:var(--teal)">Mutation detection</h3><p>Share of injected faults the suite kills (test strength).</p></div>
+        <div class="card"><h3 style="color:#c97f12">Execution validity</h3><p>Share of generated tests that compile &amp; run correctly.</p></div>
+      </div>
+      <p class="small" style="margin-top:16px; color:var(--ink2)">All five configurations run on the <strong>same backend &amp; BA document</strong>, under identical conditions — so differences reflect the <strong>architecture</strong>, not the inputs.</p>
+    </section>
+
+    <!-- 23 · Coverage results -->
+    <section>
+      <span class="chip">Results · Table 6</span><div class="h-rule"></div>
+      <h2 style="font-size:1.2em">Coverage Comparison</h2>
+      <div class="two" style="margin-top:8px">
+        <table>
+          <thead><tr><th>Config</th><th>Line</th><th>Branch</th><th>Endpoint</th></tr></thead>
+          <tbody>
+            <tr><td class="mode">LLM</td><td>71%</td><td>63%</td><td>68%</td></tr>
+            <tr><td class="mode">RAG</td><td>79%</td><td>70%</td><td>74%</td></tr>
+            <tr><td class="mode">Hybrid</td><td>86%</td><td>82%</td><td>88%</td></tr>
+            <tr><td class="mode">LoRA</td><td>81%</td><td>75%</td><td>80%</td></tr>
+            <tr class="best"><td class="mode">LoRA + RAG</td><td>88%</td><td>84%</td><td>91%</td></tr>
+          </tbody>
+        </table>
+        <div><canvas id="covChart" height="210"></canvas></div>
+      </div>
+      <p class="xs" style="margin-top:8px; color:var(--muted)">Coverage rises steadily LLM → LoRA+RAG; retrieval + adaptation compound.</p>
+    </section>
+
+    <!-- 24 · Mutation + validity -->
+    <section>
+      <span class="chip">Results · Tables 7 &amp; 8</span><div class="h-rule"></div>
+      <h2 style="font-size:1.2em">Mutation Detection &amp; Execution Validity</h2>
+      <div class="two" style="margin-top:6px">
+        <div><p class="xs" style="color:var(--muted); margin:0 0 4px">Mutation detection rate</p><canvas id="mutChart" height="165"></canvas></div>
+        <div><p class="xs" style="color:var(--muted); margin:0 0 4px">Execution validity</p><canvas id="valChart" height="165"></canvas></div>
+      </div>
+      <div class="grid g3" style="margin-top:14px">
+        <div class="card kpi"><div class="num">+22%</div><div class="lbl">Mutation: LLM → LoRA+RAG</div></div>
+        <div class="card kpi"><div class="num t">97%</div><div class="lbl">Best execution validity</div></div>
+        <div class="card kpi"><div class="num a">5</div><div class="lbl">Configs · identical conditions</div></div>
+      </div>
+    </section>
+
+    <!-- 25 · Key findings -->
+    <section>
+      <span class="chip">Key Findings</span><div class="h-rule"></div>
+      <div class="grid g2">
+        <div class="card"><h3 style="color:var(--accent)">① Context wins</h3><p>RAG grounds tests in real documentation → higher relevance &amp; coverage than standalone LLM.</p></div>
+        <div class="card"><h3 style="color:var(--teal)">② Hybrid = reliability</h3><p>Rule-based validation + static analysis lift execution validity to 96%.</p></div>
+        <div class="card"><h3 style="color:var(--c-lora)">③ Adaptation helps</h3><p>LoRA improves domain understanding; with RAG it tops every metric.</p></div>
+        <div class="card"><h3 style="color:#c97f12">④ Scale &amp; speed</h3><p>AI explores far more input/boundary scenarios automatically than manual design.</p></div>
+      </div>
+    </section>
+
+    <!-- 26 · DIVIDER: Limitations -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b1"></span><span class="ring r1"></span>
+      <span class="kick">Part 08</span><h1>Limitations</h1><div class="rule"></div>
+    </div></section>
+
+    <!-- 27 · Limitations -->
+    <section>
+      <span class="chip">Scope &amp; Boundaries</span><div class="h-rule"></div>
+      <div class="grid g2">
+        <div class="card"><h3>01 · Research scope</h3><p>Prototype scale vs. large distributed enterprises with hundreds of services.</p></div>
+        <div class="card"><h3>02 · Input dependency</h3><p>Output quality bound by completeness &amp; clarity of requirement artefacts.</p></div>
+        <div class="card"><h3>03 · Model variability</h3><p>Generative non-determinism; compute cost of LoRA &amp; Hybrid configurations.</p></div>
+        <div class="card"><h3>04 · Testing scope</h3><p>Backend API &amp; integration testing — not UI, performance or security testing.</p></div>
+      </div>
+    </section>
+
+    <!-- 28 · DIVIDER: Conclusion -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b2"></span><span class="ring r2"></span>
+      <span class="kick">Part 09</span><h1>Conclusion &amp; Contributions</h1><div class="rule"></div>
+    </div></section>
+
+    <!-- 29 · Conclusion + contributions -->
+    <section>
+      <span class="chip">Conclusion</span><div class="h-rule"></div>
+      <div class="two top">
+        <div>
+          <p class="lead">Generative AI — especially <strong>retrieval + domain adaptation</strong> — measurably improves automated test generation for enterprise backends: higher coverage, stronger defect detection &amp; more valid tests.</p>
+          <div class="grid" style="margin-top:12px">
+            <div class="card xs"><strong>Conceptual</strong> — a modular AI-augmented testing framework.</div>
+            <div class="card xs"><strong>Methodological</strong> — first like-for-like comparison of 5 AI configs.</div>
+            <div class="card xs"><strong>Empirical</strong> — coverage + mutation + execution validity evidence.</div>
+            <div class="card xs"><strong>Practical</strong> — embeddable .NET prototype with CI/CD.</div>
+          </div>
+        </div>
+        <div>
+          <p class="xs" style="color:var(--muted); margin:0 0 6px">Best configuration</p>
+          <table>
+            <thead><tr><th>Metric</th><th>LoRA + RAG</th></tr></thead>
+            <tbody>
+              <tr><td>Line coverage</td><td class="mode">88%</td></tr>
+              <tr><td>Branch coverage</td><td class="mode">84%</td></tr>
+              <tr><td>Endpoint coverage</td><td class="mode">91%</td></tr>
+              <tr><td>Mutation detection</td><td class="mode">80%</td></tr>
+              <tr class="best"><td>Execution validity</td><td class="mode">97%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 30 · Thank you -->
+    <section class="divider"><div class="wrap">
+      <span class="blob b1"></span><span class="blob b2"></span><span class="ring r1"></span><span class="ring r2"></span>
+      <span class="kick">Thank You</span>
+      <h1>Questions &amp; Discussion</h1>
+      <div class="rule"></div>
+      <p class="sub">Kariyawasam Ketangodage Shanaka Madhusanka · MS24901062<br>Supervisor: Dr. Dinuka R. Wijendra · SLIIT · MSc in IT (EAD) · May 2026</p>
+      <div class="badges" style="justify-content:center; margin-top:16px">
+        <span class="bl">LLM</span><span class="br">RAG</span><span class="bh">HYBRID</span><span class="bo">LoRA</span><span class="bx">LoRA + RAG</span>
+      </div>
+    </div></section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({ hash:true, transition:'slide', backgroundTransition:'fade',
+    width:1280, height:720, margin:0.055, controls:true, progress:true, slideNumber:false });
+
+  function setNo(){ document.querySelector('.pageno').textContent = (Reveal.getIndices().h+1)+' / '+Reveal.getTotalSlides(); }
+  Reveal.on('slidechanged', setNo); Reveal.on('ready', setNo);
+
+  const modes=['LLM','RAG','Hybrid','LoRA','LoRA+RAG'];
+  const C={ ink:'#1f2a44', muted:'#7c889f', grid:'rgba(31,42,68,.08)',
+            blue:'#2f5fe0', teal:'#12b3a0', amber:'#f2a431', violet:'#8a6cf0', rose:'#f0608a' };
+  const opts=(max=100,min=50)=>({ responsive:true,
+    plugins:{ legend:{ labels:{ color:C.ink, font:{size:11}, boxWidth:12 } } },
+    scales:{ x:{ ticks:{ color:C.ink, font:{size:11} }, grid:{ color:C.grid } },
+             y:{ min, max, ticks:{ color:C.muted, callback:v=>v+'%' }, grid:{ color:C.grid } } } });
+
+  let built=false;
+  function build(){
+    if(built||!window.Chart) return; built=true;
+    new Chart(covChart,{ type:'line', data:{ labels:modes, datasets:[
+      { label:'Line', data:[71,79,86,81,88], borderColor:C.blue, backgroundColor:C.blue, tension:.35, pointRadius:4 },
+      { label:'Branch', data:[63,70,82,75,84], borderColor:C.amber, backgroundColor:C.amber, tension:.35, pointRadius:4 },
+      { label:'Endpoint', data:[68,74,88,80,91], borderColor:C.teal, backgroundColor:C.teal, tension:.35, pointRadius:4 } ]},
+      options:opts(95,55) });
+    new Chart(mutChart,{ type:'bar', data:{ labels:modes, datasets:[{ data:[58,68,77,72,80],
+      backgroundColor:[C.blue,C.teal,C.amber,C.violet,C.rose], borderRadius:6 }]},
+      options:{ ...opts(90,40), plugins:{ legend:{ display:false } } } });
+    new Chart(valChart,{ type:'bar', data:{ labels:modes, datasets:[{ data:[85,91,96,93,97],
+      backgroundColor:[C.blue,C.teal,C.amber,C.violet,C.rose], borderRadius:6 }]},
+      options:{ ...opts(100,70), plugins:{ legend:{ display:false } } } });
+  }
+  Reveal.on('ready', build); setTimeout(build,400);
+</script>
+</body>
+</html>

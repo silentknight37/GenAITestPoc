@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "1nzACR2kO9A=",
+  "dgSpecHash": "oVRfl6z0O/Y=",
   "success": true,
   "projectFilePath": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.AspNetCore\\GenAITest.AspNetCore.csproj",
   "expectedPackageFiles": [
@@ -36,7 +36,8 @@
     "C:\\Users\\Lenovo\\.nuget\\packages\\system.reflection.metadata\\7.0.0\\system.reflection.metadata.7.0.0.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\system.text.encodings.web\\10.0.1\\system.text.encodings.web.10.0.1.nupkg.sha512",
-    "C:\\Users\\Lenovo\\.nuget\\packages\\system.text.json\\10.0.1\\system.text.json.10.0.1.nupkg.sha512"
+    "C:\\Users\\Lenovo\\.nuget\\packages\\system.text.json\\10.0.1\\system.text.json.10.0.1.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\genaitest.engine\\1.0.70\\genaitest.engine.1.0.70.nupkg.sha512"
   ],
   "logs": []
 }

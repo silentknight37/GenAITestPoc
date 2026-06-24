@@ -6,9 +6,9 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "GenAITest.AspNetCore/2.71.0": {
+      "GenAITest.AspNetCore/2.76.0": {
         "dependencies": {
-          "GenAITest.Engine": "1.0.69"
+          "GenAITest.Engine": "1.0.70"
         },
         "runtime": {
           "GenAITest.AspNetCore.dll": {}
@@ -505,7 +505,7 @@
           }
         }
       },
-      "GenAITest.Engine/1.0.69": {
+      "GenAITest.Engine/1.0.70": {
         "dependencies": {
           "Microsoft.CodeAnalysis.CSharp": "4.8.0",
           "Microsoft.Data.Sqlite": "8.0.10",
@@ -514,15 +514,15 @@
         },
         "runtime": {
           "GenAITest.Engine.dll": {
-            "assemblyVersion": "1.0.69",
-            "fileVersion": "1.0.69.0"
+            "assemblyVersion": "1.0.70",
+            "fileVersion": "1.0.70.0"
           }
         }
       }
     }
   },
   "libraries": {
-    "GenAITest.AspNetCore/2.71.0": {
+    "GenAITest.AspNetCore/2.76.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -758,7 +758,7 @@
       "path": "system.text.json/10.0.1",
       "hashPath": "system.text.json.10.0.1.nupkg.sha512"
     },
-    "GenAITest.Engine/1.0.69": {
+    "GenAITest.Engine/1.0.70": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

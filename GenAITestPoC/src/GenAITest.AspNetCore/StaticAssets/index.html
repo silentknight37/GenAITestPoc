@@ -32,7 +32,7 @@
   <span class="navbar-brand"><i class="fa-solid fa-flask-vial text-info"></i>GenAI Test Framework</span>
   <div class="d-flex gap-2" id="navTabs">
     <button class="btn btn-sm btn-outline-light active" onclick="showTab('configure')">Configure</button>
-    <button class="btn btn-sm btn-outline-light" onclick="showTab('testcases')" id="btnTestCases" disabled>Test Cases</button>
+    <button class="btn btn-sm btn-outline-light" onclick="openTestCases()" id="btnTestCases">Test Cases</button>
     <button class="btn btn-sm btn-outline-light" onclick="showTab('output')" id="btnOutput" disabled>Output</button>
   </div>
 </nav>
@@ -89,7 +89,6 @@
             </div>
           </div>
         </div>
-        <div class="form-text">LoRA and LoRA + RAG require a configured fine-tuned model (<code>OPENAI_LORA_MODEL</code>).</div>
       </div>
 
       <button id="btnGenerate" class="btn btn-primary btn-lg w-100" onclick="startGeneration()">
@@ -326,6 +325,22 @@ async function loadTestCases() {
   applyFilters();
   updateStats();
   loadRules();
+}
+
+// Test Cases nav button: show the previously generated test cases for the mode selected on the
+// Configure page, loaded from disk (artifacts/<mode>/), without needing to regenerate.
+async function openTestCases() {
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+  try {
+    const r = await fetch(`${API}/api/testcases/history?mode=${encodeURIComponent(mode)}`);
+    allCases = await r.json();
+  } catch { allCases = []; }
+  selected = new Set((allCases||[]).map(c=>c.testName));
+  document.getElementById('statMode').textContent = mode.toUpperCase();
+  applyFilters();
+  updateStats();
+  loadRules();
+  showTab('testcases');
 }
 
 // ── Rule validation report ──────────────────────────────────────────────────

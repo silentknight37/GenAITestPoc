@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "eFnpdEFbRhg=",
+  "dgSpecHash": "812vP8545x8=",
   "success": true,
   "projectFilePath": "C:\\GIT\\GenAITestPoc_GIT\\LogisticsPro_API\\LogisticsPro_API.GenAI.Tests.Integration\\LogisticsPro_API.GenAI.Tests.Integration.csproj",
   "expectedPackageFiles": [
@@ -8,7 +8,7 @@
     "C:\\Users\\Lenovo\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",
-    "C:\\Users\\Lenovo\\.nuget\\packages\\genaitest.aspnetcore\\2.72.0\\genaitest.aspnetcore.2.72.0.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\genaitest.aspnetcore\\2.77.0\\genaitest.aspnetcore.2.77.0.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\genaitest.engine\\1.0.70\\genaitest.engine.1.0.70.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\mediatr\\12.0.1\\mediatr.12.0.1.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",

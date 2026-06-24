@@ -2547,7 +2547,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "2.72.0",
+    "version": "2.77.0",
     "restore": {
       "projectUniqueName": "C:\\GIT\\GenAITestPoc_GIT\\GenAITestPoC\\src\\GenAITest.AspNetCore\\GenAITest.AspNetCore.csproj",
       "projectName": "GenAITest.AspNetCore",

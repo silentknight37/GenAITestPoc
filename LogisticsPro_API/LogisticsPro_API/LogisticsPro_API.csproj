@@ -11,7 +11,7 @@
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
-    <PackageReference Include="GenAITest.AspNetCore" Version="2.72.0" />
+    <PackageReference Include="GenAITest.AspNetCore" Version="2.77.0" />
   </ItemGroup>
 
   <ItemGroup>
